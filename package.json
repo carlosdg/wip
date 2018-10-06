@@ -5,6 +5,7 @@
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-grid-layout": "^0.16.6",
     "react-scripts": "2.0.3"
   },
   "scripts": {
