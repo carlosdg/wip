@@ -1,0 +1,16 @@
+.Item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.Item__toolbar {
+  background-color: #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 3px;
+}
+
+.Item__childrenContainer {
+  height: 80%;
+  padding: 5px;
+}

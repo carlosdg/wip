@@ -1,7 +1,7 @@
-import InteractiveGrid from "./InteractiveGrid";
-import Item from "./Item";
+import Grid from "./Grid/Grid";
+import Item from "./Item/Item";
 
-export default{ 
-  Grid: InteractiveGrid, 
+export default {
+  Grid,
   Item
 };
