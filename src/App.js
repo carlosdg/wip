@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 
+// Messy code to play around for now
 class App extends Component {
   state = {
     x: 0,
