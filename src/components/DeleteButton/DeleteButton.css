@@ -1,0 +1,22 @@
+.DeleteButton {
+  background: inherit;
+  background-color: #fff;
+  border: inherit;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.DeleteButton:disabled {
+  color: #fff;
+}
+
+.DeleteButton:not(:disabled):hover,
+.DeleteButton:not(:disabled):focus {
+  background-color: #e57373;
+  transform: rotate(360deg)
+}
