@@ -7,4 +7,15 @@ import './index.css';
 import "../node_modules/react-grid-layout/css/styles.css"
 import "../node_modules/react-resizable/css/styles.css"
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const application = ReactDOM.render(<App />, document.getElementById('root'));
+
+function draw(ev) {
+
+  var file = document.getElementById("openImageButton").files[0];
+  if (!file)
+    return;
+
+  application.addImage(file);
+}
+
+document.getElementById("openImageButton").addEventListener("change", draw)
