@@ -49,7 +49,6 @@ class App extends Component {
           accept="image/*"
           name="img"
           size="65"
-          id="openImageButton"
           onChange={this.addImage}
         />
         <InteractiveGrid.Grid>
@@ -94,7 +93,25 @@ class App extends Component {
             </div>
           </InteractiveGrid.Item>
           {this.state.activeImages.map((file, index) => (
-            <ImageItem key={index} identifier={index + 3} file={file} />
+            <InteractiveGrid.Item
+              key={`${index + 3}`}
+              id={`${index + 3}`}
+              onDelete={id => console.log(id)}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <ScrollableContainer>
+                  <ImageItem file={file} />
+                </ScrollableContainer>
+              </div>
+            </InteractiveGrid.Item>
           ))}
         </InteractiveGrid.Grid>
         <p>
