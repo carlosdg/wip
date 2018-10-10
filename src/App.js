@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageItem from "./components/ImageItem";
+import * as MouseCoordinates from "./lib/mouseCoordinates";
 
 // Messy code to play around for now
 class App extends Component {
@@ -12,9 +13,10 @@ class App extends Component {
   };
 
   onMouseMove = e => {
-    const { top, left } = this.canvas.getBoundingClientRect();
-    const x = Math.floor(Math.abs(e.clientX - left));
-    const y = Math.floor(Math.abs(e.clientY - top));
+    const { x, y } = MouseCoordinates.getCoordinatesRelativeToElement(
+      e,
+      this.canvas
+    );
 
     this.setState({ ...this.state, x, y });
   };
@@ -119,7 +121,6 @@ class App extends Component {
         </p>
       </div>
     );
-    console.log(a);
     return a;
   }
 }
