@@ -2,30 +2,18 @@ import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageItem from "./components/ImageItem";
-import * as MouseCoordinates from "./lib/mouseCoordinates";
 
 // Messy code to play around for now
 class App extends Component {
   state = {
     x: 0,
     y: 0,
+    pixel: [],
     activeImages: []
   };
 
-  onMouseMove = e => {
-    const { x, y } = MouseCoordinates.getCoordinatesRelativeToElement(
-      e,
-      this.canvas
-    );
-
-    this.setState({ ...this.state, x, y });
-  };
-
-  onRef = canvas => {
-    this.canvas = canvas;
-    this.data = this.canvas
-      .getContext("2d")
-      .getImageData(0, 0, this.canvas.width, this.canvas.height);
+  onMouseMove = ({ x, y }, pixel) => {
+    this.setState({ x, y, pixel });
   };
 
   addImage = event => {
@@ -54,50 +42,10 @@ class App extends Component {
           onChange={this.addImage}
         />
         <InteractiveGrid.Grid>
-          <InteractiveGrid.Item key="0" id="0">
-            <div>123</div>
-          </InteractiveGrid.Item>
-          <InteractiveGrid.Item key="1" id="1">
-            <div>456</div>
-          </InteractiveGrid.Item>
-          <InteractiveGrid.Item key="2" id="2" onDelete={id => console.log(id)}>
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              <ScrollableContainer>
-                <canvas
-                  width="300"
-                  height="300"
-                  onMouseDown={e =>
-                    console.log({ type: "mousedown", ...this.state })
-                  }
-                  onMouseUp={e =>
-                    console.log({ type: "mouseup", ...this.state })
-                  }
-                  onClick={e =>
-                    console.log({ x: this.state.x, y: this.state.y })
-                  }
-                  onMouseMove={this.onMouseMove}
-                  style={{
-                    display: "block",
-                    backgroundColor: "#eee",
-                    maxHeight: "100%"
-                  }}
-                  ref={this.onRef}
-                />
-              </ScrollableContainer>
-            </div>
-          </InteractiveGrid.Item>
           {this.state.activeImages.map((file, index) => (
             <InteractiveGrid.Item
-              key={`${index + 3}`}
-              id={`${index + 3}`}
+              key={index + ""}
+              id={index + ""}
               onDelete={id => console.log(id)}
             >
               <div
@@ -110,14 +58,21 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <ImageItem file={file} />
+                  <ImageItem file={file} onMouseMove={this.onMouseMove} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>
           ))}
         </InteractiveGrid.Grid>
         <p>
-          {this.state.x}, {this.state.y}
+          {this.state.x}, {this.state.y},
+          <span
+            style={{
+              backgroundColor: `rgba(${this.state.pixel.join(",")})`
+            }}
+          >
+            {`rgba(${this.state.pixel.join(",")})`}
+          </span>
         </p>
       </div>
     );
