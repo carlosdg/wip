@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as MouseCoordinates from "../../lib/mouseCoordinates";
+import * as Coordinates from "../../lib/coordinates";
 
 const PIXEL_DIMENSIONS = 4;
 const mapMatrixPositionToArray = (x, y, numCols, skip) =>
@@ -37,7 +37,7 @@ class ImageItem extends Component {
       return;
     }
 
-    const coordinates = MouseCoordinates.getCoordinatesRelativeToElement(
+    const coordinates = Coordinates.mapToCoordinatesRelativeToElement(
       mouseEvent,
       this.refs.canvas
     );

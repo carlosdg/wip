@@ -1,14 +1,17 @@
 /**
- * Returns the mouse coordinates with respect to the given element
- * 
- * @param {MouseEvent} mouseEvent Mouse event to get the coordinates from
+ * Maps the given coordinates with respect to the viewport to coordinates
+ * with respect to the given element
+ *
+ * @param {Object} coords Coordinates to map to relative coordinates
+ * @param {number} coords.clientX Horizontal coordinate with respect to the app viewport
+ * @param {number} coords.clientY Vertical coordinate with respect to the app viewport
  * @param {Element} parentElement Element to get the bounding box from to
  * map the given coordinates to be relative to this element
  * @returns {Object} {x, y} Mouse coordinates with respect to the given element
  */
-export function getCoordinatesRelativeToElement(mouseEvent, parentElement) {
+export function mapToCoordinatesRelativeToElement(coords, parentElement) {
   return mapToRelativeCoordinates(
-    mouseEvent,
+    coords,
     parentElement.getBoundingClientRect()
   );
 }
@@ -17,12 +20,14 @@ export function getCoordinatesRelativeToElement(mouseEvent, parentElement) {
  * Maps the mouse coordinates from the given mouse event to relative
  * coordinates with respect to the given element bounding box
  *
- * @param {MouseEvent} mouseEvent Mouse event to get the coordinates to map from
+ * @param {Object} coords Coordinates to map to relative coordinates
+ * @param {number} coords.clientX Horizontal coordinate with respect to the app viewport
+ * @param {number} coords.clientY Vertical coordinate with respect to the app viewport
  * @param {DOMRectReadOnly} parentElementBoundingBox Bounding box where to
  * map the coordinates to
  * @returns {Object} {x, y} Mouse coordinates with respect the given bounding box
  */
-export function mapToRelativeCoordinates(mouseEvent, parentElementBoundingBox) {
+export function mapToRelativeCoordinates(coords, parentElementBoundingBox) {
   const { top, left } = parentElementBoundingBox;
 
   // Top and left can be real numbers. If, for example, top = 66.19
@@ -35,7 +40,7 @@ export function mapToRelativeCoordinates(mouseEvent, parentElementBoundingBox) {
   // left values as integers we have to consider the ceiling.
 
   return {
-    x: mouseEvent.clientX - Math.ceil(left),
-    y: mouseEvent.clientY - Math.ceil(top)
+    x: coords.clientX - Math.ceil(left),
+    y: coords.clientY - Math.ceil(top)
   };
 }
