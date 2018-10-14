@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import * as Coordinates from "../../lib/coordinates";
-import * as ImageHelper from "../../lib/image";
 
 const PIXEL_DIMENSIONS = 4;
 const mapMatrixPositionToArray = (x, y, numCols, skip) =>
@@ -9,18 +8,24 @@ const mapMatrixPositionToArray = (x, y, numCols, skip) =>
 const toMinMaxRange = (min, value, max) => Math.max(min, Math.min(value, max));
 
 /**
- * Component that renders an image from the given file passed
- * as prop
+ * Component that renders an image from the given promise passed
+ * as prop. That promise needs to resolve to the Image instance
+ * to render in this component. Or it can reject if there is any
+ * error during the image load.
+ * 
+ * This way the strategy used to load the image (for example: from
+ * a file, from a portion of another image, from an URL, etc) can
+ * be decided by the user of the component
  */
-class FileImage extends Component {
+class ImageComponent extends Component {
   static propTypes = {
-    /** File instance from where the image will be loaded */
-    file: PropTypes.instanceOf(File).isRequired,
+    /** Promise that resolves to the image to render */
+    imagePromise: PropTypes.instanceOf(Promise).isRequired,
     /** Callback called with the mouse position relative to the
      * image and the pixel value at that position */
     onMouseMove: PropTypes.func
   };
-  
+
   static defaultProps = {
     onMouseMove: null
   };
@@ -38,7 +43,7 @@ class FileImage extends Component {
   componentDidMount() {
     // Try to get the image and draw it to the canvas
     // If there is an error update the state.error
-    ImageHelper.loadFromObject(this.props.file)
+    this.props.imagePromise
       .then(image => {
         const canvas = this.refs.canvas;
         const context = canvas.getContext("2d");
@@ -124,4 +129,4 @@ class FileImage extends Component {
   }
 }
 
-export default FileImage;
+export default ImageComponent;

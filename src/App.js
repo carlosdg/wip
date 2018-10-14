@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
-import FileImage from "./components/FileImage";
+import ImageComponent from "./components/ImageComponent";
+import * as ImageHelper from "./lib/image";
 
 // Messy code to play around for now
 class App extends Component {
@@ -9,7 +10,7 @@ class App extends Component {
     x: 0,
     y: 0,
     pixel: [0, 0, 0, 255],
-    activeImages: []
+    imagePromises: []
   };
 
   onMouseMove = ({ x, y }, pixel) => {
@@ -25,10 +26,10 @@ class App extends Component {
       return;
     }
 
+    const imagePromise = ImageHelper.loadFromObject(files[0]);
+
     this.setState({
-      x: 0,
-      y: 0,
-      activeImages: this.state.activeImages.concat([files[0]])
+      imagePromises: this.state.imagePromises.concat([imagePromise])
     });
   };
 
@@ -45,7 +46,7 @@ class App extends Component {
           onChange={this.addImage}
         />
         <InteractiveGrid.Grid>
-          {this.state.activeImages.map((file, index) => (
+          {this.state.imagePromises.map((promise, index) => (
             <InteractiveGrid.Item
               key={index + ""}
               id={index + ""}
@@ -61,7 +62,7 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <FileImage file={file} onMouseMove={this.onMouseMove} />
+                  <ImageComponent imagePromise={promise} onMouseMove={this.onMouseMove} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>
