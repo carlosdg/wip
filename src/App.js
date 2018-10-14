@@ -22,6 +22,7 @@ class App extends Component {
     // TODO: handle error
     if (files.length !== 1 || !files[0]) {
       console.error("Error reading files");
+      return;
     }
 
     this.setState({
