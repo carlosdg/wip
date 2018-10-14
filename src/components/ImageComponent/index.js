@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import * as Coordinates from "../../lib/coordinates";
-
-const PIXEL_DIMENSIONS = 4;
-const mapMatrixPositionToArray = (x, y, numCols, skip) =>
-  (y * numCols + x) * skip;
-const toMinMaxRange = (min, value, max) => Math.max(min, Math.min(value, max));
+import Pixels from "../../lib/Pixels";
 
 /**
  * Component that renders an image from the given promise passed
  * as prop. That promise needs to resolve to the Image instance
  * to render in this component. Or it can reject if there is any
  * error during the image load.
- * 
+ *
  * This way the strategy used to load the image (for example: from
  * a file, from a portion of another image, from an URL, etc) can
  * be decided by the user of the component
@@ -33,7 +29,7 @@ class ImageComponent extends Component {
   /** Component state */
   state = {
     /** Image pixels */
-    imagePixelData: null,
+    imagePixels: null,
     /** Flag to know if the image is currently being loaded */
     isImageLoading: true,
     /** Error object that is not null if there is an error */
@@ -52,14 +48,12 @@ class ImageComponent extends Component {
         canvas.height = image.naturalHeight;
         context.drawImage(image, 0, 0);
 
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = new Pixels(imgData.width, imgData.height, imgData.data);
+
         this.setState({
           isImageLoading: false,
-          imagePixelData: context.getImageData(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          )
+          imagePixels: pixels
         });
       })
       .catch(error => {
@@ -87,30 +81,9 @@ class ImageComponent extends Component {
       mouseEvent,
       this.refs.canvas
     );
-    const pixel = this.getPixel(coordinates);
+    const pixel = this.state.imagePixels.getPixel(coordinates);
 
     this.props.onMouseMove(coordinates, pixel);
-  };
-
-  // TODO: refactor this out of the view
-  getPixel = coordinates => {
-    const x = toMinMaxRange(0, coordinates.x, this.refs.canvas.width);
-    const y = toMinMaxRange(0, coordinates.y, this.refs.canvas.height);
-    const pixels = this.state.imagePixelData.data;
-    const numCols = this.refs.canvas.width;
-    const pixelPosition = mapMatrixPositionToArray(
-      x,
-      y,
-      numCols,
-      PIXEL_DIMENSIONS
-    );
-
-    const result = [];
-    for (let i = 0; i < PIXEL_DIMENSIONS; ++i) {
-      result.push(pixels[pixelPosition + i]);
-    }
-
-    return result;
   };
 
   render() {
