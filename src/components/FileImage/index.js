@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import * as Coordinates from "../../lib/coordinates";
 import * as ImageHelper from "../../lib/image";
 
@@ -7,10 +8,30 @@ const mapMatrixPositionToArray = (x, y, numCols, skip) =>
   (y * numCols + x) * skip;
 const toMinMaxRange = (min, value, max) => Math.max(min, Math.min(value, max));
 
-class ImageItem extends Component {
+/**
+ * Component that renders an image from the given file passed
+ * as prop
+ */
+class FileImage extends Component {
+  static propTypes = {
+    /** File instance from where the image will be loaded */
+    file: PropTypes.instanceOf(File).isRequired,
+    /** Callback called with the mouse position relative to the
+     * image and the pixel value at that position */
+    onMouseMove: PropTypes.func
+  };
+  
+  static defaultProps = {
+    onMouseMove: null
+  };
+
+  /** Component state */
   state = {
+    /** Image pixels */
     imagePixelData: null,
+    /** Flag to know if the image is currently being loaded */
     isImageLoading: true,
+    /** Error object that is not null if there is an error */
     error: null
   };
 
@@ -44,6 +65,10 @@ class ImageItem extends Component {
       });
   }
 
+  /** (Method bound to the class instances). Mouse move event
+   * handler, gets the coordinates relative to the image where
+   * the user mouse is pointing to and the pixel RGBA value there
+   * and calls props.onMouseMove */
   onMouseMove = mouseEvent => {
     if (
       !this.props.onMouseMove ||
@@ -99,4 +124,4 @@ class ImageItem extends Component {
   }
 }
 
-export default ImageItem;
+export default FileImage;

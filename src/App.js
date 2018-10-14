@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
-import ImageItem from "./components/ImageItem";
+import FileImage from "./components/FileImage";
 
 // Messy code to play around for now
 class App extends Component {
@@ -61,7 +61,7 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <ImageItem file={file} onMouseMove={this.onMouseMove} />
+                  <FileImage file={file} onMouseMove={this.onMouseMove} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>
