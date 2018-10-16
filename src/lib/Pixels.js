@@ -63,4 +63,38 @@ export default class Pixels {
       pixelPosition + this.pixelDimension
     );
   };
+
+  /**
+   * Returns the pixels of the image
+   *
+   * @returns {Array} Pixels values of the image, an element
+   * for each pixel dimension (4 in case of RGBA for example)
+   */
+  getPixels = () => {
+    return this.pixels;
+  };
+
+  /**
+   * Returns the given pixels converted to grayscale,
+   * according to Phase Alternating Line (PAL). We assume
+   * that the given pixels are in RGBA.
+   *
+   * @param {Array} pixels Pixels to convert
+   * @returns {Array} Pixels values of the image, an element
+   * for each pixel dimension (1 in case of grayscale)
+   */
+  static convertToGrayscale = (pixels) => {
+    if (!pixels instanceof Array)
+      throw new TypeError('Expected array of pixels');
+
+    let convertedPixels = [];
+    for (let i = 0; i < pixels.length; i += RGBA_PIXEL_DIMENSIONS) {
+      let rComponent = pixels[i],
+          gComponent = pixels[i + 1],
+          bComponent = pixels[i + 2];
+      convertedPixels.push(Math.round(rComponent * 0.222 + gComponent * 0.707 + bComponent * 0.071));
+    }
+
+    return convertedPixels;
+  };
 }

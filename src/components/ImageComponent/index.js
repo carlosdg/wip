@@ -36,6 +36,12 @@ class ImageComponent extends Component {
     error: null
   };
 
+  /** Returns the pixels of the image */
+  getPixels () {
+    // TODO: check if loading and if error
+    return this.state.imagePixels;
+  }
+
   componentDidMount() {
     // Try to get the image and draw it to the canvas
     // If there is an error update the state.error

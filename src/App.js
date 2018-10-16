@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageComponent from "./components/ImageComponent";
+import Histogram from "./components/Histogram";
 import * as ImageHelper from "./lib/image";
 
 // Messy code to play around for now
@@ -10,7 +11,8 @@ class App extends Component {
     x: 0,
     y: 0,
     pixel: [0, 0, 0, 255],
-    imagePromises: []
+    imagePromises: [],
+    imageComponents: [],
   };
 
   onMouseMove = ({ x, y }, pixel) => {
@@ -33,9 +35,16 @@ class App extends Component {
     });
   };
 
+  storeImageComponent = newImageComponent => {
+    this.state.imageComponents.push(newImageComponent);
+  };
+
   render() {
     const currentPixelRgbaValue = `rgba(${this.state.pixel.join(", ")})`;
 
+    //BUG: Everytime an ImageComponent is added all the previous ones resets
+    // its width and height
+    //BUG: For the histogram visualization, the mouse must pass above the image
     return (
       <div>
         <input
@@ -62,7 +71,28 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <ImageComponent imagePromise={promise} onMouseMove={this.onMouseMove} />
+                  <ImageComponent ref={this.storeImageComponent} imagePromise={promise} onMouseMove={this.onMouseMove} />
+                </ScrollableContainer>
+              </div>
+            </InteractiveGrid.Item>
+          ))}
+          {this.state.imageComponents.map((imageComponent, index) => (
+            <InteractiveGrid.Item
+              key={this.state.imagePromises.length + index + ""}
+              id={this.state.imagePromises.length + index + ""}
+              onDelete={id => console.log(id)}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <ScrollableContainer>
+                  <Histogram imagePixels={imageComponent.getPixels()} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>
