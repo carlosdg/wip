@@ -36,7 +36,11 @@ class App extends Component {
   };
 
   storeImageComponent = newImageComponent => {
-    this.state.imageComponents.push(newImageComponent);
+    setTimeout(() => {
+      this.setState({
+        imageComponents: this.state.imageComponents.concat([newImageComponent])
+      });
+    }, 500);
   };
 
   render() {
@@ -44,7 +48,6 @@ class App extends Component {
 
     //BUG: Everytime an ImageComponent is added all the previous ones resets
     // its width and height
-    //BUG: For the histogram visualization, the mouse must pass above the image
     return (
       <div>
         <input
