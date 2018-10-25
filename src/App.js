@@ -3,7 +3,7 @@ import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageComponent from "./components/ImageComponent";
 import Histogram from "./components/Histogram";
-import * as ImageHelper from "./lib/image";
+import * as ImageHelper from "./lib/imageHelper";
 
 // Messy code to play around for now
 class App extends Component {

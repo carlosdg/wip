@@ -9,7 +9,7 @@ const toMinMaxRange = (min, value, max) => Math.max(min, Math.min(value, max));
  * This class aims to abstract away the pixel
  * related manipulations
  */
-export default class Pixels {
+export default class Image {
   /**
    * Creates an instance of this class. Note: this treats
    * the given pixels as RGBA pixels

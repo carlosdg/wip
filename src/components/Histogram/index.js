@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import 'react-vis/dist/style.css';
-import Pixels from "../../lib/Pixels"
+import Image from "../../lib/Image"
 import {
   FlexibleXYPlot,
   XAxis,
@@ -34,7 +34,7 @@ class Histogram extends Component {
   componentDidMount() {
     //TODO: Create an histogram for each RGB channel and for grayscale.
     // The user should be able to choose what histogram wants to visualize with buttons
-    let imagePixels = Pixels.convertToGrayscale(this.state.imageData.getPixels());
+    let imagePixels = Image.convertToGrayscale(this.state.imageData.getPixels());
     let valuesCount = new Array(256).fill(0);
     imagePixels.forEach((value) => {
       valuesCount[value]++;

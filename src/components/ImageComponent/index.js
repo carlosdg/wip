@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import * as Coordinates from "../../lib/coordinates";
-import Pixels from "../../lib/Pixels";
+import Image from "../../lib/Image";
 
 /**
  * Component that renders an image from the given promise passed
@@ -28,8 +28,8 @@ class ImageComponent extends Component {
 
   /** Component state */
   state = {
-    /** Image pixels */
-    imagePixels: null,
+    /** Image */
+    image: null,
     /** Flag to know if the image is currently being loaded */
     isImageLoading: true,
     /** Error object that is not null if there is an error */
@@ -37,9 +37,9 @@ class ImageComponent extends Component {
   };
 
   /** Returns the pixels of the image */
-  getPixels () {
+  getImage () {
     // TODO: check if loading and if error
-    return this.state.imagePixels;
+    return this.state.image;
   }
 
   componentDidMount() {
@@ -55,11 +55,11 @@ class ImageComponent extends Component {
         context.drawImage(image, 0, 0);
 
         const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const pixels = new Pixels(imgData.width, imgData.height, imgData.data);
+        const imageObject = new Image(imgData.width, imgData.height, imgData.data);
 
         this.setState({
           isImageLoading: false,
-          imagePixels: pixels
+          image: imageObject
         });
       })
       .catch(error => {
@@ -87,7 +87,7 @@ class ImageComponent extends Component {
       mouseEvent,
       this.refs.canvas
     );
-    const pixel = this.state.imagePixels.getPixel(coordinates);
+    const pixel = this.state.image.getPixel(coordinates);
 
     this.props.onMouseMove(coordinates, pixel);
   };
