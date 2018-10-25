@@ -96,7 +96,7 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <HistogramComponent histogram={new Histogram(imageComponent.getImage().getPixels())} />
+                  <HistogramComponent histogram={new Histogram(imageComponent.getImage().getGrayscaleValues())} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>

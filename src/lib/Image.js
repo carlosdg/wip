@@ -75,6 +75,44 @@ export default class Image {
   };
 
   /**
+   * Returns a specific channel values of the image.
+   * 0 => R channel position
+   * 1 => G channel position
+   * 2 => B channel position
+   * 3 => Alpha channel position
+   *
+   * @param {Integer} channelPosition Position of the desired
+   * channel values in a RGBA pixel.
+   * @returns {Array} Desired channel pixels values.
+   */
+  getChannelValues = (channelPosition) => {
+    if (!channelPosition instanceof Number || (channelPosition < 0 || channelPosition > 3))
+      throw new TypeError('Expected a channel position (between 0 and 3 ())');
+
+    let desiredChannelValues = [];
+    for (let i = channelPosition; i < this.pixels.length; i += RGBA_PIXEL_DIMENSIONS) {
+      desiredChannelValues.push(this.pixels[i]);
+    }
+
+    return desiredChannelValues;
+  };
+
+  /**
+   * Returns the values of the grayscale pixels of the image.
+   * The method works even though the image is not in grayscale.
+   */
+  getGrayscaleValues = () => {
+    if (!Image.isInGrayscale(this.pixels))
+      return Image.convertToGrayscale(this.pixels);
+
+    let grayscaleValues = [];
+    for (let i = 0; i < this.pixels.length; i += RGBA_PIXEL_DIMENSIONS) {
+      grayscaleValues.push(this.pixels[i]);
+    }
+    return grayscaleValues;
+  }
+
+  /**
    * Returns the given pixels converted to grayscale,
    * according to Phase Alternating Line (PAL). We assume
    * that the given pixels are in RGBA.
@@ -96,5 +134,26 @@ export default class Image {
     }
 
     return convertedPixels;
+  };
+
+  /**
+   * Checks if the given image (array of pixels) is in grayscale.
+   *
+   * @param {Array} pixels Pixels to check
+   * @returns {Boolean} Result of the comprobation
+   */
+  static isInGrayscale = (pixels) => {
+    if (!pixels instanceof Array)
+      throw new TypeError('Expected array of pixels');
+
+    for (let i = 0; i < pixels.length; i += RGBA_PIXEL_DIMENSIONS) {
+      let rComponent = pixels[i],
+          gComponent = pixels[i + 1],
+          bComponent = pixels[i + 2];
+
+      if (rComponent !== gComponent || gComponent !== bComponent)
+        return false;
+    }
+    return true;
   };
 }
