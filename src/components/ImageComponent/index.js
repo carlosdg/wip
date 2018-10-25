@@ -36,7 +36,7 @@ class ImageComponent extends Component {
     error: null
   };
 
-  /** Returns the pixels of the image */
+  /** Returns the image */
   getImage () {
     // TODO: check if loading and if error
     return this.state.image;

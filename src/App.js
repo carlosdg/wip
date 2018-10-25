@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageComponent from "./components/ImageComponent";
-import Histogram from "./components/Histogram";
+import HistogramComponent from "./components/HistogramComponent";
+import Histogram from "./lib/Histogram"
 import * as ImageHelper from "./lib/imageHelper";
 
 // Messy code to play around for now
@@ -95,7 +96,7 @@ class App extends Component {
                 }}
               >
                 <ScrollableContainer>
-                  <Histogram imagePixels={imageComponent.getPixels()} />
+                  <HistogramComponent histogram={new Histogram(imageComponent.getImage().getPixels())} />
                 </ScrollableContainer>
               </div>
             </InteractiveGrid.Item>
