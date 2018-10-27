@@ -3,8 +3,9 @@ import InteractiveGrid from "./components/InteractiveGrid";
 import ScrollableContainer from "./components/ScrollableContainer";
 import ImageComponent from "./components/ImageComponent";
 import HistogramComponent from "./components/HistogramComponent";
-import Histogram from "./lib/Histogram"
+import Histogram from "./lib/Histogram";
 import * as ImageHelper from "./lib/imageHelper";
+import * as LayoutHelper from "./lib/grid/calculateLayout";
 
 // Messy code to play around for now
 class App extends Component {
@@ -14,7 +15,15 @@ class App extends Component {
     pixel: [0, 0, 0, 255],
     imagePromises: [],
     imageComponents: [],
+    histograms: [],
+    gridLayouts: {}
   };
+
+  componentDidMount() {
+    this.setState({
+      gridLayouts: LayoutHelper.createNewSetOfLayouts()
+    });
+  }
 
   onMouseMove = ({ x, y }, pixel) => {
     this.setState({ x, y, pixel });
@@ -31,24 +40,35 @@ class App extends Component {
 
     const imagePromise = ImageHelper.loadFromObject(files[0]);
 
-    this.setState({
-      imagePromises: this.state.imagePromises.concat([imagePromise])
-    });
+    this.setState(prevState => ({
+      imagePromises: prevState.imagePromises.concat([imagePromise]),
+      gridLayouts: LayoutHelper.addNewElementToLayouts(
+        prevState.gridLayouts,
+        "image_" + prevState.imagePromises.length
+      )
+    }));
   };
 
+  // Temp method to simulate the user clicking on the show histogram button
   storeImageComponent = newImageComponent => {
     setTimeout(() => {
-      this.setState({
-        imageComponents: this.state.imageComponents.concat([newImageComponent])
-      });
+      this.setState(prevState => ({
+        imageComponents: prevState.imageComponents.concat([newImageComponent]),
+        histograms: prevState.histograms.concat([
+          new Histogram(newImageComponent.getImage().getGrayscaleValues())
+        ]),
+        gridLayouts: LayoutHelper.addNewElementToLayouts(
+          prevState.gridLayouts,
+          "histogram_" + prevState.imageComponents.length
+        )
+      }));
     }, 500);
   };
 
-  render() {
-    const currentPixelRgbaValue = `rgba(${this.state.pixel.join(", ")})`;
+  onGridLayoutChange = (_, newLayouts) =>
+    requestAnimationFrame(() => this.setState({ gridLayouts: newLayouts }));
 
-    //BUG: Everytime an ImageComponent is added all the previous ones resets
-    // its width and height
+  render() {
     return (
       <div>
         <input
@@ -58,75 +78,92 @@ class App extends Component {
           size="65"
           onChange={this.addImage}
         />
-        <InteractiveGrid.Grid>
-          {this.state.imagePromises.map((promise, index) => (
-            <InteractiveGrid.Item
-              key={index + ""}
-              id={index + ""}
-              onDelete={id => console.log(id)}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <ScrollableContainer>
-                  <ImageComponent ref={this.storeImageComponent} imagePromise={promise} onMouseMove={this.onMouseMove} />
-                </ScrollableContainer>
-              </div>
-            </InteractiveGrid.Item>
-          ))}
-          {this.state.imageComponents.map((imageComponent, index) => (
-            <InteractiveGrid.Item
-              key={this.state.imagePromises.length + index + ""}
-              id={this.state.imagePromises.length + index + ""}
-              onDelete={id => console.log(id)}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <ScrollableContainer>
-                  <HistogramComponent histogram={new Histogram(imageComponent.getImage().getGrayscaleValues())} />
-                </ScrollableContainer>
-              </div>
-            </InteractiveGrid.Item>
-          ))}
+        <InteractiveGrid.Grid
+          layouts={this.state.gridLayouts}
+          onLayoutChange={this.onGridLayoutChange}
+        >
+          {this.state.imagePromises.map((promise, index) =>
+            this.getImageItem(promise, index)
+          )}
+          {this.state.histograms.map((histogram, index) =>
+            this.getHistogramItem(histogram, index)
+          )}
         </InteractiveGrid.Grid>
-        <p
+        {this.getDisplayForPixelUnderMouse()}
+      </div>
+    );
+  }
+
+  // Temporal methods to keep the render method cleaner for now
+
+  getImageItem(imgPromise, id) {
+    return (
+      <InteractiveGrid.Item
+        key={"image_" + id}
+        id={"image_" + id}
+        onDelete={id => console.log(id)}
+      >
+        <div
           style={{
-            display: "inline-block",
-            margin: "0.5rem",
-            padding: "0.5rem",
-            borderRadius: "5px",
-            border: `1px solid ${currentPixelRgbaValue}`,
-            boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
           }}
         >
-          {this.state.x}, {this.state.y},
-          <span
-            style={{
-              display: "inline-block",
-              width: "0.5rem",
-              height: "0.5rem",
-              margin: "0 0.5rem",
-              backgroundColor: currentPixelRgbaValue,
-              border: "1px solid black",
-              borderRadius: "2px"
-            }}
-          />
-          {currentPixelRgbaValue}
-        </p>
-      </div>
+          <ScrollableContainer>
+            <ImageComponent
+              ref={this.storeImageComponent}
+              imagePromise={imgPromise}
+              onMouseMove={this.onMouseMove}
+            />
+          </ScrollableContainer>
+        </div>
+      </InteractiveGrid.Item>
+    );
+  }
+
+  getHistogramItem(histogram, id) {
+    return (
+      <InteractiveGrid.Item
+        key={"histogram_" + id}
+        id={"histogram_" + id}
+        onDelete={id => console.log(id)}
+      >
+        <HistogramComponent histogram={histogram} />
+      </InteractiveGrid.Item>
+    );
+  }
+
+  getDisplayForPixelUnderMouse() {
+    const currentPixelRgbaValue = `rgba(${this.state.pixel.join(", ")})`;
+
+    return (
+      <p
+        style={{
+          display: "inline-block",
+          margin: "0.5rem",
+          padding: "0.5rem",
+          borderRadius: "5px",
+          border: `1px solid ${currentPixelRgbaValue}`,
+          boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
+        }}
+      >
+        {this.state.x}, {this.state.y},
+        <span
+          style={{
+            display: "inline-block",
+            width: "0.5rem",
+            height: "0.5rem",
+            margin: "0 0.5rem",
+            backgroundColor: currentPixelRgbaValue,
+            border: "1px solid black",
+            borderRadius: "2px"
+          }}
+        />
+        {currentPixelRgbaValue}
+      </p>
     );
   }
 }

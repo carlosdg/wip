@@ -1,34 +1,27 @@
 import React from "react";
 import { WidthProvider, Responsive } from "react-grid-layout";
-import GRID_PROPERTIES from "./gridProperties";
-import { calculateLayouts } from './calculateLayout'
+import GRID_PROPERTIES from "../../../lib/grid/gridProperties";
 
 const ResponsiveGrid = WidthProvider(Responsive);
 
 /**
- * Responsive Interactive Grid component based
- * on react-grid-layout responsive grid.
- * 
- * Important: the children have to be Item components
- * and have a key property
- * 
- * TODO: find a way to enforce the previous mentioned
- * constraint
+ * react-grid-layout responsive grid with some default props given as defined in
+ * gridProperties: cols, breakpoints and rowHeight
  */
-const Grid = ({ children }) => {
-  const numberOfChildren = React.Children.count(children);
-  const layout = calculateLayouts(numberOfChildren);
-
+const Grid = ({ children, ...props }) => {
   return (
     <ResponsiveGrid
       cols={GRID_PROPERTIES.GRID_COLUMNS}
       breakpoints={GRID_PROPERTIES.LAYOUT_BREAKPOINTS}
       rowHeight={GRID_PROPERTIES.GRID_ITEM_ROW_HEIGHT}
-      layouts={layout}
+      {...props}
     >
       {children}
     </ResponsiveGrid>
   );
 };
+
+Grid.propTypes = ResponsiveGrid.propTypes;
+Grid.defaultProps = { layouts: {}, ...ResponsiveGrid.defaultProps };
 
 export default Grid;
