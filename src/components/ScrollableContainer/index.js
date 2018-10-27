@@ -6,7 +6,7 @@ import "./ScrollableContainer.css";
  * user scroll through it when the children occupy too much 
  * space.
  */
-const ScrollableContainer = ({ children, style, ...props }) => (
+const ScrollableContainer = ({ children, ...props }) => (
   <div className="ScrollableContainer" {...props}>
     {children}
   </div>

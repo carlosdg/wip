@@ -1,4 +1,6 @@
 .Item {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: white;
@@ -11,6 +13,8 @@
 }
 
 .Item__childrenContainer {
-  height: 80%;
-  padding: 5px;
+  /* This way children have all the container height available */
+  height: 100%;
+  padding: 10px;
+  overflow: auto;
 }
