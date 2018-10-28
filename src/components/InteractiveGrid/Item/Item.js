@@ -10,6 +10,10 @@ const stopEvent = event => {
   event.stopPropagation();
 };
 
+// FIXME: use another method to keep the state of the item selected, right now
+// if we click into no item, the app state will have the last item selected but
+// visually none will have the selected styles
+
 /**
  * Grid Item component. Forces grid items to be draggable
  * only by a toolbar at the top and also allows to listen
@@ -24,11 +28,13 @@ export default class Item extends React.Component {
       PropTypes.string,
       PropTypes.symbol
     ]).isRequired,
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    onSelect: PropTypes.func
   };
 
   static defaultProps = {
-    onDelete: null
+    onDelete: null,
+    onSelect: null
   };
 
   /** We only want to allow the item being drag when the user
@@ -67,6 +73,10 @@ export default class Item extends React.Component {
    * `onDelete` callback with the ID of this element */
   onDelete = () => this.props.onDelete(this.props.id);
 
+  /** When the user selects this item, call the props
+   * `onSelect` callback with the ID of this element */
+  onSelect = () => this.props.onSelect(this.props.id);
+
   render() {
     const { children, className, style } = this.props;
 
@@ -77,6 +87,8 @@ export default class Item extends React.Component {
         draggable={this.state.isDraggable}
         onDragStart={this.onDragStart}
         onMouseUp={this.onDragEnd} // OnMouseUp instead of DragEnd because DragStart prevents default
+        onFocus={this.props.onSelect ? this.onSelect : null}
+        tabIndex="0"
       >
         <div
           onMouseDown={this.onDragHandleMouseDown}

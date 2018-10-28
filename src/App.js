@@ -22,6 +22,7 @@ class App extends Component {
     imagePromises: [],
     imageComponents: [],
     histograms: [],
+    selectedGridItem: null,
     gridLayouts: {}
   };
 
@@ -74,6 +75,10 @@ class App extends Component {
   onGridLayoutChange = (_, newLayouts) =>
     requestAnimationFrame(() => this.setState({ gridLayouts: newLayouts }));
 
+  onGridItemSelection = itemId => this.setState({ selectedGridItem: itemId });
+  onGridItemDeletion = itemId =>
+    console.log(`Delete grid item with id = ${itemId}`);
+
   render() {
     return (
       <AppContainer>
@@ -115,7 +120,8 @@ class App extends Component {
       <InteractiveGrid.Item
         key={"image_" + id}
         id={"image_" + id}
-        onDelete={id => console.log(id)}
+        onDelete={this.onGridItemDeletion}
+        onSelect={this.onGridItemSelection}
       >
         <div
           style={{
@@ -143,7 +149,8 @@ class App extends Component {
       <InteractiveGrid.Item
         key={"histogram_" + id}
         id={"histogram_" + id}
-        onDelete={id => console.log(id)}
+        onDelete={this.onGridItemDeletion}
+        onSelect={this.onGridItemSelection}
       >
         <HistogramComponent histogram={histogram} />
       </InteractiveGrid.Item>

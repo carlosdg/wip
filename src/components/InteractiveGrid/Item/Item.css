@@ -6,10 +6,21 @@
   background-color: white;
 }
 
+.Item:focus-within {
+  outline: none;
+  box-shadow: -3px 5px 10px -1px #ddd, 3px -5px 10px -1px #ddd;
+}
+
 .Item__toolbar {
   background-color: #ddd;
   border-bottom: 1px solid #ddd;
-  padding: 3px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 5px;
+}
+
+.Item:focus-within .Item__toolbar {
+  background-color: hsl(210, 25%, 70%);
 }
 
 .Item__childrenContainer {
