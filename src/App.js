@@ -5,7 +5,7 @@ import ImageComponent from "./components/ImageComponent";
 import HistogramComponent from "./components/HistogramComponent";
 import Histogram from "./lib/Histogram";
 import * as ImageHelper from "./lib/imageHelper";
-import * as LayoutHelper from "./lib/grid/calculateLayout";
+import * as GridLayoutHelper from "./lib/grid/calculateLayout";
 import {
   AppContainer,
   NavbarContainer,
@@ -27,7 +27,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({
-      gridLayouts: LayoutHelper.createNewSetOfLayouts()
+      gridLayouts: GridLayoutHelper.createNewSetOfLayouts()
     });
   }
 
@@ -48,7 +48,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       imagePromises: prevState.imagePromises.concat([imagePromise]),
-      gridLayouts: LayoutHelper.addNewElementToLayouts(
+      gridLayouts: GridLayoutHelper.addNewElementToLayouts(
         prevState.gridLayouts,
         "image_" + prevState.imagePromises.length
       )
@@ -63,7 +63,7 @@ class App extends Component {
         histograms: prevState.histograms.concat([
           new Histogram(newImageComponent.getImage().getGrayscaleValues())
         ]),
-        gridLayouts: LayoutHelper.addNewElementToLayouts(
+        gridLayouts: GridLayoutHelper.addNewElementToLayouts(
           prevState.gridLayouts,
           "histogram_" + prevState.imageComponents.length
         )
