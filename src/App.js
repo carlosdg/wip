@@ -6,6 +6,12 @@ import HistogramComponent from "./components/HistogramComponent";
 import Histogram from "./lib/Histogram";
 import * as ImageHelper from "./lib/imageHelper";
 import * as LayoutHelper from "./lib/grid/calculateLayout";
+import {
+  AppContainer,
+  NavbarContainer,
+  MainContainer,
+  FooterContainer
+} from "./components/Layout";
 
 // Messy code to play around for now
 class App extends Component {
@@ -70,33 +76,41 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <input
-          type="file"
-          accept="image/*"
-          name="img"
-          size="65"
-          onChange={this.addImage}
-        />
-        <InteractiveGrid.Grid
-          layouts={this.state.gridLayouts}
-          onLayoutChange={this.onGridLayoutChange}
-        >
-          {this.state.imagePromises.map((promise, index) =>
-            this.getImageItem(promise, index)
-          )}
-          {this.state.histograms.map((histogram, index) =>
-            this.getHistogramItem(histogram, index)
-          )}
-        </InteractiveGrid.Grid>
-        {this.getDisplayForPixelUnderMouse()}
-      </div>
+      <AppContainer>
+        <NavbarContainer>
+          <input
+            type="file"
+            accept="image/*"
+            name="img"
+            size="65"
+            onChange={this.addImage}
+          />
+        </NavbarContainer>
+        <MainContainer>{this.getGridComponent()}</MainContainer>
+        <FooterContainer>{this.getDisplayForPixelUnderMouse()}</FooterContainer>
+      </AppContainer>
     );
   }
 
   // Temporal methods to keep the render method cleaner for now
 
-  getImageItem(imgPromise, id) {
+  getGridComponent() {
+    return (
+      <InteractiveGrid.Grid
+        layouts={this.state.gridLayouts}
+        onLayoutChange={this.onGridLayoutChange}
+      >
+        {this.state.imagePromises.map((promise, index) =>
+          this.getImageGridItem(promise, index)
+        )}
+        {this.state.histograms.map((histogram, index) =>
+          this.getHistogramGridItem(histogram, index)
+        )}
+      </InteractiveGrid.Grid>
+    );
+  }
+
+  getImageGridItem(imgPromise, id) {
     return (
       <InteractiveGrid.Item
         key={"image_" + id}
@@ -124,7 +138,7 @@ class App extends Component {
     );
   }
 
-  getHistogramItem(histogram, id) {
+  getHistogramGridItem(histogram, id) {
     return (
       <InteractiveGrid.Item
         key={"histogram_" + id}
@@ -140,7 +154,7 @@ class App extends Component {
     const currentPixelRgbaValue = `rgba(${this.state.pixel.join(", ")})`;
 
     return (
-      <p
+      <div
         style={{
           display: "inline-block",
           margin: "0.5rem",
@@ -163,7 +177,7 @@ class App extends Component {
           }}
         />
         {currentPixelRgbaValue}
-      </p>
+      </div>
     );
   }
 }
