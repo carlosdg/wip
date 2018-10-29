@@ -1,17 +1,11 @@
 import React, { Component } from "react";
-import InteractiveGrid from "./components/InteractiveGrid";
-import ScrollableContainer from "./components/ScrollableContainer";
-import ImageComponent from "./components/ImageComponent";
-import HistogramComponent from "./components/HistogramComponent";
-import Histogram from "./lib/Histogram";
-import * as ImageHelper from "./lib/imageHelper";
-import * as GridLayoutHelper from "./lib/grid/calculateLayout";
-import {
-  AppContainer,
-  NavbarContainer,
-  MainContainer,
-  FooterContainer
-} from "./components/Layout";
+import InteractiveGrid from "../InteractiveGrid";
+import ImageComponent from "../ImageComponent";
+import HistogramComponent from "../HistogramComponent";
+import Histogram from "../../lib/Histogram";
+import * as ImageHelper from "../../lib/imageHelper";
+import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
+import "./App.css";
 
 // Messy code to play around for now
 class App extends Component {
@@ -90,8 +84,8 @@ class App extends Component {
 
   render() {
     return (
-      <AppContainer>
-        <NavbarContainer>
+      <div className="app-container">
+        <nav>
           <input
             type="file"
             accept="image/*"
@@ -99,10 +93,10 @@ class App extends Component {
             size="65"
             onChange={this.onNewImage}
           />
-        </NavbarContainer>
-        <MainContainer>{this.getGridComponent()}</MainContainer>
-        <FooterContainer>{this.getDisplayForPixelUnderMouse()}</FooterContainer>
-      </AppContainer>
+        </nav>
+        <main className="main">{this.getGridComponent()}</main>
+        <footer>{this.getDisplayForPixelUnderMouse()}</footer>
+      </div>
     );
   }
 
@@ -133,22 +127,14 @@ class App extends Component {
         onSelect={this.onGridItemSelection}
         onDeselect={this.onGridItemDeselection}
       >
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
-          <ScrollableContainer>
+        <div className="center">
+          <div className="scrollable">
             <ImageComponent
               ref={this.storeImageComponent}
               imagePromise={imgPromise}
               onMouseMove={this.onMouseMoveOverImage}
             />
-          </ScrollableContainer>
+          </div>
         </div>
       </InteractiveGrid.Item>
     );
