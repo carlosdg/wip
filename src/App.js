@@ -16,9 +16,8 @@ import {
 // Messy code to play around for now
 class App extends Component {
   state = {
-    x: 0,
-    y: 0,
-    pixel: [0, 0, 0, 255],
+    pixelCoords: { x: 0, y: 0 },
+    pixelValue: [0, 0, 0, 255],
     imagePromises: [],
     imageComponents: [],
     histograms: [],
@@ -32,11 +31,11 @@ class App extends Component {
     });
   }
 
-  onMouseMove = ({ x, y }, pixel) => {
-    this.setState({ x, y, pixel });
+  onMouseMoveOverImage = (pixelCoords, pixelValue) => {
+    this.setState({ pixelCoords, pixelValue });
   };
 
-  addImage = event => {
+  onNewImage = event => {
     const files = event.target.files;
 
     // TODO: handle error
@@ -66,16 +65,26 @@ class App extends Component {
         ]),
         gridLayouts: GridLayoutHelper.addNewElementToLayouts(
           prevState.gridLayouts,
-          "histogram_" + prevState.imageComponents.length
+          "histogram_" + prevState.histograms.length
         )
       }));
     }, 500);
   };
 
+  /** When the user resizes or moves a grid item, we need to update the layout
+   * state */
   onGridLayoutChange = (_, newLayouts) =>
-    requestAnimationFrame(() => this.setState({ gridLayouts: newLayouts }));
+    this.setState({ gridLayouts: newLayouts });
 
+  /** When the user selects a grid item, we need to update the selected item
+   * state */
   onGridItemSelection = itemId => this.setState({ selectedGridItem: itemId });
+
+  /** When the user deselects a grid item, we need to update the deselected item
+   * state */
+  onGridItemDeselection = () => this.setState({ selectedGridItem: null });
+
+  /** TODO: When the user wants to delete a grid item, we need to remove it */
   onGridItemDeletion = itemId =>
     console.log(`Delete grid item with id = ${itemId}`);
 
@@ -88,7 +97,7 @@ class App extends Component {
             accept="image/*"
             name="img"
             size="65"
-            onChange={this.addImage}
+            onChange={this.onNewImage}
           />
         </NavbarContainer>
         <MainContainer>{this.getGridComponent()}</MainContainer>
@@ -122,6 +131,7 @@ class App extends Component {
         id={"image_" + id}
         onDelete={this.onGridItemDeletion}
         onSelect={this.onGridItemSelection}
+        onDeselect={this.onGridItemDeselection}
       >
         <div
           style={{
@@ -136,7 +146,7 @@ class App extends Component {
             <ImageComponent
               ref={this.storeImageComponent}
               imagePromise={imgPromise}
-              onMouseMove={this.onMouseMove}
+              onMouseMove={this.onMouseMoveOverImage}
             />
           </ScrollableContainer>
         </div>
@@ -151,6 +161,7 @@ class App extends Component {
         id={"histogram_" + id}
         onDelete={this.onGridItemDeletion}
         onSelect={this.onGridItemSelection}
+        onDeselect={this.onGridItemDeselection}
       >
         <HistogramComponent histogram={histogram} />
       </InteractiveGrid.Item>
@@ -158,7 +169,7 @@ class App extends Component {
   }
 
   getDisplayForPixelUnderMouse() {
-    const currentPixelRgbaValue = `rgba(${this.state.pixel.join(", ")})`;
+    const currentPixelRgbaValue = `rgba(${this.state.pixelValue.join(", ")})`;
 
     return (
       <div
@@ -171,7 +182,7 @@ class App extends Component {
           boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
         }}
       >
-        {this.state.x}, {this.state.y},
+        x: {this.state.pixelCoords.x}, y: {this.state.pixelCoords.y},
         <span
           style={{
             display: "inline-block",
