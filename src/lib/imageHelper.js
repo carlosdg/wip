@@ -1,19 +1,4 @@
-/**
- * Class to represent image load errors
- */
-export class ImageLoadError extends Error {
-  /**
-   * Creates an instance of this class
-   *
-   * @param {string} errorImageSrc Source of the image that caused the error
-   * @param {string} message Error message
-   */
-  constructor(errorImageSrc, message = "Error loading image") {
-    super(message);
-    this.name = "ImageLoadError";
-    this.src = errorImageSrc;
-  }
-}
+import { ImageLoadException } from "./Exceptions";
 
 /**
  * Returns an promise that resolves with
@@ -29,7 +14,7 @@ export function load(src) {
 
   return new Promise((resolve, reject) => {
     image.onload = () => resolve(image);
-    image.onerror = () => reject(new ImageLoadError(src));
+    image.onerror = () => reject(new ImageLoadException(src));
   });
 }
 
