@@ -88,6 +88,37 @@ export default class RgbaImage {
   };
 
   /**
+   * Returns a specific channel values of the image.
+   * 0 => R channel position
+   * 1 => G channel position
+   * 2 => B channel position
+   * 3 => Alpha channel position
+   *
+   * @param {Integer} channelPosition Position of the desired
+   * channel values in a RGBA pixel.
+   * @returns {Array} Desired channel pixels values.
+   */
+  getChannel = channelPosition => {
+    if (!Checks.isInRange(channelPosition, 0, RgbaImage.NUM_CHANNELS))
+      throw new ValueOutOfBoundsException(
+        channelPosition,
+        0,
+        RgbaImage.NUM_CHANNELS
+      );
+
+    const desiredChannelValues = [];
+    for (
+      let i = channelPosition;
+      i < this.pixels.length;
+      i += RgbaImage.NUM_CHANNELS
+    ) {
+      desiredChannelValues.push(this.pixels[i]);
+    }
+
+    return desiredChannelValues;
+  };
+
+  /**
    * @returns {Uint8ClampedArray} Pixels values of the image, an element for
    * each pixel dimension (4 in case of RGBA for example)
    */
@@ -115,95 +146,4 @@ export default class RgbaImage {
    */
   _mapMatrixPositionToArray = (x, y) =>
     (y * this.width + x) * RgbaImage.NUM_CHANNELS;
-
-  /**
-   * Returns a specific channel values of the image.
-   * 0 => R channel position
-   * 1 => G channel position
-   * 2 => B channel position
-   * 3 => Alpha channel position
-   *
-   * @param {Integer} channelPosition Position of the desired
-   * channel values in a RGBA pixel.
-   * @returns {Array} Desired channel pixels values.
-   */
-  getChannelValues = channelPosition => {
-    if (
-      !channelPosition instanceof Number ||
-      (channelPosition < 0 || channelPosition > 3)
-    )
-      throw new TypeError("Expected a channel position (between 0 and 3 ())");
-
-    let desiredChannelValues = [];
-    for (
-      let i = channelPosition;
-      i < this.pixels.length;
-      i += RgbaImage.NUM_CHANNELS
-    ) {
-      desiredChannelValues.push(this.pixels[i]);
-    }
-
-    return desiredChannelValues;
-  };
-
-  /**
-   * Returns the values of the grayscale pixels of the image.
-   * The method works even though the image is not in grayscale.
-   */
-  getGrayscaleValues = () => {
-    if (!RgbaImage.isInGrayscale(this.pixels))
-      return RgbaImage.convertToGrayscale(this.pixels);
-
-    let grayscaleValues = [];
-    for (let i = 0; i < this.pixels.length; i += RgbaImage.NUM_CHANNELS) {
-      grayscaleValues.push(this.pixels[i]);
-    }
-    return grayscaleValues;
-  };
-
-  /**
-   * Returns the given pixels converted to grayscale,
-   * according to Phase Alternating Line (PAL). We assume
-   * that the given pixels are in RGBA.
-   *
-   * @param {Array} pixels Pixels to convert
-   * @returns {Array} Pixels values of the image, an element
-   * for each pixel dimension (1 in case of grayscale)
-   */
-  static convertToGrayscale = pixels => {
-    if (!pixels instanceof Array)
-      throw new TypeError("Expected array of pixels");
-
-    let convertedPixels = [];
-    for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
-      let rComponent = pixels[i],
-        gComponent = pixels[i + 1],
-        bComponent = pixels[i + 2];
-      convertedPixels.push(
-        Math.round(rComponent * 0.222 + gComponent * 0.707 + bComponent * 0.071)
-      );
-    }
-
-    return convertedPixels;
-  };
-
-  /**
-   * Checks if the given image (array of pixels) is in grayscale.
-   *
-   * @param {Array} pixels Pixels to check
-   * @returns {Boolean} Result of the comprobation
-   */
-  static isInGrayscale = pixels => {
-    if (!pixels instanceof Array)
-      throw new TypeError("Expected array of pixels");
-
-    for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
-      let rComponent = pixels[i],
-        gComponent = pixels[i + 1],
-        bComponent = pixels[i + 2];
-
-      if (rComponent !== gComponent || gComponent !== bComponent) return false;
-    }
-    return true;
-  };
 }

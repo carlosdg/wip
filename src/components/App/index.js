@@ -3,6 +3,7 @@ import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramComponent from "../HistogramComponent";
 import Histogram from "../../lib/Histogram";
+import { getGrayscaleValues } from "../../lib/ImageProcessing/grayscale";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import "./App.css";
@@ -55,7 +56,7 @@ class App extends Component {
       this.setState(prevState => ({
         imageComponents: prevState.imageComponents.concat([newImageComponent]),
         histograms: prevState.histograms.concat([
-          new Histogram(newImageComponent.getImage().getGrayscaleValues())
+          new Histogram(getGrayscaleValues(newImageComponent.getImage()))
         ]),
         gridLayouts: GridLayoutHelper.addNewElementToLayouts(
           prevState.gridLayouts,
