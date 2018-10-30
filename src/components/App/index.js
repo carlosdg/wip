@@ -69,7 +69,7 @@ class App extends Component {
   /** When the user resizes or moves a grid item, we need to update the layout
    * state */
   onGridLayoutChange = (_, newLayouts) =>
-    this.setState({ gridLayouts: newLayouts });
+    requestAnimationFrame(() => this.setState({ gridLayouts: newLayouts }));
 
   /** When the user selects a grid item, we need to update the selected item
    * state */
