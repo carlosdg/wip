@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Overlay from "./Overlay";
 import * as Coordinates from "../../lib/coordinates";
-import Image from "../../lib/Image";
+import RgbaImage from "../../lib/RgbaImage";
 
 /**
  * Returns an object defining the rectangle given by the two coordinates
@@ -92,11 +92,7 @@ class ImageComponent extends Component {
         context.drawImage(image, 0, 0);
 
         const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const imageObject = new Image(
-          imgData.width,
-          imgData.height,
-          imgData.data
-        );
+        const imageObject = RgbaImage.fromImageData(imgData);
 
         this.setState({
           isImageLoading: false,
@@ -161,7 +157,7 @@ class ImageComponent extends Component {
    * Event listener for the mouse up event. Updates the state to know that the
    * user stopped the selection of the part of the image. Then, if the resulting
    * rectangle has 0 width or height it is discarted.
-   * 
+   *
    * MAYBE TODO: set the current mouse coordinate to the ones on mouse up
    * TODO: notify the parent component of the selection
    */
