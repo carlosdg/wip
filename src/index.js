@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
-import "./index.css";
+import "./index.scss";
 
 // react-grid-layout CSS classes
 import "../node_modules/react-grid-layout/css/styles.css";
