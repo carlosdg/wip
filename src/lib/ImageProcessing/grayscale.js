@@ -5,10 +5,8 @@ import RgbaImage from "../RgbaImage";
  * The method works even though the image is not in grayscale.
  */
 export const getGrayscaleValues = rgbaImage => {
-  if (!isInGrayscale(rgbaImage.pixels))
-    return convertToGrayscale(rgbaImage.pixels);
-
-  let grayscaleValues = [];
+  
+  let grayscaleValues = convertToGrayscale(rgbaImage.pixels);
   for (let i = 0; i < rgbaImage.pixels.length; i += RgbaImage.NUM_CHANNELS) {
     grayscaleValues.push(rgbaImage.pixels[i]);
   }
@@ -25,7 +23,6 @@ export const getGrayscaleValues = rgbaImage => {
  * for each pixel dimension (1 in case of grayscale)
  */
 export const convertToGrayscale = pixels => {
-  if (!pixels instanceof Array) throw new TypeError("Expected array of pixels");
 
   let convertedPixels = [];
   for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
@@ -47,7 +44,6 @@ export const convertToGrayscale = pixels => {
  * @returns {Boolean} Result of the comprobation
  */
 export const isInGrayscale = pixels => {
-  if (!pixels instanceof Array) throw new TypeError("Expected array of pixels");
 
   for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
     let rComponent = pixels[i],
