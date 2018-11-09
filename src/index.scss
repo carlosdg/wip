@@ -3,7 +3,7 @@
 $primary: hsl(210, 25%, 70%);
 $navbar-item-img-max-height: 50px;
 
-
+@import "../node_modules/bulma/bulma.sass";
 @import "../node_modules/bulma/sass/utilities/_all.sass";
 @import "../node_modules/bulma/sass/elements/button.sass";
 @import "../node_modules/bulma/sass/elements/container.sass";
