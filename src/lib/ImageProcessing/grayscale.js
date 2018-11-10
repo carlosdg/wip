@@ -1,4 +1,4 @@
-import RgbaImage from "../RgbaImage";
+import RgbaImageBuffer from "../RgbaImageBuffer";
 
 /**
  * Returns the values of the grayscale pixels of the image.
@@ -7,7 +7,7 @@ import RgbaImage from "../RgbaImage";
 export const getGrayscaleValues = rgbaImage => {
   
   let grayscaleValues = convertToGrayscale(rgbaImage.pixels);
-  for (let i = 0; i < rgbaImage.pixels.length; i += RgbaImage.NUM_CHANNELS) {
+  for (let i = 0; i < rgbaImage.pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
     grayscaleValues.push(rgbaImage.pixels[i]);
   }
   return grayscaleValues;
@@ -25,7 +25,7 @@ export const getGrayscaleValues = rgbaImage => {
 export const convertToGrayscale = pixels => {
 
   let convertedPixels = [];
-  for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
+  for (let i = 0; i < pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
     let rComponent = pixels[i],
       gComponent = pixels[i + 1],
       bComponent = pixels[i + 2];
@@ -45,7 +45,7 @@ export const convertToGrayscale = pixels => {
  */
 export const isInGrayscale = pixels => {
 
-  for (let i = 0; i < pixels.length; i += RgbaImage.NUM_CHANNELS) {
+  for (let i = 0; i < pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
     let rComponent = pixels[i],
       gComponent = pixels[i + 1],
       bComponent = pixels[i + 2];

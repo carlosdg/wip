@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Overlay from "./Overlay";
-import RgbaImage from "../../lib/RgbaImage";
+import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import * as Coordinates from "../../lib/coordinates";
 
 /**
@@ -42,7 +42,7 @@ const areCoordinatesAligned = (coords1, coords2) =>
 class ImageComponent extends Component {
   static propTypes = {
     /** RgbaImage instance to render */
-    rgbaImage: PropTypes.instanceOf(RgbaImage).isRequired,
+    rgbaImage: PropTypes.instanceOf(RgbaImageBuffer).isRequired,
     /** Callback called with the mouse position relative to the
      * image and the pixel value at that position */
     onMouseMove: PropTypes.func

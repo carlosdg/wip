@@ -7,7 +7,7 @@ import { ValueOutOfBoundsException } from "./Exceptions";
  * abstract away the pixel related manipulations by providing a set of
  * convenience methods for iterating through pixels.
  */
-export default class RgbaImage {
+export default class RgbaImageBuffer {
   /** Number of channels in a RGBA pixel */
   static NUM_CHANNELS = 4;
 
@@ -17,16 +17,16 @@ export default class RgbaImage {
    * references
    *
    * @param {ImageData} imgData ImageData instance to create the RgbaImage from
-   * @returns {RgbaImage} Instance of RgbaImage initialized from the ImgData
+   * @returns {RgbaImageBuffer} Instance of RgbaImage initialized from the ImgData
    */
   static fromImageData({ width, height, data }) {
-    return new RgbaImage(width, height, data);
+    return new RgbaImageBuffer(width, height, data);
   }
 
   /**
    * Convenient function to create an ImageData object from a RgbaImage object
    *
-   * @param {RgbaImage} rgbaImage Instance of RgbaImage used to create the
+   * @param {RgbaImageBuffer} rgbaImage Instance of RgbaImage used to create the
    * ImageData
    * @returns {ImageData} ImageData instance with a copy of the width, height
    * and pixels of the given RgbaImage
@@ -55,11 +55,11 @@ export default class RgbaImage {
   }
 
   /** Alias for RgbaImage.toImageData(instanceOfRgbaImage) */
-  toImageData = () => RgbaImage.toImageData(this);
+  toImageData = () => RgbaImageBuffer.toImageData(this);
 
   /** Returns a deep copy of this RgbaImage instance */
   copy = () =>
-    new RgbaImage(this.width, this.height, new Uint8ClampedArray(this.pixels));
+    new RgbaImageBuffer(this.width, this.height, new Uint8ClampedArray(this.pixels));
 
   /**
    * Returns the pixel value at the given position
@@ -83,7 +83,7 @@ export default class RgbaImage {
 
     return this.pixels.slice(
       pixelPosition,
-      pixelPosition + RgbaImage.NUM_CHANNELS
+      pixelPosition + RgbaImageBuffer.NUM_CHANNELS
     );
   };
 
@@ -99,18 +99,18 @@ export default class RgbaImage {
    * @returns {Array} Desired channel pixels values.
    */
   getChannel = channelPosition => {
-    if (!Checks.isInRange(channelPosition, 0, RgbaImage.NUM_CHANNELS))
+    if (!Checks.isInRange(channelPosition, 0, RgbaImageBuffer.NUM_CHANNELS))
       throw new ValueOutOfBoundsException(
         channelPosition,
         0,
-        RgbaImage.NUM_CHANNELS
+        RgbaImageBuffer.NUM_CHANNELS
       );
 
     const desiredChannelValues = [];
     for (
       let i = channelPosition;
       i < this.pixels.length;
-      i += RgbaImage.NUM_CHANNELS
+      i += RgbaImageBuffer.NUM_CHANNELS
     ) {
       desiredChannelValues.push(this.pixels[i]);
     }
@@ -145,5 +145,5 @@ export default class RgbaImage {
    * @returns {number} Corresponding vector coordinate
    */
   _mapMatrixPositionToArray = (x, y) =>
-    (y * this.width + x) * RgbaImage.NUM_CHANNELS;
+    (y * this.width + x) * RgbaImageBuffer.NUM_CHANNELS;
 }

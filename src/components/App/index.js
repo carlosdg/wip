@@ -7,7 +7,7 @@ import Histogram from "../../lib/Histogram";
 import { getGrayscaleValues } from "../../lib/ImageProcessing/grayscale";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
-import RgbaImage from "../../lib/RgbaImage";
+import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import "./App.css";
 
 class App extends Component {
@@ -51,7 +51,7 @@ class App extends Component {
         context.drawImage(image, 0, 0);
 
         const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const rgbaImage = RgbaImage.fromImageData(imgData);
+        const rgbaImage = RgbaImageBuffer.fromImageData(imgData);
         const histogram = new Histogram(getGrayscaleValues(rgbaImage));
 
         this.setState(prevState => ({
