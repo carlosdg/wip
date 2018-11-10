@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramComponent from "../HistogramComponent";
-import Toolbar from "../Toolbar";
+import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { getGrayscaleValues } from "../../lib/ImageProcessing/grayscale";
 import * as ImageHelper from "../../lib/imageHelper";
@@ -91,7 +91,7 @@ class App extends Component {
   render() {
     return (
       <div className="app-container">
-        <Toolbar onNewImage={this.onNewImage} />
+        <AppToolbar onNewImage={this.onNewImage} />
         <main className="main">{this.getGridComponent()}</main>
         <footer>{this.getDisplayForPixelUnderMouse()}</footer>
       </div>
