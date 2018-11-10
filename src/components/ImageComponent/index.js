@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Overlay from "./Overlay";
-import * as Coordinates from "../../lib/coordinates";
 import RgbaImage from "../../lib/RgbaImage";
+import * as Coordinates from "../../lib/coordinates";
 
 /**
  * Returns an object defining the rectangle given by the two coordinates
@@ -37,19 +37,12 @@ const areCoordinatesAligned = (coords1, coords2) =>
 // - The mouse up event is done outside the component
 // - The user wants to select a part passing the scroll
 /**
- * Component that renders an image from the given promise passed
- * as prop. That promise needs to resolve to the Image instance
- * to render in this component. Or it can reject if there is any
- * error during the image load.
- *
- * This way the strategy used to load the image (for example: from
- * a file, from a portion of another image, from an URL, etc) can
- * be decided by the user of the component
+ * Component that renders an image from the given RgbaImage instance
  */
 class ImageComponent extends Component {
   static propTypes = {
-    /** Promise that resolves to the image to render */
-    imagePromise: PropTypes.instanceOf(Promise).isRequired,
+    /** RgbaImage instance to render */
+    rgbaImage: PropTypes.instanceOf(RgbaImage).isRequired,
     /** Callback called with the mouse position relative to the
      * image and the pixel value at that position */
     onMouseMove: PropTypes.func
@@ -61,62 +54,36 @@ class ImageComponent extends Component {
 
   /** Component state */
   state = {
-    /** Image */
-    image: null,
     /** Flag to know if the image is currently being loaded */
-    isImageLoading: true,
-    /** Error object that is not null if there is an error */
-    error: null,
-
+    isImageLoading: false,
+    /** Flag to know if the user clicked and is holding the mouse down */
     isMouseDown: false,
+    /** Coordinates of the mouse when the user started pressing it */
     mouseDownOriginCoordinates: { x: -1, y: -1 },
+    /** Current mouse coordinates relative to the image viewport */
     currentMouseCoordinates: { x: -1, y: -1 }
   };
 
-  /** Returns the image */
-  getImage() {
-    // TODO: check if loading and if error
-    return this.state.image;
-  }
-
   componentDidMount() {
-    // Try to get the image and draw it to the canvas
-    // If there is an error update the state.error
-    this.props.imagePromise
-      .then(image => {
-        const canvas = this.refs.canvas;
-        const context = canvas.getContext("2d");
+    // Try to get the image and draw it to the canvas If there is an error
+    // update the state.error
+    const canvas = this.refs.canvas;
+    const context = canvas.getContext("2d");
 
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
-        context.drawImage(image, 0, 0);
+    canvas.width = this.props.rgbaImage.width;
+    canvas.height = this.props.rgbaImage.height;
+    context.putImageData(this.props.rgbaImage.toImageData(), 0, 0);
 
-        const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const imageObject = RgbaImage.fromImageData(imgData);
-
-        this.setState({
-          isImageLoading: false,
-          image: imageObject
-        });
-      })
-      .catch(error => {
-        this.setState({
-          isImageLoading: false,
-          error: error
-        });
-      });
+    this.setState({
+      isImageLoading: false
+    });
   }
 
-  /** (Method bound to the class instances). Mouse move event
-   * handler, gets the coordinates relative to the image where
-   * the user mouse is pointing to and the pixel RGBA value there
-   * and calls props.onMouseMove */
+  /** Mouse move event handler, gets the coordinates relative to the image where
+   * the user mouse is pointing to and the pixel RGBA value there and calls
+   * props.onMouseMove */
   onMouseMove = mouseEvent => {
-    if (
-      !this.props.onMouseMove ||
-      this.state.isImageLoading ||
-      this.state.error
-    ) {
+    if (!this.props.onMouseMove || this.state.isImageLoading) {
       return;
     }
 
@@ -124,7 +91,7 @@ class ImageComponent extends Component {
       mouseEvent,
       this.refs.canvas
     );
-    const pixel = this.state.image.getPixel(coordinates);
+    const pixel = this.props.rgbaImage.getPixel(coordinates);
 
     if (this.state.isMouseDown) {
       this.setState({
@@ -158,8 +125,8 @@ class ImageComponent extends Component {
    * user stopped the selection of the part of the image. Then, if the resulting
    * rectangle has 0 width or height it is discarted.
    *
-   * MAYBE TODO: set the current mouse coordinate to the ones on mouse up
-   * TODO: notify the parent component of the selection
+   * MAYBE TODO: set the current mouse coordinate to the ones on mouse up TODO:
+   * notify the parent component of the selection
    */
   onMouseUp = mouseEvent => {
     if (this.state.isMouseDown) {
@@ -188,7 +155,7 @@ class ImageComponent extends Component {
       this.state.currentMouseCoordinates
     );
 
-    // TODO: check if loading and if error
+    // TODO: check if loading
     return (
       <div
         style={{

@@ -30,23 +30,24 @@ const createNewElementLayoutInfo = id => ({
 
 /**
  * Returns a new set set of layouts resulting from adding a default layout
- * information for the new element with the given ID
+ * information for the new elements with the given IDs
  *
  * @param {Object} currentLayouts Layouts object to where the new element
  * information is going to be added
- * @param {String | number} newElementId ID of the Element to add to the layout
+ * @param {Array<String | number>} newElementsIds IDs of the elements to add to
+ * the layout
  */
-const addNewElementToLayouts = (currentLayouts, newElementId) => {
-  const newElementLayoutInfo = createNewElementLayoutInfo(newElementId);
+const addNewElementsToLayouts = (currentLayouts, newElementsIds) => {
+  const newElementsLayoutInfos = newElementsIds.map(createNewElementLayoutInfo);
   const newLayouts = createNewSetOfLayouts();
 
   Object.keys(currentLayouts).forEach(layoutName => {
-    newLayouts[layoutName] = currentLayouts[layoutName].concat([
-      newElementLayoutInfo
-    ]);
+    newLayouts[layoutName] = currentLayouts[layoutName].concat(
+      newElementsLayoutInfos
+    );
   });
 
   return newLayouts;
 };
 
-export { createNewSetOfLayouts, addNewElementToLayouts };
+export { createNewSetOfLayouts, addNewElementsToLayouts };

@@ -2,20 +2,19 @@ import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramComponent from "../HistogramComponent";
-import Toolbar from "../Toolbar"
+import Toolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { getGrayscaleValues } from "../../lib/ImageProcessing/grayscale";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
+import RgbaImage from "../../lib/RgbaImage";
 import "./App.css";
 
-// Messy code to play around for now
 class App extends Component {
   state = {
     pixelCoords: { x: 0, y: 0 },
     pixelValue: [0, 0, 0, 255],
-    imagePromises: [],
-    imageComponents: [],
+    rgbaImages: [],
     histograms: [],
     selectedGridItem: null,
     gridLayouts: {}
@@ -40,31 +39,36 @@ class App extends Component {
       return;
     }
 
-    const imagePromise = ImageHelper.loadFromObject(files[0]);
+    // Try to get the image and draw it to the canvas. If there is an error
+    // update the state.error
+    ImageHelper.loadFromObject(files[0])
+      .then(image => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
 
-    this.setState(prevState => ({
-      imagePromises: prevState.imagePromises.concat([imagePromise]),
-      gridLayouts: GridLayoutHelper.addNewElementToLayouts(
-        prevState.gridLayouts,
-        "image_" + prevState.imagePromises.length
-      )
-    }));
-  };
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        context.drawImage(image, 0, 0);
 
-  // Temp method to simulate the user clicking on the show histogram button
-  storeImageComponent = newImageComponent => {
-    setTimeout(() => {
-      this.setState(prevState => ({
-        imageComponents: prevState.imageComponents.concat([newImageComponent]),
-        histograms: prevState.histograms.concat([
-          new Histogram(getGrayscaleValues(newImageComponent.getImage()))
-        ]),
-        gridLayouts: GridLayoutHelper.addNewElementToLayouts(
-          prevState.gridLayouts,
-          "histogram_" + prevState.histograms.length
-        )
-      }));
-    }, 500);
+        const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const rgbaImage = RgbaImage.fromImageData(imgData);
+        const histogram = new Histogram(getGrayscaleValues(rgbaImage));
+
+        this.setState(prevState => ({
+          rgbaImages: prevState.rgbaImages.concat([rgbaImage]),
+          histograms: prevState.histograms.concat([histogram]),
+          gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
+            prevState.gridLayouts,
+            [
+              "image_" + prevState.rgbaImages.length,
+              "histogram_" + prevState.histograms.length
+            ]
+          )
+        }));
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   /** When the user resizes or moves a grid item, we need to update the layout
@@ -87,7 +91,7 @@ class App extends Component {
   render() {
     return (
       <div className="app-container">
-        <Toolbar onNewImage={this.onNewImage}></Toolbar>
+        <Toolbar onNewImage={this.onNewImage} />
         <main className="main">{this.getGridComponent()}</main>
         <footer>{this.getDisplayForPixelUnderMouse()}</footer>
       </div>
@@ -102,8 +106,8 @@ class App extends Component {
         layouts={this.state.gridLayouts}
         onLayoutChange={this.onGridLayoutChange}
       >
-        {this.state.imagePromises.map((promise, index) =>
-          this.getImageGridItem(promise, index)
+        {this.state.rgbaImages.map((rgbaImage, index) =>
+          this.getImageGridItem(rgbaImage, index)
         )}
         {this.state.histograms.map((histogram, index) =>
           this.getHistogramGridItem(histogram, index)
@@ -112,7 +116,7 @@ class App extends Component {
     );
   }
 
-  getImageGridItem(imgPromise, id) {
+  getImageGridItem(rgbaImage, id) {
     return (
       <InteractiveGrid.Item
         key={"image_" + id}
@@ -124,8 +128,7 @@ class App extends Component {
         <div className="center">
           <div className="scrollable">
             <ImageComponent
-              ref={this.storeImageComponent}
-              imagePromise={imgPromise}
+              rgbaImage={rgbaImage}
               onMouseMove={this.onMouseMoveOverImage}
             />
           </div>
