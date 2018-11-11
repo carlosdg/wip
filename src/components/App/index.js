@@ -4,7 +4,7 @@ import ImageComponent from "../ImageComponent";
 import HistogramComponent from "../HistogramComponent";
 import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
-import { getGrayscaleValues } from "../../lib/ImageProcessing/grayscale";
+import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -30,7 +30,29 @@ class App extends Component {
     this.setState({ pixelCoords, pixelValue });
   };
 
-  onNewImage = event => {
+  /**  Adds all the information related to the given image buffer to the app */
+  addNewImage = imageBuffer => {
+    // TODO: Update the Histogram so it doesn't need grayscale images
+    const histogram = new Histogram(imageToGrayscale(imageBuffer));
+    const imageKey = `image_${this.state.imagesInfos.length}`;
+    const histogramKey = `histogram_${this.state.histogramInfos.length}`;
+
+    this.setState(prevState => ({
+      imagesInfos: prevState.imagesInfos.concat([
+        { key: imageKey, imageBuffer }
+      ]),
+      histogramInfos: prevState.histogramInfos.concat([
+        { key: histogramKey, histogram, visible: false }
+      ]),
+      gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
+        prevState.gridLayouts,
+        [imageKey]
+      )
+    }));
+  };
+
+  /** Listener for a file input event to load the input image to the application */
+  onNewImageFromFile = event => {
     const files = event.target.files;
 
     // TODO: handle error
@@ -52,22 +74,7 @@ class App extends Component {
 
         const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
         const imageBuffer = RgbaImageBuffer.fromImageData(imgData);
-        const histogram = new Histogram(getGrayscaleValues(imageBuffer));
-        const imageKey = `image_${this.state.imagesInfos.length}`;
-        const histogramKey = `histogram_${this.state.histogramInfos.length}`;
-
-        this.setState(prevState => ({
-          imagesInfos: prevState.imagesInfos.concat([
-            { key: imageKey, imageBuffer }
-          ]),
-          histogramInfos: prevState.histogramInfos.concat([
-            { key: histogramKey, histogram, visible: false }
-          ]),
-          gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
-            prevState.gridLayouts,
-            [imageKey]
-          )
-        }));
+        this.addNewImage(imageBuffer);
       })
       .catch(error => {
         console.error(error);
@@ -175,14 +182,28 @@ class App extends Component {
     }
   };
 
+  currentImageToGrayscale = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        imageToGrayscale(this.state.imagesInfos[index].imageBuffer)
+      );
+    }
+  };
+
   render() {
     return (
       <div>
         <div className="app-container">
           <AppToolbar
-            onNewImage={this.onNewImage}
+            onFileInput={this.onNewImageFromFile}
             onShowHistogram={this.showHistogramOfCurrentImage}
             onDownload={this.downloadCurrentImage}
+            onGrayscale={this.currentImageToGrayscale}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>

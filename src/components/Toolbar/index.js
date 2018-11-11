@@ -73,6 +73,11 @@ class AppToolbar extends React.Component {
                           Download Image
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.onGrayscale}>
+                          To Grayscale
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -87,7 +92,7 @@ class AppToolbar extends React.Component {
               accept="image/*"
               name="image-input"
               onChange={event => {
-                this.props.onNewImage(event);
+                this.props.onFileInput(event);
                 this.refs.fileInputForm.reset();
               }}
             />
