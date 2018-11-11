@@ -38,7 +38,7 @@ class AppToolbar extends React.Component {
             aria-haspopup="true"
             onClick={this.handleToggle}
           >
-            File
+            Menu
           </Button>
           <Popper
             open={this.state.open}
@@ -60,6 +60,9 @@ class AppToolbar extends React.Component {
                     <MenuList>
                       <MenuItem onClick={this.handleClose}>
                         <label htmlFor="image-input">Open File</label>
+                      </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.onShowHistogram}>Histogram</span>
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>

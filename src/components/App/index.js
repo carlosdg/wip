@@ -61,11 +61,11 @@ class App extends Component {
             { key: imageKey, imageBuffer }
           ]),
           histogramInfos: prevState.histogramInfos.concat([
-            { key: histogramKey, histogram, visible: true }
+            { key: histogramKey, histogram, visible: false }
           ]),
           gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
             prevState.gridLayouts,
-            [imageKey, histogramKey]
+            [imageKey]
           )
         }));
       })
@@ -126,10 +126,34 @@ class App extends Component {
     }));
   };
 
+  showHistogramOfCurrentImage = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.setState(prevState => ({
+        histogramInfos: prevState.histogramInfos.map((histogramInfo, i) =>
+          i === index
+            ? { ...histogramInfo, visible: true }
+            : { ...histogramInfo }
+        ),
+        gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
+          prevState.gridLayouts,
+          [prevState.histogramInfos[index].key]
+        )
+      }));
+    }
+  };
+
   render() {
     return (
       <div className="app-container">
-        <AppToolbar onNewImage={this.onNewImage} />
+        <AppToolbar
+          onNewImage={this.onNewImage}
+          onShowHistogram={this.showHistogramOfCurrentImage}
+        />
         <main className="main">{this.getGridComponent()}</main>
         <footer>{this.getDisplayForPixelUnderMouse()}</footer>
       </div>
