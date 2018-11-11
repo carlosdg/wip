@@ -58,14 +58,20 @@ class AppToolbar extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList>
+                      <label htmlFor="image-input">
+                        <MenuItem onClick={this.handleClose}>
+                          Open File
+                        </MenuItem>
+                      </label>
                       <MenuItem onClick={this.handleClose}>
-                        <label htmlFor="image-input">Open File</label>
+                        <span onClick={this.props.onShowHistogram}>
+                          Histogram
+                        </span>
                       </MenuItem>
                       <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.onShowHistogram}>Histogram</span>
-                      </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.onDownload}>Download Image</span>
+                        <span onClick={this.props.onDownload}>
+                          Download Image
+                        </span>
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
