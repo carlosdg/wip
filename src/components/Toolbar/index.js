@@ -64,6 +64,9 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.handleClose}>
                         <span onClick={this.props.onShowHistogram}>Histogram</span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.onDownload}>Download Image</span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

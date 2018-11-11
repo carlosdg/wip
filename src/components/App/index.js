@@ -147,15 +147,57 @@ class App extends Component {
     }
   };
 
+  downloadCurrentImage = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      const imageData = this.state.imagesInfos[index].imageBuffer.toImageData();
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = imageData.width;
+      canvas.height = imageData.height;
+      context.putImageData(imageData, 0, 0);
+
+      canvas.toBlob(
+        blob => {
+          const imgUrl = URL.createObjectURL(blob);
+          this.refs.downloadAnchor.href = imgUrl;
+          this.refs.downloadAnchor.click();
+          URL.revokeObjectURL(imgUrl);
+        },
+        null,
+        1
+      );
+    }
+  };
+
   render() {
     return (
-      <div className="app-container">
-        <AppToolbar
-          onNewImage={this.onNewImage}
-          onShowHistogram={this.showHistogramOfCurrentImage}
-        />
-        <main className="main">{this.getGridComponent()}</main>
-        <footer>{this.getDisplayForPixelUnderMouse()}</footer>
+      <div>
+        <div className="app-container">
+          <AppToolbar
+            onNewImage={this.onNewImage}
+            onShowHistogram={this.showHistogramOfCurrentImage}
+            onDownload={this.downloadCurrentImage}
+          />
+          <main className="main">{this.getGridComponent()}</main>
+          <footer>{this.getDisplayForPixelUnderMouse()}</footer>
+        </div>
+        <div>
+          <a
+            ref="downloadAnchor"
+            href="#download"
+            id="download"
+            hidden
+            download
+          >
+            This should not be visible. It is only used when downloading images
+          </a>
+        </div>
       </div>
     );
   }
