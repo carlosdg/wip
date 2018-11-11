@@ -67,14 +67,19 @@ class AppToolbar extends React.Component {
               </Grow>
             )}
           </Popper>
-          <input
-            hidden
-            id="image-input"
-            type="file"
-            accept="image/*"
-            name="image-input"
-            onChange={this.props.onNewImage}
-          />
+          <form ref="fileInputForm">
+            <input
+              hidden
+              id="image-input"
+              type="file"
+              accept="image/*"
+              name="image-input"
+              onChange={event => {
+                this.props.onNewImage(event);
+                this.refs.fileInputForm.reset();
+              }}
+            />
+          </form>
         </Toolbar>
       </AppBar>
     );
