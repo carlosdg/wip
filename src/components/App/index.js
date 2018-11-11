@@ -16,7 +16,7 @@ class App extends Component {
     pixelValue: [0, 0, 0, 255],
     rgbaImages: [],
     histograms: [],
-    selectedGridItem: null,
+    selectedGridItem: {},
     gridLayouts: {}
   };
 
@@ -82,7 +82,7 @@ class App extends Component {
 
   /** When the user deselects a grid item, we need to update the deselected item
    * state */
-  onGridItemDeselection = () => this.setState({ selectedGridItem: null });
+  onGridItemDeselection = () => this.setState({ selectedGridItem: {} });
 
   /** TODO: When the user wants to delete a grid item, we need to remove it */
   onGridItemDeletion = itemId =>
@@ -120,10 +120,13 @@ class App extends Component {
     return (
       <InteractiveGrid.Item
         key={"image_" + id}
-        id={"image_" + id}
+        id={{ type: "image", index: id }}
         onDelete={this.onGridItemDeletion}
         onSelect={this.onGridItemSelection}
-        onDeselect={this.onGridItemDeselection}
+        isSelected={
+          this.state.selectedGridItem.type === "image" &&
+          this.state.selectedGridItem.index === id
+        }
       >
         <div className="center">
           <div className="scrollable">
@@ -141,10 +144,13 @@ class App extends Component {
     return (
       <InteractiveGrid.Item
         key={"histogram_" + id}
-        id={"histogram_" + id}
+        id={{ type: "histogram", index: id }}
         onDelete={this.onGridItemDeletion}
         onSelect={this.onGridItemSelection}
-        onDeselect={this.onGridItemDeselection}
+        isSelected={
+          this.state.selectedGridItem.type === "histogram" &&
+          this.state.selectedGridItem.index === id
+        }
       >
         <HistogramComponent histogram={histogram} />
       </InteractiveGrid.Item>

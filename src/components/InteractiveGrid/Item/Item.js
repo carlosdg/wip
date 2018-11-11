@@ -22,17 +22,19 @@ export default class Item extends React.Component {
     id: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
-      PropTypes.symbol
+      PropTypes.symbol,
+      PropTypes.object
     ]).isRequired,
     onDelete: PropTypes.func,
     onSelect: PropTypes.func,
-    onDeselect: PropTypes.func
+    isSelected: PropTypes.bool
   };
 
   static defaultProps = {
     onDelete: null,
     onSelect: null,
-    onDeselect: null
+    onDeselect: null,
+    isSelected: false
   };
 
   /** We only want to allow the item being drag when the user is trying to drag
@@ -74,29 +76,24 @@ export default class Item extends React.Component {
    * the ID of this element */
   onSelect = () => this.props.onSelect(this.props.id);
 
-  /** When the user gets the focus out of this item, call the props `onDeselect`
-   * callback with the ID of this element */
-  onDeselect = () => this.props.onDeselect(this.props.id);
-
   render() {
     const {
       children,
       className,
       style,
       onSelect,
-      onDeselect,
-      onDelete
+      onDelete,
+      isSelected
     } = this.props;
 
     return (
       <div
-        className={`Item ${className}`}
+        className={`Item ${className} ${isSelected && "is-selected"}`}
         style={style}
         draggable={this.state.isDraggable}
         onDragStart={this.onDragStart}
         onMouseUp={this.onDragEnd} // OnMouseUp instead of DragEnd because DragStart prevents default
         onFocus={onSelect ? this.onSelect : null}
-        onBlur={onDeselect ? this.onDeselect : null}
         tabIndex="0"
       >
         <div

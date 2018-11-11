@@ -6,7 +6,7 @@
   background-color: white;
 }
 
-.Item:focus-within {
+.Item.is-selected {
   outline: none;
   box-shadow: -3px 5px 10px -1px #ddd, 3px -5px 10px -1px #ddd;
 }
@@ -19,7 +19,7 @@
   padding: 5px;
 }
 
-.Item:focus-within .Item__toolbar {
+.Item.is-selected .Item__toolbar {
   background-color: hsl(210, 25%, 70%);
 }
 
