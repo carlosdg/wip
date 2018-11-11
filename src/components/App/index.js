@@ -12,19 +12,19 @@ import "./App.css";
 
 class App extends Component {
   state = {
+    /** All the information relative to the images loaded */
+    imagesInfos: [],
+    /** All the information relative to the histograms of each image */
+    histogramInfos: [],
+    /** Grid layouts for the elements on screen */
+    gridLayouts: GridLayoutHelper.createNewSetOfLayouts(),
+    /** Information of the current grid item being selected (item type & index) */
+    selectedGridItem: { type: "", index: -1 },
+    /** Coordenates of the pixel that was last being pointed by the mouse */
     pixelCoords: { x: 0, y: 0 },
-    pixelValue: [0, 0, 0, 255],
-    rgbaImages: [],
-    histograms: [],
-    selectedGridItem: {},
-    gridLayouts: {}
+    /** Value of the pixel that was last being pointed by the mouse */
+    pixelValue: [0, 0, 0, 255]
   };
-
-  componentDidMount() {
-    this.setState({
-      gridLayouts: GridLayoutHelper.createNewSetOfLayouts()
-    });
-  }
 
   onMouseMoveOverImage = (pixelCoords, pixelValue) => {
     this.setState({ pixelCoords, pixelValue });
@@ -51,18 +51,21 @@ class App extends Component {
         context.drawImage(image, 0, 0);
 
         const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const rgbaImage = RgbaImageBuffer.fromImageData(imgData);
-        const histogram = new Histogram(getGrayscaleValues(rgbaImage));
+        const imageBuffer = RgbaImageBuffer.fromImageData(imgData);
+        const histogram = new Histogram(getGrayscaleValues(imageBuffer));
+        const imageKey = `image_${this.state.imagesInfos.length}`;
+        const histogramKey = `histogram_${this.state.histogramInfos.length}`;
 
         this.setState(prevState => ({
-          rgbaImages: prevState.rgbaImages.concat([rgbaImage]),
-          histograms: prevState.histograms.concat([histogram]),
+          imagesInfos: prevState.imagesInfos.concat([
+            { key: imageKey, imageBuffer }
+          ]),
+          histogramInfos: prevState.histogramInfos.concat([
+            { key: histogramKey, histogram, visible: true }
+          ]),
           gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
             prevState.gridLayouts,
-            [
-              "image_" + prevState.rgbaImages.length,
-              "histogram_" + prevState.histograms.length
-            ]
+            [imageKey, histogramKey]
           )
         }));
       })
@@ -71,22 +74,57 @@ class App extends Component {
       });
   };
 
+  /** Returns whether the given item is selected or not */
+  isGridItemSelected = (type, index) =>
+    this.state.selectedGridItem.index === index &&
+    this.state.selectedGridItem.type === type;
+
   /** When the user resizes or moves a grid item, we need to update the layout
    * state */
   onGridLayoutChange = (_, newLayouts) =>
     requestAnimationFrame(() => this.setState({ gridLayouts: newLayouts }));
 
-  /** When the user selects a grid item, we need to update the selected item
-   * state */
-  onGridItemSelection = itemId => this.setState({ selectedGridItem: itemId });
+  /** Returns a function that, when the user selects an image grid item, updates
+   * the selected item state */
+  onGridItemSelection = type => index =>
+    this.setState({ selectedGridItem: { type, index } });
 
-  /** When the user deselects a grid item, we need to update the deselected item
-   * state */
-  onGridItemDeselection = () => this.setState({ selectedGridItem: {} });
+  /** Removes the image in the given position and all its related information
+   * like the histogram */
+  deleteAllImageRelatedInfo = index => {
+    this.setState(prevState => ({
+      histogramInfos: prevState.histogramInfos.filter((_, i) => i !== index),
+      imagesInfos: prevState.imagesInfos.filter((_, i) => i !== index),
+      gridLayouts: GridLayoutHelper.removeElementsFromLayout(
+        prevState.gridLayouts,
+        [prevState.histogramInfos[index].key, prevState.imagesInfos[index].key]
+      ),
+      selectedGridItem:
+        index === prevState.selectedGridItem.index
+          ? { type: "", index: -1 }
+          : prevState.selectedGridItem
+    }));
+  };
 
-  /** TODO: When the user wants to delete a grid item, we need to remove it */
-  onGridItemDeletion = itemId =>
-    console.log(`Delete grid item with id = ${itemId}`);
+  /** Hides the given histogram from the view */
+  hideHistogram = index => {
+    // Set the visibility to false, remove its layout information and resets the
+    // current selected item if it was the histogram to hide
+    this.setState(prevState => ({
+      histogramInfos: prevState.histogramInfos.map((histogramInfo, i) =>
+        i === index
+          ? { ...histogramInfo, visible: false }
+          : { ...histogramInfo }
+      ),
+      gridLayouts: GridLayoutHelper.removeElementsFromLayout(
+        prevState.gridLayouts,
+        [prevState.histogramInfos[index].key]
+      ),
+      selectedGridItem: this.isGridItemSelected("histogram", index)
+        ? { type: "", index: -1 }
+        : prevState.selectedGridItem
+    }));
+  };
 
   render() {
     return (
@@ -98,7 +136,7 @@ class App extends Component {
     );
   }
 
-  // Temporal methods to keep the render method cleaner for now
+  // Methods to keep the render method cleaner
 
   getGridComponent() {
     return (
@@ -106,32 +144,33 @@ class App extends Component {
         layouts={this.state.gridLayouts}
         onLayoutChange={this.onGridLayoutChange}
       >
-        {this.state.rgbaImages.map((rgbaImage, index) =>
-          this.getImageGridItem(rgbaImage, index)
+        {this.state.imagesInfos.map((image, index) =>
+          this.getImageGridItem(image, index)
         )}
-        {this.state.histograms.map((histogram, index) =>
-          this.getHistogramGridItem(histogram, index)
-        )}
+        {this.state.histogramInfos
+          .map((histogram, index) =>
+            histogram.visible
+              ? this.getHistogramGridItem(histogram, index)
+              : null
+          )
+          .filter(element => element !== null)}
       </InteractiveGrid.Grid>
     );
   }
 
-  getImageGridItem(rgbaImage, id) {
+  getImageGridItem({ imageBuffer, key }, index) {
     return (
       <InteractiveGrid.Item
-        key={"image_" + id}
-        id={{ type: "image", index: id }}
-        onDelete={this.onGridItemDeletion}
-        onSelect={this.onGridItemSelection}
-        isSelected={
-          this.state.selectedGridItem.type === "image" &&
-          this.state.selectedGridItem.index === id
-        }
+        key={key}
+        id={index}
+        onDelete={this.deleteAllImageRelatedInfo}
+        onSelect={this.onGridItemSelection("image")}
+        isSelected={this.isGridItemSelected("image", index)}
       >
         <div className="center">
           <div className="scrollable">
             <ImageComponent
-              rgbaImage={rgbaImage}
+              rgbaImage={imageBuffer}
               onMouseMove={this.onMouseMoveOverImage}
             />
           </div>
@@ -140,17 +179,14 @@ class App extends Component {
     );
   }
 
-  getHistogramGridItem(histogram, id) {
+  getHistogramGridItem({ histogram, key }, index) {
     return (
       <InteractiveGrid.Item
-        key={"histogram_" + id}
-        id={{ type: "histogram", index: id }}
-        onDelete={this.onGridItemDeletion}
-        onSelect={this.onGridItemSelection}
-        isSelected={
-          this.state.selectedGridItem.type === "histogram" &&
-          this.state.selectedGridItem.index === id
-        }
+        key={key}
+        id={index}
+        onDelete={this.hideHistogram}
+        onSelect={this.onGridItemSelection("histogram")}
+        isSelected={this.isGridItemSelected("histogram", index)}
       >
         <HistogramComponent histogram={histogram} />
       </InteractiveGrid.Item>

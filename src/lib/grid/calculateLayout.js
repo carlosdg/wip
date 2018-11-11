@@ -50,4 +50,26 @@ const addNewElementsToLayouts = (currentLayouts, newElementsIds) => {
   return newLayouts;
 };
 
-export { createNewSetOfLayouts, addNewElementsToLayouts };
+/**
+ * Returns a new set of layouts without the elements with the given IDs
+ *
+ * @param {Object} currentLayouts Layouts object
+ * @param {Array<String | number>} ids IDs of the elements to remove
+ */
+const removeElementsFromLayout = (currentLayouts, ids) => {
+  const newLayouts = {};
+
+  Object.keys(currentLayouts).forEach(layoutName => {
+    newLayouts[layoutName] = currentLayouts[layoutName].filter(
+      ({ i }) => !ids.includes(i)
+    );
+  });
+
+  return newLayouts;
+};
+
+export {
+  createNewSetOfLayouts,
+  addNewElementsToLayouts,
+  removeElementsFromLayout
+};
