@@ -78,6 +78,11 @@ class AppToolbar extends React.Component {
                           To Grayscale
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.linearTransformation}>
+                          Linear Transformation
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

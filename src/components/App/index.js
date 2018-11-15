@@ -5,6 +5,7 @@ import HistogramComponent from "../HistogramComponent";
 import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
+import { linearTransformation } from "../../lib/ImageProcessing/linearTransformation";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -195,6 +196,20 @@ class App extends Component {
     }
   };
 
+  currentImageLinearTransformation = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      let points = [{x: 0, y: 0}, {x: 50, y: 100}, {x: 255, y: 255}];
+      this.addNewImage(
+        linearTransformation(this.state.imagesInfos[index].imageBuffer, points)
+      );
+    }
+  };
+
   render() {
     return (
       <div>
@@ -204,6 +219,7 @@ class App extends Component {
             onShowHistogram={this.showHistogramOfCurrentImage}
             onDownload={this.downloadCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
+            linearTransformation={this.currentImageLinearTransformation}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>
