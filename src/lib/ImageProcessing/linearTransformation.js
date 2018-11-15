@@ -2,7 +2,8 @@ import RgbaImageBuffer from "../RgbaImageBuffer";
 import { LinearTransformationException } from "../Exceptions";
 
 /**
- * Transforms the given image according to the given points
+ * Transforms the given image according to the linear sections
+ * conformed by the given points
  *
  * @param {RgbaImageBuffer} imgBuffer Image to transform
  * @param {Array} points Contains the points which defines
