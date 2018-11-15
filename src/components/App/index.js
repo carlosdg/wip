@@ -24,7 +24,9 @@ class App extends Component {
     /** Coordenates of the pixel that was last being pointed by the mouse */
     pixelCoords: { x: 0, y: 0 },
     /** Value of the pixel that was last being pointed by the mouse */
-    pixelValue: [0, 0, 0, 255]
+    pixelValue: [0, 0, 0, 255],
+    /** Amount of removed images, needed for proper indexing images on the grid */
+    removedImagesCount: 0
   };
 
   onMouseMoveOverImage = (pixelCoords, pixelValue) => {
@@ -35,8 +37,8 @@ class App extends Component {
   addNewImage = imageBuffer => {
     // TODO: Update the Histogram so it doesn't need grayscale images
     const histogram = new Histogram(imageToGrayscale(imageBuffer));
-    const imageKey = `image_${this.state.imagesInfos.length}`;
-    const histogramKey = `histogram_${this.state.histogramInfos.length}`;
+    const imageKey = `image_${this.state.imagesInfos.length + this.state.removedImagesCount}`;
+    const histogramKey = `histogram_${this.state.histogramInfos.length  + this.state.removedImagesCount}`;
 
     this.setState(prevState => ({
       imagesInfos: prevState.imagesInfos.concat([
@@ -110,7 +112,8 @@ class App extends Component {
       selectedGridItem:
         index === prevState.selectedGridItem.index
           ? { type: "", index: -1 }
-          : prevState.selectedGridItem
+          : prevState.selectedGridItem,
+      removedImagesCount: prevState.removedImagesCount + 1
     }));
   };
 
