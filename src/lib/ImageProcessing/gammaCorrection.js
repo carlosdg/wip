@@ -1,5 +1,5 @@
 import RgbaImageBuffer from "../RgbaImageBuffer";
-import GammaCorrectionException from "../Exceptions/GammaCorrectionException";
+import {ImageOperationException} from "../Exceptions";
 
 /**
  * Applies gamma correction to the given image
@@ -14,7 +14,7 @@ export const gammaCorrection = (
 ) => {
 
   if (gammaValue < 0)
-    throw new GammaCorrectionException("Invalid gamma value, gamma should be positive.");
+    throw new ImageOperationException("GammaCorrectionException", "Invalid gamma value, gamma should be equal or greater than 0.");
   
   const result = imgBuffer.copy();
 

@@ -93,6 +93,11 @@ class AppToolbar extends React.Component {
                           Gamma Correction
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.imagesDifference}>
+                          Images Difference
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

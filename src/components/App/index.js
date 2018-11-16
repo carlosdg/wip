@@ -8,6 +8,7 @@ import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
 import { linearTransformation } from "../../lib/ImageProcessing/linearTransformation";
 import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brightnessAndContrastAdjustment";
 import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
+import { imagesDifference} from "../../lib/ImageProcessing/imagesDifference";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -243,11 +244,27 @@ class App extends Component {
       // Handle error
       console.error("Error");
     } else {
-      let gammaValue = 1000;
+      let gammaValue = 4;
       this.addNewImage(
         gammaCorrection(
           this.state.imagesInfos[index].imageBuffer,
           gammaValue
+        )
+      );
+    }
+  }
+
+  applyImagesDifference = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        imagesDifference(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.imagesInfos[this.state.imagesInfos.length - 1].imageBuffer
         )
       );
     }
@@ -265,6 +282,7 @@ class App extends Component {
             linearTransformation={this.currentImageLinearTransformation}
             brightnessAndContrastAdjustment={this.currentImageBrightnessAndContrastAdjustment}
             gammaCorrection={this.currentImageGammaCorrection}
+            imagesDifference={this.applyImagesDifference}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>

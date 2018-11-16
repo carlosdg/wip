@@ -1,5 +1,5 @@
 import ValueOutOfBoundsException from "./ValueOutOfBoundsException";
 import ImageLoadException from "./ImageLoadException";
-import LinearTransformationException from "./LinearTransformationException";
+import ImageOperationException from "./ImageOperationException";
 
-export { ValueOutOfBoundsException, ImageLoadException, LinearTransformationException };
+export { ValueOutOfBoundsException, ImageLoadException, ImageOperationException };
