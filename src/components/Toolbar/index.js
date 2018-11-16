@@ -88,6 +88,11 @@ class AppToolbar extends React.Component {
                           Brightness and Contrast Adjustment
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.gammaCorrection}>
+                          Gamma Correction
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
