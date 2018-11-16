@@ -83,6 +83,11 @@ class AppToolbar extends React.Component {
                           Linear Transformation
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.brightnessAndContrastAdjustment}>
+                          Brightness and Contrast Adjustment
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

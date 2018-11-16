@@ -6,6 +6,7 @@ import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
 import { linearTransformation } from "../../lib/ImageProcessing/linearTransformation";
+import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brightnessAndContrastAdjustment";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -213,6 +214,27 @@ class App extends Component {
     }
   };
 
+  currentImageBrightnessAndContrastAdjustment = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      let newContrast = 20;
+      let newBrightness = 100;
+      this.addNewImage(
+        brightnessAndContrastAdjustment(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.histogramInfos[index].histogram.histogramInfo.mean,
+          this.state.histogramInfos[index].histogram.histogramInfo.stdDev,
+          newBrightness,
+          newContrast
+        )
+      );
+    }
+  }
+
   render() {
     return (
       <div>
@@ -223,6 +245,7 @@ class App extends Component {
             onDownload={this.downloadCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
             linearTransformation={this.currentImageLinearTransformation}
+            brightnessAndContrastAdjustment={this.currentImageBrightnessAndContrastAdjustment} 
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>
