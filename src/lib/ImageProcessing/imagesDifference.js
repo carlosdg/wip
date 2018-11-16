@@ -6,7 +6,7 @@ import {ImageOperationException} from "../Exceptions";
  * 
  * @param {RgbaImageBuffer} firstImgBuffer First image
  * @param {RgbaImageBuffer} secondImgBuffer Second image
- * @returns {RgbaImageBuffer} Transformed image
+ * @returns {RgbaImageBuffer} Result image
  */
 export const imagesDifference = (
   firstImgBuffer,

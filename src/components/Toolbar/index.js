@@ -98,6 +98,11 @@ class AppToolbar extends React.Component {
                           Images Difference
                         </span>
                       </MenuItem>
+                      <MenuItem onClick={this.handleClose}>
+                        <span onClick={this.props.changesDetection}>
+                          Changes Detection
+                        </span>
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

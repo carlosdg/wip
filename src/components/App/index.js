@@ -9,6 +9,7 @@ import { linearTransformation } from "../../lib/ImageProcessing/linearTransforma
 import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brightnessAndContrastAdjustment";
 import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
 import { imagesDifference} from "../../lib/ImageProcessing/imagesDifference";
+import { changesDetection} from "../../lib/ImageProcessing/changesDetection";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -270,6 +271,24 @@ class App extends Component {
     }
   }
 
+  applyChangesDetection = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        changesDetection(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.imagesInfos[this.state.imagesInfos.length - 1].imageBuffer,
+          40,
+          {r:0, g:0, b:255}
+        )
+      );
+    }
+  }
+
   render() {
     return (
       <div>
@@ -283,6 +302,7 @@ class App extends Component {
             brightnessAndContrastAdjustment={this.currentImageBrightnessAndContrastAdjustment}
             gammaCorrection={this.currentImageGammaCorrection}
             imagesDifference={this.applyImagesDifference}
+            changesDetection={this.applyChangesDetection}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>
