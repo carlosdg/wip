@@ -200,16 +200,15 @@ class App extends Component {
     }
   };
 
-  currentImageLinearTransformation = () => {
+  currentImageLinearTransformation = (coordinates) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       // Handle error
       console.error("Error");
     } else {
-      let points = [{x: 0, y: 0}, {x: 50, y: 100}, {x: 255, y: 255}];
       this.addNewImage(
-        linearTransformation(this.state.imagesInfos[index].imageBuffer, points)
+        linearTransformation(this.state.imagesInfos[index].imageBuffer, coordinates)
       );
     }
   };
