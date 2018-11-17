@@ -75,6 +75,9 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.props.onShowHistogram}>
                         Histogram
                       </MenuItem>
+                      <MenuItem onClick={this.props.onShowCumulativeHistogram}>
+                        Cumulative Histogram
+                      </MenuItem>
                       <MenuItem onClick={this.props.onDownload}>
                         Download Image
                       </MenuItem>
