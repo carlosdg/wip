@@ -18,7 +18,7 @@ class HistogramComponent extends Component {
 
   componentDidMount() {
     this.setState({
-      histogramVisualizationData: this.props.histogram.histogramValues.map(
+      histogramVisualizationData: this.props.histogram.map(
         (value, index) => ({ x0: index, x: index + 1, y: value })
       )
     });

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
-import HistogramComponent from "../HistogramComponent";
+import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
@@ -203,16 +203,15 @@ class App extends Component {
     }
   };
 
-  currentImageLinearTransformation = () => {
+  currentImageLinearTransformation = (coordinates) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       // Handle error
       console.error("Error");
     } else {
-      let points = [{x: 0, y: 0}, {x: 50, y: 100}, {x: 255, y: 255}];
       this.addNewImage(
-        linearTransformation(this.state.imagesInfos[index].imageBuffer, points)
+        linearTransformation(this.state.imagesInfos[index].imageBuffer, coordinates)
       );
     }
   };
@@ -374,7 +373,7 @@ class App extends Component {
         onSelect={this.onGridItemSelection("histogram")}
         isSelected={this.isGridItemSelected("histogram", index)}
       >
-        <HistogramComponent histogram={histogram} />
+        <HistogramAndInfoComponent histogram={histogram} />
       </InteractiveGrid.Item>
     );
   }

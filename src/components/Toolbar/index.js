@@ -9,9 +9,20 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
 
+import LinearTransformationDialog from "./LinearTransformationDialog";
+
 class AppToolbar extends React.Component {
   state = {
-    open: false
+    open: false,
+    isLinearTransformDialogOpen: false
+  };
+
+  handleLinearTransformDialogOpen = () => {
+    this.setState({ open: false, isLinearTransformDialogOpen: true });
+  };
+
+  handleLinearTransformDialogClose = () => {
+    this.setState({ isLinearTransformDialogOpen: false });
   };
 
   handleToggle = () => {
@@ -78,13 +89,13 @@ class AppToolbar extends React.Component {
                           To Grayscale
                         </span>
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.linearTransformation}>
-                          Linear Transformation
-                        </span>
+                      <MenuItem onClick={this.handleLinearTransformDialogOpen}>
+                        Linear Transformation
                       </MenuItem>
                       <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.brightnessAndContrastAdjustment}>
+                        <span
+                          onClick={this.props.brightnessAndContrastAdjustment}
+                        >
                           Brightness and Contrast Adjustment
                         </span>
                       </MenuItem>
@@ -122,6 +133,15 @@ class AppToolbar extends React.Component {
               }}
             />
           </form>
+          <LinearTransformationDialog
+            isOpen={this.state.isLinearTransformDialogOpen}
+            onClose={this.handleLinearTransformDialogClose}
+            onSubmit={coordinates => {
+              this.handleLinearTransformDialogClose();
+              console.log({ coordinates });
+              this.props.linearTransformation(coordinates);
+            }}
+          />
         </Toolbar>
       </AppBar>
     );
