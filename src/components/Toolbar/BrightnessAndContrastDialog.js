@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { isInRange } from "../../lib/Checks";
 
 const styles = {
   inputsContainer: {
@@ -17,7 +18,7 @@ const styles = {
   input: {
     margin: "1rem"
   }
-}
+};
 
 /**
  * Dialog to prompt the user for the new brightness and contrast for the new
@@ -32,24 +33,49 @@ export default class BrightnessAndContrastDialog extends React.Component {
 
   state = {
     brightness: 0,
-    contrast: 0
+    brightnessErrorMessage: "",
+    contrast: 0,
+    contrastErrorMessage: ""
+  };
+
+  /** General listener for a change on the brightness or contrast input */
+  onChange = (e, valueStateName, errorMessageStateName, errorMessage) => {
+    const value = Number(e.target.value, 10);
+
+    if (!isInRange(value, 0, 256)) {
+      this.setState({
+        [valueStateName]: e.target.value,
+        [errorMessageStateName]: errorMessage
+      });
+    } else {
+      this.setState({
+        [valueStateName]: value,
+        [errorMessageStateName]: ""
+      });
+    }
   };
 
   /** Listener for when the user changes the brightness input value */
-  onBrightnessChange = e => {
-    this.setState({
-      brightness: e.target.value
-    });
-  };
+  onBrightnessChange = e =>
+    this.onChange(
+      e,
+      "brightness",
+      "brightnessErrorMessage",
+      "Required a number between 0 and 255"
+    );
 
+  // TODO: check for the real limits of the contrast
   /** Listener for when the user changes the contrast input value */
-  onContrastChange = e => {
-    this.setState({
-      contrast: e.target.value
-    });
-  };
+  onContrastChange = e =>
+    this.onChange(
+      e,
+      "contrast",
+      "contrastErrorMessage",
+      "Required a number between 0 and 255"
+    );
 
   onSubmit = () =>
+    // TODO: if there is an error: show error message and don't submit
     this.props.onSubmit(this.state.brightness, this.state.contrast);
 
   render() {
@@ -69,6 +95,8 @@ export default class BrightnessAndContrastDialog extends React.Component {
           </DialogContentText>
           <div className="center" style={styles.inputsContainer}>
             <TextField
+              error={!!this.state.brightnessErrorMessage}
+              label={this.state.brightnessErrorMessage}
               type="number"
               placeholder="0"
               value={this.state.brightness}
@@ -82,6 +110,8 @@ export default class BrightnessAndContrastDialog extends React.Component {
               }}
             />
             <TextField
+              error={!!this.state.contrastErrorMessage}
+              label={this.state.contrastErrorMessage}
               type="number"
               placeholder="0"
               value={this.state.contrast}
