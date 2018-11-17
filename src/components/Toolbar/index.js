@@ -66,53 +66,37 @@ class AppToolbar extends React.Component {
                     placement === "bottom" ? "center top" : "center bottom"
                 }}
               >
-                <Paper>
+                <Paper onClick={this.handleClose}>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList>
                       <label htmlFor="image-input">
-                        <MenuItem onClick={this.handleClose}>
-                          Open File
-                        </MenuItem>
+                        <MenuItem>Open File</MenuItem>
                       </label>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.onShowHistogram}>
-                          Histogram
-                        </span>
+                      <MenuItem onClick={this.props.onShowHistogram}>
+                        Histogram
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.onDownload}>
-                          Download Image
-                        </span>
+                      <MenuItem onClick={this.props.onDownload}>
+                        Download Image
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.onGrayscale}>
-                          To Grayscale
-                        </span>
+                      <MenuItem onClick={this.props.onGrayscale}>
+                        To Grayscale
                       </MenuItem>
                       <MenuItem onClick={this.handleLinearTransformDialogOpen}>
                         Linear Transformation
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span
-                          onClick={this.props.brightnessAndContrastAdjustment}
-                        >
-                          Brightness and Contrast Adjustment
-                        </span>
+                      <MenuItem
+                        onClick={this.props.brightnessAndContrastAdjustment}
+                      >
+                        Brightness and Contrast Adjustment
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.gammaCorrection}>
-                          Gamma Correction
-                        </span>
+                      <MenuItem onClick={this.props.gammaCorrection}>
+                        Gamma Correction
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.imagesDifference}>
-                          Images Difference
-                        </span>
+                      <MenuItem onClick={this.props.imagesDifference}>
+                        Images Difference
                       </MenuItem>
-                      <MenuItem onClick={this.handleClose}>
-                        <span onClick={this.props.changesDetection}>
-                          Changes Detection
-                        </span>
+                      <MenuItem onClick={this.props.changesDetection}>
+                        Changes Detection
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
