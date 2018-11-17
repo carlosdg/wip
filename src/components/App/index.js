@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
-import HistogramComponent from "../HistogramComponent";
+import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
@@ -316,7 +316,7 @@ class App extends Component {
         onSelect={this.onGridItemSelection("histogram")}
         isSelected={this.isGridItemSelected("histogram", index)}
       >
-        <HistogramComponent histogram={histogram} />
+        <HistogramAndInfoComponent histogram={histogram} />
       </InteractiveGrid.Item>
     );
   }
