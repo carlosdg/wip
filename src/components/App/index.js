@@ -268,15 +268,16 @@ class App extends Component {
     }
   };
 
-  currentImageBrightnessAndContrastAdjustment = () => {
+  currentImageBrightnessAndContrastAdjustment = (
+    newBrightness,
+    newContrast
+  ) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       // Handle error
       console.error("Error");
     } else {
-      let newContrast = 20;
-      let newBrightness = 100;
       this.addNewImage(
         brightnessAndContrastAdjustment(
           this.state.imagesInfos[index].imageBuffer,

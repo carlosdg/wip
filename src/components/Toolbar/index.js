@@ -10,20 +10,20 @@ import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
 
 import LinearTransformationDialog from "./LinearTransformationDialog";
+import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
 
 class AppToolbar extends React.Component {
   state = {
     open: false,
-    isLinearTransformDialogOpen: false
+    isLinearTransformDialogOpen: false,
+    isLightnessAndContrastDialogOpen: false
   };
 
-  handleLinearTransformDialogOpen = () => {
-    this.setState({ open: false, isLinearTransformDialogOpen: true });
-  };
+  handleDialogOpen = dialogStateName => () =>
+    this.setState({ open: false, [dialogStateName]: true });
 
-  handleLinearTransformDialogClose = () => {
-    this.setState({ isLinearTransformDialogOpen: false });
-  };
+  handleDialogClose = dialogStateName => () =>
+    this.setState({ [dialogStateName]: false });
 
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
@@ -84,11 +84,17 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.props.onGrayscale}>
                         To Grayscale
                       </MenuItem>
-                      <MenuItem onClick={this.handleLinearTransformDialogOpen}>
+                      <MenuItem
+                        onClick={this.handleDialogOpen(
+                          "isLinearTransformDialogOpen"
+                        )}
+                      >
                         Linear Transformation
                       </MenuItem>
                       <MenuItem
-                        onClick={this.props.brightnessAndContrastAdjustment}
+                        onClick={this.handleDialogOpen(
+                          "isLightnessAndContrastDialogOpen"
+                        )}
                       >
                         Brightness and Contrast Adjustment
                       </MenuItem>
@@ -122,11 +128,18 @@ class AppToolbar extends React.Component {
           </form>
           <LinearTransformationDialog
             isOpen={this.state.isLinearTransformDialogOpen}
-            onClose={this.handleLinearTransformDialogClose}
+            onClose={this.handleDialogClose("isLinearTransformDialogOpen")}
             onSubmit={coordinates => {
-              this.handleLinearTransformDialogClose();
-              console.log({ coordinates });
+              this.handleDialogClose("isLinearTransformDialogOpen")();
               this.props.linearTransformation(coordinates);
+            }}
+          />
+          <BrightnessAndContrastDialog
+            isOpen={this.state.isLightnessAndContrastDialogOpen}
+            onClose={this.handleDialogClose("isLightnessAndContrastDialogOpen")}
+            onSubmit={(brightness, contrast) => {
+              this.handleDialogClose("isLightnessAndContrastDialogOpen")();
+              this.props.brightnessAndContrastAdjustment(brightness, contrast);
             }}
           />
         </Toolbar>
