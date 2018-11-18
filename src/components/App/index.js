@@ -291,14 +291,13 @@ class App extends Component {
     }
   };
 
-  currentImageGammaCorrection = () => {
+  currentImageGammaCorrection = (gammaValue) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       // Handle error
       console.error("Error");
     } else {
-      let gammaValue = 4;
       this.addNewImage(
         gammaCorrection(this.state.imagesInfos[index].imageBuffer, gammaValue)
       );

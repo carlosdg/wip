@@ -11,12 +11,14 @@ import MenuList from "@material-ui/core/MenuList";
 
 import LinearTransformationDialog from "./LinearTransformationDialog";
 import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
+import GammaCorrectionDialog from "./gammaCorrectionDialog";
 
 class AppToolbar extends React.Component {
   state = {
     open: false,
     isLinearTransformDialogOpen: false,
-    isLightnessAndContrastDialogOpen: false
+    isLightnessAndContrastDialogOpen: false,
+    isGammaCorrectionDialogOpen: false
   };
 
   handleDialogOpen = dialogStateName => () =>
@@ -98,7 +100,11 @@ class AppToolbar extends React.Component {
                       >
                         Brightness and Contrast Adjustment
                       </MenuItem>
-                      <MenuItem onClick={this.props.gammaCorrection}>
+                      <MenuItem 
+                        onClick={this.handleDialogOpen(
+                          "isGammaCorrectionDialogOpen"
+                        )}
+                      >
                         Gamma Correction
                       </MenuItem>
                       <MenuItem onClick={this.props.imagesDifference}>
@@ -143,6 +149,14 @@ class AppToolbar extends React.Component {
             onSubmit={(brightness, contrast) => {
               this.handleDialogClose("isLightnessAndContrastDialogOpen")();
               this.props.brightnessAndContrastAdjustment(brightness, contrast);
+            }}
+          />
+          <GammaCorrectionDialog
+            isOpen={this.state.isGammaCorrectionDialogOpen}
+            onClose={this.handleDialogClose("isGammaCorrectionDialogOpen")}
+            onSubmit={(gammaValue) => {
+              this.handleDialogClose("isGammaCorrectionDialogOpen")();
+              this.props.gammaCorrection(gammaValue);
             }}
           />
         </Toolbar>
