@@ -11,6 +11,7 @@ import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brigh
 import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
 import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
+import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -338,6 +339,22 @@ class App extends Component {
     }
   };
 
+  currentImageHistogramEqualization = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        histogramEqualization(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.cHistogramInfos[index].cHistogram
+        )
+      );
+    }
+  };
+
   render() {
     return (
       <div>
@@ -357,6 +374,7 @@ class App extends Component {
             gammaCorrection={this.currentImageGammaCorrection}
             imagesDifference={this.applyImagesDifference}
             changesDetection={this.applyChangesDetection}
+            histogramEqualization={this.currentImageHistogramEqualization}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>
