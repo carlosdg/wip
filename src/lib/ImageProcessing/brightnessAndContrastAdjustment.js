@@ -1,4 +1,4 @@
-import RgbaImageBuffer from "../RgbaImageBuffer";
+import { transformImage } from "./transformImage";
 
 /**
  * Changes the contrast and the brightness of the given image
@@ -18,8 +18,6 @@ export const brightnessAndContrastAdjustment = (
   newContrast
 ) => {
   // TODO check parameters
-  const result = imgBuffer.copy();
-
   const A = newContrast / oldContrast;
   const B = newBrightness - A * oldBrightness; 
   let lookupTable = [];
@@ -29,12 +27,5 @@ export const brightnessAndContrastAdjustment = (
     lookupTable.push(Math.min(Math.max(newValue, 0), 255));
   }
 
-  for (let i = 0; i < result.pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
-    let newValue = lookupTable[result.pixels[i]];
-    result.pixels[i] = newValue;
-    result.pixels[i + 1] = newValue;
-    result.pixels[i + 2] = newValue;
-  }
-
-  return result;
+  return transformImage(imgBuffer, lookupTable);
 }

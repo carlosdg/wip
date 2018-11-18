@@ -15,5 +15,6 @@ export default class CumulativeHistogram {
       count += value;
       return count;
     });
+    this.count = count;
   }
 }

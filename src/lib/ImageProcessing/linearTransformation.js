@@ -1,4 +1,4 @@
-import RgbaImageBuffer from "../RgbaImageBuffer";
+import { transformImage } from "./transformImage";
 import {ImageOperationException} from "../Exceptions";
 
 /**
@@ -46,8 +46,6 @@ export const linearTransformation = (
       "X coordinate value of the last point should be greater or equal to 255"
     );
 
-  const result = imgBuffer.copy();
-
   let sections = [];
   for (let i = 1; i < points.length; ++i) {
     let newSection = {};
@@ -69,11 +67,5 @@ export const linearTransformation = (
     lookupTable.push(Math.min(Math.max(newValue, 0), 255));
   }
   
-  for (let i = 0; i < result.pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
-    let newValue = lookupTable[result.pixels[i]];
-    result.pixels[i] = newValue;
-    result.pixels[i + 1] = newValue;
-    result.pixels[i + 2] = newValue;
-  }
-  return result;
+  return transformImage(imgBuffer, lookupTable);
 };
