@@ -113,6 +113,9 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.props.changesDetection}>
                         Changes Detection
                       </MenuItem>
+                      <MenuItem onClick={this.props.histogramSpecification}>
+                        Histogram Specification
+                      </MenuItem>
                       <MenuItem onClick={this.props.histogramEqualization}>
                         Histogram Equalization
                       </MenuItem>

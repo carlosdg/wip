@@ -11,6 +11,7 @@ import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brigh
 import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
 import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
+import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
@@ -338,6 +339,23 @@ class App extends Component {
     }
   };
 
+  applyHistogramSpecification = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        histogramSpecification(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.cHistogramInfos[index].cHistogram,
+          this.state.cHistogramInfos[this.state.cHistogramInfos.length - 1].cHistogram
+        )
+      );
+    }
+  };
+
   currentImageHistogramEqualization = () => {
     const { type, index } = this.state.selectedGridItem;
 
@@ -373,6 +391,7 @@ class App extends Component {
             gammaCorrection={this.currentImageGammaCorrection}
             imagesDifference={this.applyImagesDifference}
             changesDetection={this.applyChangesDetection}
+            histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
           />
           <main className="main">{this.getGridComponent()}</main>
