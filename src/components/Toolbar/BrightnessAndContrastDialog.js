@@ -39,13 +39,19 @@ export default class BrightnessAndContrastDialog extends React.Component {
   };
 
   /** General listener for a change on the brightness or contrast input */
-  onChange = (e, valueStateName, errorMessageStateName, errorMessage) => {
+  onChange = (
+    e,
+    valueStateName,
+    errorMessageStateName,
+    minPossibleValue,
+    maxPossibleValue
+  ) => {
     const value = Number.parseFloat(e.target.value);
 
-    if (!isInRange(value, 0, 256)) {
+    if (!isInRange(value, minPossibleValue, maxPossibleValue + 1)) {
       this.setState({
         [valueStateName]: e.target.value,
-        [errorMessageStateName]: errorMessage
+        [errorMessageStateName]: `Required a number between ${minPossibleValue} and ${maxPossibleValue}`
       });
     } else {
       this.setState({
@@ -57,22 +63,11 @@ export default class BrightnessAndContrastDialog extends React.Component {
 
   /** Listener for when the user changes the brightness input value */
   onBrightnessChange = e =>
-    this.onChange(
-      e,
-      "brightness",
-      "brightnessErrorMessage",
-      "Required a number between 0 and 255"
-    );
+    this.onChange(e, "brightness", "brightnessErrorMessage", 0, 255);
 
-  // TODO: check for the real limits of the contrast
   /** Listener for when the user changes the contrast input value */
   onContrastChange = e =>
-    this.onChange(
-      e,
-      "contrast",
-      "contrastErrorMessage",
-      "Required a number between 0 and 255"
-    );
+    this.onChange(e, "contrast", "contrastErrorMessage", 0, 128);
 
   onSubmit = () =>
     // TODO: if there is an error: show error message and don't submit
