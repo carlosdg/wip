@@ -45,7 +45,9 @@ class ImageComponent extends Component {
     rgbaImage: PropTypes.instanceOf(RgbaImageBuffer).isRequired,
     /** Callback called with the mouse position relative to the
      * image and the pixel value at that position */
-    onMouseMove: PropTypes.func
+    onMouseMove: PropTypes.func,
+    /** Called when the user selects a region of the image */
+    onSelection: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -128,24 +130,39 @@ class ImageComponent extends Component {
    * MAYBE TODO: set the current mouse coordinate to the ones on mouse up TODO:
    * notify the parent component of the selection
    */
-  onMouseUp = mouseEvent => {
-    if (this.state.isMouseDown) {
-      if (
-        areCoordinatesAligned(
-          this.state.mouseDownOriginCoordinates,
-          this.state.currentMouseCoordinates
-        )
-      ) {
-        this.setState({
-          isMouseDown: false,
-          mouseDownOriginCoordinates: { x: -1, y: -1 },
-          currentMouseCoordinates: { x: -1, y: -1 }
-        });
-      } else {
-        this.setState({
-          isMouseDown: false
-        });
-      }
+  onMouseUp = () => {
+    const {
+      isMouseDown,
+      mouseDownOriginCoordinates,
+      currentMouseCoordinates
+    } = this.state;
+
+    if (!isMouseDown) {
+      return;
+    }
+
+    if (
+      areCoordinatesAligned(mouseDownOriginCoordinates, currentMouseCoordinates)
+    ) {
+      this.setState({
+        isMouseDown: false,
+        mouseDownOriginCoordinates: { x: -1, y: -1 },
+        currentMouseCoordinates: { x: -1, y: -1 }
+      });
+      const { width, height } = this.props.rgbaImage;
+      this.props.onSelection({ top: 0, left: 0, width, height });
+    } else {
+      this.setState({ isMouseDown: false });
+      const { top, left, right, bottom } = calculateRect(
+        mouseDownOriginCoordinates,
+        currentMouseCoordinates
+      );
+      this.props.onSelection({
+        top,
+        left,
+        width: right - left + 1,
+        height: bottom - top + 1
+      });
     }
   };
 

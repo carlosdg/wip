@@ -36,13 +36,31 @@ class App extends Component {
     removedImagesCount: 0
   };
 
+  /** Callback that updates the pixel value and coordinates currently under the
+   * user's mouse */
   onMouseMoveOverImage = (pixelCoords, pixelValue) => {
     this.setState({ pixelCoords, pixelValue });
+  };
+
+  /** Returns a callback that updates the region of the asked image info */
+  onImageRegionSelection = index => newRegion => {
+    console.log(newRegion);
+    this.setState(prevState => ({
+      imagesInfos: prevState.imagesInfos.map((info, i) =>
+        i === index ? { ...info, region: newRegion } : info
+      )
+    }));
   };
 
   /**  Adds all the information related to the given image buffer to the app */
   addNewImage = imageBuffer => {
     // TODO: Update the Histogram so it doesn't need grayscale images
+    const imageSection = {
+      top: 0,
+      left: 0,
+      width: imageBuffer.width,
+      height: imageBuffer.height
+    };
     const histogram = new Histogram(imageToGrayscale(imageBuffer));
     const cHistogram = new CumulativeHistogram(histogram.histogramValues);
     const imageKey = `Image ${this.state.imagesInfos.length +
@@ -52,7 +70,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       imagesInfos: prevState.imagesInfos.concat([
-        { key: imageKey, imageBuffer }
+        { key: imageKey, imageBuffer, region: imageSection }
       ]),
       histogramInfos: prevState.histogramInfos.concat([
         { key: histogramKey, histogram, cHistogram, visible: false }
@@ -168,6 +186,7 @@ class App extends Component {
     }
   };
 
+  /** Downloads the selected region of the current selected image if any */
   downloadCurrentImage = () => {
     const { type, index } = this.state.selectedGridItem;
 
@@ -175,13 +194,15 @@ class App extends Component {
       // Handle error
       console.error("Error");
     } else {
-      const imageData = this.state.imagesInfos[index].imageBuffer.toImageData();
+      const imgInfo = this.state.imagesInfos[index];
+      const { left, top, width, height } = imgInfo.region;
+      const imageData = imgInfo.imageBuffer.toImageData();
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
       canvas.width = imageData.width;
       canvas.height = imageData.height;
-      context.putImageData(imageData, 0, 0);
+      context.putImageData(imageData, 0, 0, left, top, width, height);
 
       canvas.toBlob(
         blob => {
@@ -412,6 +433,7 @@ class App extends Component {
             <ImageComponent
               rgbaImage={imageBuffer}
               onMouseMove={this.onMouseMoveOverImage}
+              onSelection={this.onImageRegionSelection(index)}
             />
           </div>
         </div>
