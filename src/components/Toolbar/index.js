@@ -13,7 +13,8 @@ import LinearTransformationDialog from "./LinearTransformationDialog";
 import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
 import GammaCorrectionDialog from "./gammaCorrectionDialog";
 import ImageDifferenceDialog from "./ImageDifferenceDialog";
-import HistogramSpecificationDialog from "./HistogramSpecificationDialog"
+import HistogramSpecificationDialog from "./HistogramSpecificationDialog";
+import ChangesDetectionDialog from "./ChangesDetectionDialog";
 
 class AppToolbar extends React.Component {
   state = {
@@ -22,7 +23,8 @@ class AppToolbar extends React.Component {
     isLightnessAndContrastDialogOpen: false,
     isGammaCorrectionDialogOpen: false,
     isImageDifferenceDialogOpen: false,
-    isHistogramSpecificationDialogOpen: false
+    isHistogramSpecificationDialogOpen: false,
+    isChangesDetectionDialogOpen: false
   };
 
   handleDialogOpen = dialogStateName => () =>
@@ -115,7 +117,11 @@ class AppToolbar extends React.Component {
                       >
                         Images Difference
                       </MenuItem>
-                      <MenuItem onClick={this.props.changesDetection}>
+                      <MenuItem
+                        onClick={this.handleDialogOpen(
+                          "isChangesDetectionDialogOpen"
+                        )}
+                      >
                         Changes Detection
                       </MenuItem>
                       <MenuItem
@@ -181,10 +187,20 @@ class AppToolbar extends React.Component {
           />
           <HistogramSpecificationDialog
             isOpen={this.state.isHistogramSpecificationDialogOpen}
-            onClose={this.handleDialogClose("isHistogramSpecificationDialogOpen")}
+            onClose={this.handleDialogClose(
+              "isHistogramSpecificationDialogOpen"
+            )}
             onSubmit={imgName => {
               this.handleDialogClose("isHistogramSpecificationDialogOpen")();
               this.props.histogramSpecification(imgName);
+            }}
+          />
+          <ChangesDetectionDialog
+            isOpen={this.state.isChangesDetectionDialogOpen}
+            onClose={this.handleDialogClose("isChangesDetectionDialogOpen")}
+            onSubmit={userInput => {
+              this.handleDialogClose("isChangesDetectionDialogOpen")();
+              this.props.changesDetection(userInput);
             }}
           />
         </Toolbar>

@@ -276,19 +276,22 @@ class App extends Component {
     }
   };
 
-  applyChangesDetection = () => {
+  applyChangesDetection = ({ imgName, rgbaColor, threshold }) => {
     const { type, index } = this.state.selectedGridItem;
+    const { imageBuffer } = this.state.imagesInfos.find(
+      ({ key }) => key === imgName
+    );
 
-    if (type !== "image" || index < 0) {
+    if (type !== "image" || index < 0 || imageBuffer === undefined) {
       // Handle error
       console.error("Error");
     } else {
       this.addNewImage(
         changesDetection(
           this.state.imagesInfos[index].imageBuffer,
-          this.state.imagesInfos[this.state.imagesInfos.length - 1].imageBuffer,
-          40,
-          { r: 0, g: 0, b: 255 }
+          imageBuffer,
+          threshold,
+          rgbaColor
         )
       );
     }
