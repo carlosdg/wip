@@ -110,6 +110,10 @@ export default class HistogramAndInfoComponent extends React.Component {
                     <TableCell>Mode</TableCell>
                     <TableCell numeric>{histogramInfo.mode.value}</TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell>Entropy</TableCell>
+                    <TableCell numeric>{histogramInfo.entropy}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>

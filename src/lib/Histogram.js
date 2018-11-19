@@ -76,5 +76,18 @@ export default class Histogram {
     this.histogramInfo.mode = {};
     this.histogramInfo.mode.value = maxIndex;
     this.histogramInfo.mode.count = maxCount;
+
+    let entropy = 0;
+    let probability;
+    for (let i = 0; i < 256; ++i) {
+      probability = this.histogramValues[i] / this.histogramInfo.count;
+      if (probability > 0) {
+        entropy += probability * Math.log2(probability);
+      }
+    }
+    if (entropy !== 0)
+      entropy *= -1;
+
+    this.histogramInfo.entropy = entropy.toFixed(3);
   }
 }
