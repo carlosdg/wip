@@ -20,6 +20,7 @@ export default class HistogramAndInfoComponent extends React.Component {
   render() {
     const { currentTab } = this.state;
     const { histogramValues, histogramInfo } = this.props.histogram;
+    const { counts } = this.props.cHistogram;
 
     return (
       <React.Fragment>
@@ -51,6 +52,18 @@ export default class HistogramAndInfoComponent extends React.Component {
             }
             onClick={e => this.updateCurrentTab(e, 1)}
           >
+            Cumul.
+          </Button>
+          <Button
+            style={
+              currentTab === 2
+                ? {
+                    boxShadow: "0px 4px 6px -5px black"
+                  }
+                : {}
+            }
+            onClick={e => this.updateCurrentTab(e, 2)}
+          >
             Info.
           </Button>
         </div>
@@ -68,6 +81,9 @@ export default class HistogramAndInfoComponent extends React.Component {
             <HistogramComponent histogram={histogramValues} />
           )}
           {currentTab === 1 && (
+            <HistogramComponent histogram={counts} />
+          )}
+          {currentTab === 2 && (
             <div
               className="scrollable"
               style={{

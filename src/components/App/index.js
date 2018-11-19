@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
-import HistogramComponent from "../HistogramComponent";
 import AppToolbar from "../Toolbar";
 import Histogram from "../../lib/Histogram";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
@@ -25,8 +24,6 @@ class App extends Component {
     imagesInfos: [],
     /** All the information relative to the histograms of each image */
     histogramInfos: [],
-    /** All the information relative to the cumulative histograms of each image */
-    cHistogramInfos: [],
     /** Grid layouts for the elements on screen */
     gridLayouts: GridLayoutHelper.createNewSetOfLayouts(),
     /** Information of the current grid item being selected (item type & index) */
@@ -52,18 +49,13 @@ class App extends Component {
       this.state.removedImagesCount}`;
     const histogramKey = `histogram_${this.state.histogramInfos.length +
       this.state.removedImagesCount}`;
-    const cHistogramKey = `cumulative_histogram_${this.state.cHistogramInfos
-      .length + this.state.removedImagesCount}`;
 
     this.setState(prevState => ({
       imagesInfos: prevState.imagesInfos.concat([
         { key: imageKey, imageBuffer }
       ]),
       histogramInfos: prevState.histogramInfos.concat([
-        { key: histogramKey, histogram, visible: false }
-      ]),
-      cHistogramInfos: prevState.cHistogramInfos.concat([
-        { key: cHistogramKey, cHistogram, visible: false }
+        { key: histogramKey, histogram, cHistogram, visible: false }
       ]),
       gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
         prevState.gridLayouts,
@@ -122,7 +114,6 @@ class App extends Component {
   deleteAllImageRelatedInfo = index => {
     this.setState(prevState => ({
       histogramInfos: prevState.histogramInfos.filter((_, i) => i !== index),
-      cHistogramInfos: prevState.cHistogramInfos.filter((_, i) => i !== index),
       imagesInfos: prevState.imagesInfos.filter((_, i) => i !== index),
       gridLayouts: GridLayoutHelper.removeElementsFromLayout(
         prevState.gridLayouts,
@@ -156,24 +147,6 @@ class App extends Component {
     }));
   };
 
-  /** Hides the given cumulative histogram from the view */
-  hideCumulativeHistogram = index => {
-    // Set the visibility to false, remove its layout information and resets the
-    // current selected item if it was the histogram to hide
-    this.setState(prevState => ({
-      cHistogramInfos: prevState.cHistogramInfos.map((info, i) =>
-        i === index ? { ...info, visible: false } : { ...info }
-      ),
-      gridLayouts: GridLayoutHelper.removeElementsFromLayout(
-        prevState.gridLayouts,
-        [prevState.cHistogramInfos[index].key]
-      ),
-      selectedGridItem: this.isGridItemSelected("cumulative_histogram", index)
-        ? { type: "", index: -1 }
-        : prevState.selectedGridItem
-    }));
-  };
-
   showHistogramOfCurrentImage = () => {
     const { type, index } = this.state.selectedGridItem;
 
@@ -190,25 +163,6 @@ class App extends Component {
         gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
           prevState.gridLayouts,
           [prevState.histogramInfos[index].key]
-        )
-      }));
-    }
-  };
-
-  showCumulativeHistogramOfCurrentImage = () => {
-    const { type, index } = this.state.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
-    } else {
-      this.setState(prevState => ({
-        cHistogramInfos: prevState.cHistogramInfos.map((info, i) =>
-          i === index ? { ...info, visible: true } : { ...info }
-        ),
-        gridLayouts: GridLayoutHelper.addNewElementsToLayouts(
-          prevState.gridLayouts,
-          [prevState.cHistogramInfos[index].key]
         )
       }));
     }
@@ -293,7 +247,7 @@ class App extends Component {
     }
   };
 
-  currentImageGammaCorrection = (gammaValue) => {
+  currentImageGammaCorrection = gammaValue => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
@@ -350,8 +304,8 @@ class App extends Component {
       this.addNewImage(
         histogramSpecification(
           this.state.imagesInfos[index].imageBuffer,
-          this.state.cHistogramInfos[index].cHistogram,
-          this.state.cHistogramInfos[this.state.cHistogramInfos.length - 1].cHistogram
+          this.state.histogramInfos[index].cHistogram,
+          this.state.histogramInfos[this.state.histogramInfos.length - 1].cHistogram
         )
       );
     }
@@ -367,7 +321,7 @@ class App extends Component {
       this.addNewImage(
         histogramEqualization(
           this.state.imagesInfos[index].imageBuffer,
-          this.state.cHistogramInfos[index].cHistogram
+          this.state.histogramInfos[index].cHistogram
         )
       );
     }
@@ -380,9 +334,6 @@ class App extends Component {
           <AppToolbar
             onFileInput={this.onNewImageFromFile}
             onShowHistogram={this.showHistogramOfCurrentImage}
-            onShowCumulativeHistogram={
-              this.showCumulativeHistogramOfCurrentImage
-            }
             onDownload={this.downloadCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
             linearTransformation={this.currentImageLinearTransformation}
@@ -425,16 +376,9 @@ class App extends Component {
           this.getImageGridItem(image, index)
         )}
         {this.state.histogramInfos
-          .map((histogram, index) =>
-            histogram.visible
-              ? this.getHistogramGridItem(histogram, index)
-              : null
-          )
-          .filter(element => element !== null)}
-        {this.state.cHistogramInfos
-          .map((cHistogram, index) =>
-            cHistogram.visible
-              ? this.getCumulativeHistogramGridItem(cHistogram, index)
+          .map((histogramInfo, index) =>
+            histogramInfo.visible
+              ? this.getHistogramGridItem(histogramInfo, index)
               : null
           )
           .filter(element => element !== null)}
@@ -463,7 +407,7 @@ class App extends Component {
     );
   }
 
-  getHistogramGridItem({ histogram, key }, index) {
+  getHistogramGridItem({ histogram, cHistogram, key }, index) {
     return (
       <InteractiveGrid.Item
         key={key}
@@ -472,21 +416,10 @@ class App extends Component {
         onSelect={this.onGridItemSelection("histogram")}
         isSelected={this.isGridItemSelected("histogram", index)}
       >
-        <HistogramAndInfoComponent histogram={histogram} />
-      </InteractiveGrid.Item>
-    );
-  }
-
-  getCumulativeHistogramGridItem({ cHistogram, key }, index) {
-    return (
-      <InteractiveGrid.Item
-        key={key}
-        id={index}
-        onDelete={this.hideCumulativeHistogram}
-        onSelect={this.onGridItemSelection("cumulative_histogram")}
-        isSelected={this.isGridItemSelected("cumulative_histogram", index)}
-      >
-        <HistogramComponent histogram={cHistogram.counts} />
+        <HistogramAndInfoComponent
+          histogram={histogram}
+          cHistogram={cHistogram}
+        />
       </InteractiveGrid.Item>
     );
   }
