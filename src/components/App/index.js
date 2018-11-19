@@ -260,18 +260,18 @@ class App extends Component {
     }
   };
 
-  applyImagesDifference = () => {
+  applyImagesDifference = otherImgName => {
     const { type, index } = this.state.selectedGridItem;
+    const { imageBuffer } = this.state.imagesInfos.find(
+      ({ key }) => key === otherImgName
+    );
 
-    if (type !== "image" || index < 0) {
+    if (type !== "image" || index < 0 || imageBuffer === undefined) {
       // Handle error
       console.error("Error");
     } else {
       this.addNewImage(
-        imagesDifference(
-          this.state.imagesInfos[index].imageBuffer,
-          this.state.imagesInfos[this.state.imagesInfos.length - 1].imageBuffer
-        )
+        imagesDifference(this.state.imagesInfos[index].imageBuffer, imageBuffer)
       );
     }
   };

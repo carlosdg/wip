@@ -12,13 +12,15 @@ import MenuList from "@material-ui/core/MenuList";
 import LinearTransformationDialog from "./LinearTransformationDialog";
 import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
 import GammaCorrectionDialog from "./gammaCorrectionDialog";
+import ImageDifferenceDialog from "./ImageDifferenceDialog";
 
 class AppToolbar extends React.Component {
   state = {
     open: false,
     isLinearTransformDialogOpen: false,
     isLightnessAndContrastDialogOpen: false,
-    isGammaCorrectionDialogOpen: false
+    isGammaCorrectionDialogOpen: false,
+    isImageDifferenceDialogOpen: false
   };
 
   handleDialogOpen = dialogStateName => () =>
@@ -97,14 +99,18 @@ class AppToolbar extends React.Component {
                       >
                         Brightness and Contrast Adjustment
                       </MenuItem>
-                      <MenuItem 
+                      <MenuItem
                         onClick={this.handleDialogOpen(
                           "isGammaCorrectionDialogOpen"
                         )}
                       >
                         Gamma Correction
                       </MenuItem>
-                      <MenuItem onClick={this.props.imagesDifference}>
+                      <MenuItem
+                        onClick={this.handleDialogOpen(
+                          "isImageDifferenceDialogOpen"
+                        )}
+                      >
                         Images Difference
                       </MenuItem>
                       <MenuItem onClick={this.props.changesDetection}>
@@ -154,9 +160,17 @@ class AppToolbar extends React.Component {
           <GammaCorrectionDialog
             isOpen={this.state.isGammaCorrectionDialogOpen}
             onClose={this.handleDialogClose("isGammaCorrectionDialogOpen")}
-            onSubmit={(gammaValue) => {
+            onSubmit={gammaValue => {
               this.handleDialogClose("isGammaCorrectionDialogOpen")();
               this.props.gammaCorrection(gammaValue);
+            }}
+          />
+          <ImageDifferenceDialog
+            isOpen={this.state.isImageDifferenceDialogOpen}
+            onClose={this.handleDialogClose("isImageDifferenceDialogOpen")}
+            onSubmit={imgName => {
+              this.handleDialogClose("isImageDifferenceDialogOpen")();
+              this.props.imagesDifference(imgName);
             }}
           />
         </Toolbar>
