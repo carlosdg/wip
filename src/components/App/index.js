@@ -45,9 +45,9 @@ class App extends Component {
     // TODO: Update the Histogram so it doesn't need grayscale images
     const histogram = new Histogram(imageToGrayscale(imageBuffer));
     const cHistogram = new CumulativeHistogram(histogram.histogramValues);
-    const imageKey = `image_${this.state.imagesInfos.length +
+    const imageKey = `Image ${this.state.imagesInfos.length +
       this.state.removedImagesCount}`;
-    const histogramKey = `histogram_${this.state.histogramInfos.length +
+    const histogramKey = `Histogram ${this.state.histogramInfos.length +
       this.state.removedImagesCount}`;
 
     this.setState(prevState => ({
@@ -391,6 +391,7 @@ class App extends Component {
       <InteractiveGrid.Item
         key={key}
         id={index}
+        name={key}
         onDelete={this.deleteAllImageRelatedInfo}
         onSelect={this.onGridItemSelection("image")}
         isSelected={this.isGridItemSelected("image", index)}
@@ -412,6 +413,7 @@ class App extends Component {
       <InteractiveGrid.Item
         key={key}
         id={index}
+        name={key}
         onDelete={this.hideHistogram}
         onSelect={this.onGridItemSelection("histogram")}
         isSelected={this.isGridItemSelected("histogram", index)}

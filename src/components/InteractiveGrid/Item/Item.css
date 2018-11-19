@@ -19,6 +19,16 @@
   padding: 5px;
 }
 
+.Item__name {
+  font-family: "Arial", sans-serif;
+  display: inline-block;
+  margin-left: 10px;
+  overflow: hidden;
+  width: 75%;
+  vertical-align: text-bottom;
+  text-overflow: ellipsis;
+}
+
 .Item.is-selected .Item__toolbar {
   background-color: hsl(210, 25%, 70%);
 }

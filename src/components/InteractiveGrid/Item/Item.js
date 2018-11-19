@@ -25,12 +25,14 @@ export default class Item extends React.Component {
       PropTypes.symbol,
       PropTypes.object
     ]).isRequired,
+    name: PropTypes.string,
     onDelete: PropTypes.func,
     onSelect: PropTypes.func,
     isSelected: PropTypes.bool
   };
 
   static defaultProps = {
+    name: "",
     onDelete: null,
     onSelect: null,
     onDeselect: null,
@@ -81,6 +83,7 @@ export default class Item extends React.Component {
       children,
       className,
       style,
+      name,
       onSelect,
       onDelete,
       isSelected
@@ -105,6 +108,7 @@ export default class Item extends React.Component {
             onMouseDown={stopEvent}
             onDelete={onDelete ? this.onDelete : null}
           />
+          <span className="Item__name">{name}</span>
         </div>
         <div className="Item__childrenContainer">{children}</div>
       </div>
