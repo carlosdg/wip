@@ -38,7 +38,7 @@ export default class GammaCorrectionDialog extends React.Component {
 
   /** General listener for a change on the gamma input */
   onChange = (e, valueStateName, errorMessageStateName, errorMessage) => {
-    const value = Number(e.target.value, 10);
+    const value = Number.parseFloat(e.target.value);
 
     if (!isInRange(value, 0, Number.POSITIVE_INFINITY)) {
       this.setState({
