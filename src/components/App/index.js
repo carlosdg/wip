@@ -122,6 +122,7 @@ class App extends Component {
   deleteAllImageRelatedInfo = index => {
     this.setState(prevState => ({
       histogramInfos: prevState.histogramInfos.filter((_, i) => i !== index),
+      cHistogramInfos: prevState.cHistogramInfos.filter((_, i) => i !== index),
       imagesInfos: prevState.imagesInfos.filter((_, i) => i !== index),
       gridLayouts: GridLayoutHelper.removeElementsFromLayout(
         prevState.gridLayouts,
