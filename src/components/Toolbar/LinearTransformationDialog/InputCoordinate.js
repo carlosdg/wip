@@ -18,11 +18,21 @@ export default class InputCoordinate extends React.Component {
     onDelete: PropTypes.func.isRequired
   };
 
-  onYChange = e =>
-    this.props.onChange({ ...this.props.coordinate, y: e.target.value });
+  onYChange = e => {
+    const number = Number.parseFloat(e.target.value);
+    this.props.onChange({
+      ...this.props.coordinate,
+      y: Number.isFinite(number) ? number : ""
+    });
+  };
 
-  onXChange = e =>
-    this.props.onChange({ ...this.props.coordinate, x: e.target.value });
+  onXChange = e => {
+    const number = Number.parseFloat(e.target.value);
+    this.props.onChange({
+      ...this.props.coordinate,
+      x: Number.isFinite(number) ? number : ""
+    });
+  };
 
   render() {
     return (
