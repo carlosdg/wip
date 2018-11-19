@@ -294,10 +294,18 @@ class App extends Component {
     }
   };
 
-  applyHistogramSpecification = () => {
+  applyHistogramSpecification = otherImgName => {
     const { type, index } = this.state.selectedGridItem;
+    const otherImgIndex = this.state.imagesInfos.findIndex(
+      ({ key }) => key === otherImgName
+    );
 
-    if (type !== "image" || index < 0) {
+    if (
+      type !== "image" ||
+      index < 0 ||
+      otherImgIndex < 0 ||
+      otherImgIndex > this.state.imagesInfos.length
+    ) {
       // Handle error
       console.error("Error");
     } else {
@@ -305,7 +313,7 @@ class App extends Component {
         histogramSpecification(
           this.state.imagesInfos[index].imageBuffer,
           this.state.histogramInfos[index].cHistogram,
-          this.state.histogramInfos[this.state.histogramInfos.length - 1].cHistogram
+          this.state.histogramInfos[otherImgIndex].cHistogram
         )
       );
     }

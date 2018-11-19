@@ -13,6 +13,7 @@ import LinearTransformationDialog from "./LinearTransformationDialog";
 import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
 import GammaCorrectionDialog from "./gammaCorrectionDialog";
 import ImageDifferenceDialog from "./ImageDifferenceDialog";
+import HistogramSpecificationDialog from "./HistogramSpecificationDialog"
 
 class AppToolbar extends React.Component {
   state = {
@@ -20,7 +21,8 @@ class AppToolbar extends React.Component {
     isLinearTransformDialogOpen: false,
     isLightnessAndContrastDialogOpen: false,
     isGammaCorrectionDialogOpen: false,
-    isImageDifferenceDialogOpen: false
+    isImageDifferenceDialogOpen: false,
+    isHistogramSpecificationDialogOpen: false
   };
 
   handleDialogOpen = dialogStateName => () =>
@@ -116,7 +118,11 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.props.changesDetection}>
                         Changes Detection
                       </MenuItem>
-                      <MenuItem onClick={this.props.histogramSpecification}>
+                      <MenuItem
+                        onClick={this.handleDialogOpen(
+                          "isHistogramSpecificationDialogOpen"
+                        )}
+                      >
                         Histogram Specification
                       </MenuItem>
                       <MenuItem onClick={this.props.histogramEqualization}>
@@ -171,6 +177,14 @@ class AppToolbar extends React.Component {
             onSubmit={imgName => {
               this.handleDialogClose("isImageDifferenceDialogOpen")();
               this.props.imagesDifference(imgName);
+            }}
+          />
+          <HistogramSpecificationDialog
+            isOpen={this.state.isHistogramSpecificationDialogOpen}
+            onClose={this.handleDialogClose("isHistogramSpecificationDialogOpen")}
+            onSubmit={imgName => {
+              this.handleDialogClose("isHistogramSpecificationDialogOpen")();
+              this.props.histogramSpecification(imgName);
             }}
           />
         </Toolbar>

@@ -11,9 +11,9 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
- * difference operation
+ * histogram specification
  */
-export default class ImageDifferenceDialog extends React.Component {
+export default class HistogramSpecificationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -40,11 +40,11 @@ export default class ImageDifferenceDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Image Difference</DialogTitle>
+        <DialogTitle id="form-dialog-title">Histogram Specificacion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please, enter the image name of the other image to perform the
-            difference to the current image
+            Please, enter the image name of the image with the histogram to perform the
+            histogram specification to the current image
           </DialogContentText>
           <TextField
             placeholder="Image 0"
