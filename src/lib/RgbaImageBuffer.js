@@ -1,6 +1,3 @@
-import * as Checks from "./Checks";
-import { ValueOutOfBoundsException } from "./Exceptions";
-
 // TODO: pollyfill ImageData constructor
 /**
  * Class to represent a RGBA pixel matrix (an image). This class aims to
@@ -59,7 +56,11 @@ export default class RgbaImageBuffer {
 
   /** Returns a deep copy of this RgbaImage instance */
   copy = () =>
-    new RgbaImageBuffer(this.width, this.height, new Uint8ClampedArray(this.pixels));
+    new RgbaImageBuffer(
+      this.width,
+      this.height,
+      new Uint8ClampedArray(this.pixels)
+    );
 
   /**
    * Returns the pixel value at the given position
@@ -69,15 +70,10 @@ export default class RgbaImageBuffer {
    * @param {number} coordinates.y Vertical coordinate
    * @returns {Array} Pixel value at the given coordinates (an array with one
    *  element per pixel dimension, 4 in case of RGBA for example)
-   * @throws {OutOfBoundsException} If the given coordinates are out of bounds
    */
   getPixel = ({ x, y }) => {
-    if (!Checks.isInRange(x, 0, this.width)) {
-      throw new ValueOutOfBoundsException(x, 0, this.width);
-    }
-    if (!Checks.isInRange(y, 0, this.height)) {
-      throw new ValueOutOfBoundsException(y, 0, this.height);
-    }
+    x = Math.max(0, Math.min(this.width - 1, x));
+    y = Math.max(0, Math.min(this.height - 1, y));
 
     const pixelPosition = this._mapMatrixPositionToArray(x, y);
 
@@ -85,37 +81,6 @@ export default class RgbaImageBuffer {
       pixelPosition,
       pixelPosition + RgbaImageBuffer.NUM_CHANNELS
     );
-  };
-
-  /**
-   * Returns a specific channel values of the image.
-   * 0 => R channel position
-   * 1 => G channel position
-   * 2 => B channel position
-   * 3 => Alpha channel position
-   *
-   * @param {Integer} channelPosition Position of the desired
-   * channel values in a RGBA pixel.
-   * @returns {Array} Desired channel pixels values.
-   */
-  getChannel = channelPosition => {
-    if (!Checks.isInRange(channelPosition, 0, RgbaImageBuffer.NUM_CHANNELS))
-      throw new ValueOutOfBoundsException(
-        channelPosition,
-        0,
-        RgbaImageBuffer.NUM_CHANNELS
-      );
-
-    const desiredChannelValues = [];
-    for (
-      let i = channelPosition;
-      i < this.pixels.length;
-      i += RgbaImageBuffer.NUM_CHANNELS
-    ) {
-      desiredChannelValues.push(this.pixels[i]);
-    }
-
-    return desiredChannelValues;
   };
 
   /**
