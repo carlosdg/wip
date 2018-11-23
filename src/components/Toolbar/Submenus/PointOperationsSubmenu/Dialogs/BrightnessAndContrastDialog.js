@@ -8,7 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { isInRange } from "../../lib/Checks";
+import { isInRange } from "../../../../../lib/Checks";
 
 const styles = {
   inputsContainer: {
