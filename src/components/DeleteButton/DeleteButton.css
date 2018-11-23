@@ -17,6 +17,7 @@
 
 .DeleteButton:not(:disabled):hover,
 .DeleteButton:not(:disabled):focus {
-  background-color: #e57373;
-  transform: rotate(360deg)
+  color: #fff;
+  background-color: #f50057;
+  transform: rotate(360deg);
 }

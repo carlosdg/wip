@@ -30,7 +30,8 @@
 }
 
 .Item.is-selected .Item__toolbar {
-  background-color: hsl(210, 25%, 70%);
+  color: #fff;
+  background-color: #3f51b5;
 }
 
 .Item__childrenContainer {
