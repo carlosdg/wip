@@ -134,6 +134,9 @@ class AppToolbar extends React.Component {
                       <MenuItem onClick={this.props.histogramEqualization}>
                         Histogram Equalization
                       </MenuItem>
+                      <MenuItem onClick={this.props.onCrop}>
+                        Crop
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>

@@ -12,6 +12,7 @@ import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
+import { crop } from "../../lib/ImageProcessing/crop";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -44,7 +45,6 @@ class App extends Component {
 
   /** Returns a callback that updates the region of the asked image info */
   onImageRegionSelection = index => newRegion => {
-    console.log(newRegion);
     this.setState(prevState => ({
       imagesInfos: prevState.imagesInfos.map((info, i) =>
         i === index ? { ...info, region: newRegion } : info
@@ -359,6 +359,22 @@ class App extends Component {
     }
   };
 
+  cropCurrentImage = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      // Handle error
+      console.error("Error");
+    } else {
+      this.addNewImage(
+        crop(
+          this.state.imagesInfos[index].imageBuffer,
+          this.state.imagesInfos[index].region
+        )
+      );
+    }
+  };
+
   render() {
     return (
       <div>
@@ -377,6 +393,7 @@ class App extends Component {
             changesDetection={this.applyChangesDetection}
             histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
+            onCrop={this.cropCurrentImage}
           />
           <main className="main">{this.getGridComponent()}</main>
           <footer>{this.getDisplayForPixelUnderMouse()}</footer>
