@@ -77,10 +77,13 @@ export default class RgbaImageBuffer {
 
     const pixelPosition = this._mapMatrixPositionToArray(x, y);
 
-    return this.pixels.slice(
-      pixelPosition,
-      pixelPosition + RgbaImageBuffer.NUM_CHANNELS
-    );
+    // We tested this way and it turned to be much more performant than using slice
+    return [
+      this.pixels[pixelPosition],
+      this.pixels[pixelPosition + 1],
+      this.pixels[pixelPosition + 2],
+      this.pixels[pixelPosition + 3]
+    ];
   };
 
   /**
