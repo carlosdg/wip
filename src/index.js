@@ -8,6 +8,8 @@ import "../node_modules/react-grid-layout/css/styles.css";
 import "../node_modules/react-resizable/css/styles.css";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { SnackbarProvider } from "notistack";
+import Button from "@material-ui/core/Button";
 
 // Material UI color theme
 const theme = createMuiTheme({
@@ -47,7 +49,20 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <div>
     <MuiThemeProvider theme={theme}>
-      <App />
+      <SnackbarProvider
+        maxSnack={5}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        action={[
+          <Button color="inherit" size="small" key={Date.now()}>
+            Dismiss
+          </Button>
+        ]}
+      >
+        <App />
+      </SnackbarProvider>
     </MuiThemeProvider>
   </div>,
   document.getElementById("root")

@@ -18,6 +18,7 @@ import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import CumulativeHistogram from "../../lib/CumulativeHistogram";
 import "./App.css";
+import { withSnackbar } from "notistack";
 
 class App extends Component {
   state = {
@@ -35,6 +36,21 @@ class App extends Component {
     pixelValue: [0, 0, 0, 255],
     /** Amount of removed images, needed for proper indexing images on the grid */
     removedImagesCount: 0
+  };
+
+  /**
+   * Notify the user of the given message with the given type
+   *
+   * @param {String} messageType Message type (error, warning, info, success)
+   * @param {String} message  Message to show to the user
+   *
+   */
+  notify = (messageType, message) => {
+    // "enqueueSnackbar" is provided by the "withSnackbar" Higher Order
+    // Component
+    this.props.enqueueSnackbar(message, {
+      variant: messageType
+    });
   };
 
   /** Callback that updates the pixel value and coordinates currently under the
@@ -86,9 +102,8 @@ class App extends Component {
   onNewImageFromFile = event => {
     const files = event.target.files;
 
-    // TODO: handle error
     if (files.length !== 1 || !files[0]) {
-      console.error("Error reading files");
+      this.notify("error", "Error reading image file");
       return;
     }
 
@@ -107,8 +122,8 @@ class App extends Component {
         const imageBuffer = RgbaImageBuffer.fromImageData(imgData);
         this.addNewImage(imageBuffer);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
+        this.notify("error", "Could not load image");
       });
   };
 
@@ -169,8 +184,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.setState(prevState => ({
         histogramInfos: prevState.histogramInfos.map((histogramInfo, i) =>
@@ -191,8 +205,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       const imgInfo = this.state.imagesInfos[index];
       const { left, top, width, height } = imgInfo.region;
@@ -221,8 +234,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         imageToGrayscale(this.state.imagesInfos[index].imageBuffer)
@@ -234,8 +246,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         linearTransformation(
@@ -253,8 +264,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         brightnessAndContrastAdjustment(
@@ -272,8 +282,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         gammaCorrection(this.state.imagesInfos[index].imageBuffer, gammaValue)
@@ -283,13 +292,18 @@ class App extends Component {
 
   applyImagesDifference = otherImgName => {
     const { type, index } = this.state.selectedGridItem;
-    const { imageBuffer } = this.state.imagesInfos.find(
+    const otherImageInfo = this.state.imagesInfos.find(
       ({ key }) => key === otherImgName
     );
+    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
 
-    if (type !== "image" || index < 0 || imageBuffer === undefined) {
-      // Handle error
-      console.error("Error");
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else if (imageBuffer === undefined) {
+      this.notify(
+        "error",
+        `Couldn't find an image with the selected name (${otherImgName})`
+      );
     } else {
       this.addNewImage(
         imagesDifference(this.state.imagesInfos[index].imageBuffer, imageBuffer)
@@ -299,13 +313,18 @@ class App extends Component {
 
   applyChangesDetection = ({ imgName, rgbaColor, threshold }) => {
     const { type, index } = this.state.selectedGridItem;
-    const { imageBuffer } = this.state.imagesInfos.find(
+    const otherImageInfo = this.state.imagesInfos.find(
       ({ key }) => key === imgName
     );
+    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
 
-    if (type !== "image" || index < 0 || imageBuffer === undefined) {
-      // Handle error
-      console.error("Error");
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else if (imageBuffer === undefined) {
+      this.notify(
+        "error",
+        `Couldn't find an image with the selected name (${imgName})`
+      );
     } else {
       this.addNewImage(
         changesDetection(
@@ -324,14 +343,16 @@ class App extends Component {
       ({ key }) => key === otherImgName
     );
 
-    if (
-      type !== "image" ||
-      index < 0 ||
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else if (
       otherImgIndex < 0 ||
       otherImgIndex > this.state.imagesInfos.length
     ) {
-      // Handle error
-      console.error("Error");
+      this.notify(
+        "error",
+        `Couldn't find an image with the selected name (${otherImgName})`
+      );
     } else {
       this.addNewImage(
         histogramSpecification(
@@ -347,8 +368,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         histogramEqualization(
@@ -363,8 +383,7 @@ class App extends Component {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      // Handle error
-      console.error("Error");
+      this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
         crop(
@@ -508,4 +527,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withSnackbar(App);
