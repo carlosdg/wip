@@ -45,13 +45,35 @@ export default class Item extends React.Component {
     isDraggable: false
   };
 
+  /**
+   * Listen for document mouse up event so we can react to it even if the users
+   * triggers it out of this element
+   */
+  componentDidMount() {
+    document.addEventListener("mouseup", this.onDragHandleMouseUp);
+  }
+
+  /**
+   * Clean the mouse up listener from the document when the component will be
+   * unmounted
+   */
+  componentWillUnmount() {
+    document.removeEventListener("mouseup", this.onDragHandleMouseUp);
+  }
+
   /** Update the state to allow the item be dragged only when the user is
    * clicking on the top toolbar */
   onDragHandleMouseDown = () => this.setState({ isDraggable: true });
 
   /** Update the state to forbid the item being dragged when the user stops
-   * clicking the top toolbar */
-  onDragHandleMouseUp = () => this.setState({ isDraggable: false });
+   * clicking the top toolbar. This listener is attached to the document so it
+   * works even if the user drags the element out of the viewport and releses
+   * the mouse there */
+  onDragHandleMouseUp = () =>
+    this.state.isDraggable &&
+    this.setState({
+      isDraggable: false
+    });
 
   /** Listener for the drag start event, but only allow the drag behaviour if
    * the state says so */
@@ -99,11 +121,7 @@ export default class Item extends React.Component {
         onFocus={onSelect ? this.onSelect : null}
         tabIndex="0"
       >
-        <div
-          onMouseDown={this.onDragHandleMouseDown}
-          onMouseUp={this.onDragHandleMouseUp}
-          className="Item__toolbar"
-        >
+        <div onMouseDown={this.onDragHandleMouseDown} className="Item__toolbar">
           <DeleteButton
             onMouseDown={stopEvent}
             onDelete={onDelete ? this.onDelete : null}
