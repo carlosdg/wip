@@ -145,19 +145,30 @@ class App extends Component {
   /** Removes the image in the given position and all its related information
    * like the histogram */
   deleteAllImageRelatedInfo = index => {
-    this.setState(prevState => ({
-      histogramInfos: prevState.histogramInfos.filter((_, i) => i !== index),
-      imagesInfos: prevState.imagesInfos.filter((_, i) => i !== index),
-      gridLayouts: GridLayoutHelper.removeElementsFromLayout(
+    this.setState(prevState => {
+      const newLayouts = GridLayoutHelper.removeElementsFromLayout(
         prevState.gridLayouts,
         [prevState.histogramInfos[index].key, prevState.imagesInfos[index].key]
-      ),
-      selectedGridItem:
-        index === prevState.selectedGridItem.index
-          ? { type: "", index: -1 }
-          : prevState.selectedGridItem,
-      removedImagesCount: prevState.removedImagesCount + 1
-    }));
+      );
+      let newSelectedItem = { ...prevState.selectedGridItem };
+
+      // We are removing an element from an array, we have to update the
+      // selected item index if it is the element removed or after it
+      if (index <= newSelectedItem.index) {
+        newSelectedItem.index -= 1;
+        if (newSelectedItem.index < 0) {
+          newSelectedItem.type = "";
+        }
+      }
+
+      return {
+        histogramInfos: prevState.histogramInfos.filter((_, i) => i !== index),
+        imagesInfos: prevState.imagesInfos.filter((_, i) => i !== index),
+        gridLayouts: newLayouts,
+        selectedGridItem: newSelectedItem,
+        removedImagesCount: prevState.removedImagesCount + 1
+      };
+    });
   };
 
   /** Hides the given histogram from the view */
