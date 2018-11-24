@@ -24,3 +24,12 @@
   flex-grow: 1;
   overflow-y: auto;
 }
+
+.main__wrapper {
+  min-height: 1000vh;
+}
+
+.footer {
+  box-shadow: 0px 1px 15px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}

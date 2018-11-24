@@ -414,8 +414,12 @@ class App extends Component {
             histogramEqualization={this.currentImageHistogramEqualization}
             onCrop={this.cropCurrentImage}
           />
-          <main className="main">{this.getGridComponent()}</main>
-          <footer>{this.getDisplayForPixelUnderMouse()}</footer>
+          <main className="main">
+            <div className="main__wrapper">{this.getGridComponent()}</div>
+          </main>
+          <footer className="footer">
+            {this.getDisplayForPixelUnderMouse()}
+          </footer>
         </div>
         <div>
           <a
