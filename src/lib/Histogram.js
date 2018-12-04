@@ -25,6 +25,10 @@ export default class Histogram {
   setImagePixels(imagePixels) {
     this.histogramValues = new Array(256).fill(0);
     for (let i = 0; i < imagePixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
+      if (imagePixels[i + 3] === 0) {
+        // The transparent pixels are ignored
+        continue;
+      }
       this.histogramValues[imagePixels[i]]++;
     }
 

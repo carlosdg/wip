@@ -1,5 +1,3 @@
-
-
 /** 
  * Returns the light value of the closest pixel of the given coordinates.
  * It retrieves the third element of the pixel assuming that no matters what
@@ -7,7 +5,7 @@
  * colored images (HSL), the third channel corresponds with the Lightness.
  */
 export const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
-    imgBuffer.getPixel(Math.round(xCoord), Math.round(yCoord))[2];
+    imgBuffer.getPixel({x: Math.round(xCoord), y: Math.round(yCoord)})[2];
 
 
 /** 
@@ -18,10 +16,10 @@ export const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
  * colored images (HSL), the third channel corresponds with the Lightness.
  */
 export const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
-    const A = imgBuffer.getPixel(Math.floor(xCoord), Math.ceil(yCoord))[2];
-    const B = imgBuffer.getPixel(Math.ceil(xCoord), Math.ceil(yCoord))[2];
-    const C = imgBuffer.getPixel(Math.floor(xCoord), Math.floor(yCoord))[2];
-    const D = imgBuffer.getPixel(Math.ceil(xCoord), Math.floor(yCoord))[2];
+    const A = imgBuffer.getPixel({x: Math.floor(xCoord), y: Math.ceil(yCoord)})[2];
+    const B = imgBuffer.getPixel({x: Math.ceil(xCoord), y: Math.ceil(yCoord)})[2];
+    const C = imgBuffer.getPixel({x: Math.floor(xCoord), y: Math.floor(yCoord)})[2];
+    const D = imgBuffer.getPixel({x: Math.ceil(xCoord), y: Math.floor(yCoord)})[2];
     const p = Math.ceil(xCoord) - xCoord;
     const q = yCoord - Math.floor(yCoord);
 
