@@ -169,6 +169,7 @@ export default class PointOperationsSubmenu extends React.Component {
           }}
         />
         <ImageDifferenceDialog
+          activeImagesNames={this.props.activeImagesNames}
           isOpen={this.state.isImageDifferenceDialogOpen}
           onClose={this.handleDialogClose("isImageDifferenceDialogOpen")}
           onSubmit={imgName => {
@@ -177,6 +178,7 @@ export default class PointOperationsSubmenu extends React.Component {
           }}
         />
         <HistogramSpecificationDialog
+          activeImagesNames={this.props.activeImagesNames}
           isOpen={this.state.isHistogramSpecificationDialogOpen}
           onClose={this.handleDialogClose("isHistogramSpecificationDialogOpen")}
           onSubmit={imgName => {
@@ -185,6 +187,7 @@ export default class PointOperationsSubmenu extends React.Component {
           }}
         />
         <ChangesDetectionDialog
+          activeImagesNames={this.props.activeImagesNames}
           isOpen={this.state.isChangesDetectionDialogOpen}
           onClose={this.handleDialogClose("isChangesDetectionDialogOpen")}
           onSubmit={userInput => {

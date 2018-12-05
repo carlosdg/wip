@@ -429,6 +429,9 @@ class App extends Component {
       <div>
         <div className="app-container">
           <AppToolbar
+            activeImagesNames={this.state.imagesInfos.map(img =>
+              img.key  
+            )}
             onFileInput={this.onNewImageFromFile}
             onShowHistogram={this.showHistogramOfCurrentImage}
             onDownload={this.downloadCurrentImage}

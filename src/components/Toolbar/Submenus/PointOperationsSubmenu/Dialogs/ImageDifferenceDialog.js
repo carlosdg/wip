@@ -6,8 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import SimpleListMenu from "../../../SimpleListMenu";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
@@ -26,7 +25,7 @@ export default class ImageDifferenceDialog extends React.Component {
 
   onChange = e =>
     this.setState({
-      imgName: e.target.value
+      imgName: e.selectedItemName
     });
 
   onSubmit = () =>
@@ -43,20 +42,16 @@ export default class ImageDifferenceDialog extends React.Component {
         <DialogTitle id="form-dialog-title">Image Difference</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please, enter the image name of the other image to perform the
-            difference to the current image
+            Please, select the image to perform the difference 
+            to the current image
           </DialogContentText>
-          <TextField
-            placeholder="Image 0"
-            value={this.state.imgName}
-            onChange={this.onChange}
-            margin="dense"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">Name: </InputAdornment>
-              )
-            }}
-          />
+          <div className="center">
+            <SimpleListMenu
+              menuTitle="Selected image"
+              options={this.props.activeImagesNames}
+              onItemSelection={this.onChange}
+            />
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.props.onClose} color="primary">

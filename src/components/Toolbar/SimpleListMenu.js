@@ -16,7 +16,7 @@ const styles = theme => ({
 class SimpleListMenu extends React.Component {
   state = {
     anchorEl: null,
-    selectedIndex: 1,
+    selectedIndex: 0,
   };
 
   handleClickListItem = event => {
@@ -49,25 +49,33 @@ class SimpleListMenu extends React.Component {
           >
             <ListItemText
               primary={this.props.menuTitle}
-              secondary={this.props.options[this.state.selectedIndex]}
+              secondary={
+                (this.props.options.length > 0) ?
+                this.props.options[this.state.selectedIndex] :
+                "None"
+              }
             />
           </ListItem>
         </List>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          {this.props.options.map((option, index) => (
-            <MenuItem
-              key={option}
-              selected={index === this.state.selectedIndex}
-              onClick={event => this.handleMenuItemClick(event, index, option)}
-            >
-              {option}
-            </MenuItem>
-          ))}
-        </Menu>
+        { (this.props.options.length > 0) ?
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={this.handleClose}
+          >
+            {this.props.options.map((option, index) => (
+              <MenuItem
+                key={option}
+                selected={index === this.state.selectedIndex}
+                onClick={event => this.handleMenuItemClick(event, index, option)}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu> :
+          null
+        }
+        
       </div>
     );
   }

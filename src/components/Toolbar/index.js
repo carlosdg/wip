@@ -19,6 +19,7 @@ const AppToolbar = props => (
         onCrop={props.onCrop}
       />
       <PointOperationsSubmenu
+        activeImagesNames={props.activeImagesNames}
         onGrayscale={props.onGrayscale}
         histogramEqualization={props.histogramEqualization}
         linearTransformation={props.linearTransformation}
