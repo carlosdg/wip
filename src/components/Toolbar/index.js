@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import FileSubmenu from "./Submenus/FileSubmenu";
 import ImageSubmenu from "./Submenus/ImageSubmenu";
 import PointOperationsSubmenu from "./Submenus/PointOperationsSubmenu";
+import GeometricOperationsSubmenu from "./Submenus/GeometricOperationsSubmenu";
 
 const AppToolbar = props => (
   <AppBar position="static">
@@ -27,6 +28,10 @@ const AppToolbar = props => (
         histogramSpecification={props.histogramSpecification}
         changesDetection={props.changesDetection}
       />
+      <GeometricOperationsSubmenu
+        imageRotation={props.imageRotation}
+        interpolationMethods={props.interpolationMethods}
+      />
     </Toolbar>
   </AppBar>
 );
@@ -43,7 +48,9 @@ AppToolbar.propTypes = {
   gammaCorrection: PropTypes.func.isRequired,
   imagesDifference: PropTypes.func.isRequired,
   histogramSpecification: PropTypes.func.isRequired,
-  changesDetection: PropTypes.func.isRequired
+  changesDetection: PropTypes.func.isRequired,
+  interpolationMethods: PropTypes.array.isRequired,
+  imageRotation: PropTypes.func.isRequired
 };
 
 export default AppToolbar;

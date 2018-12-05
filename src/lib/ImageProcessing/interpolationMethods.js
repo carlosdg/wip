@@ -4,7 +4,7 @@
  * RGB channel you choose for grayscale images and in case of operate with
  * colored images (HSL), the third channel corresponds with the Lightness.
  */
-export const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
+const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
     imgBuffer.getPixel({x: Math.round(xCoord), y: Math.round(yCoord)})[2];
 
 
@@ -15,7 +15,7 @@ export const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
  * RGB channel you choose for grayscale images and in case of operate with
  * colored images (HSL), the third channel corresponds with the Lightness.
  */
-export const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
+const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
     const A = imgBuffer.getPixel({x: Math.floor(xCoord), y: Math.ceil(yCoord)})[2];
     const B = imgBuffer.getPixel({x: Math.ceil(xCoord), y: Math.ceil(yCoord)})[2];
     const C = imgBuffer.getPixel({x: Math.floor(xCoord), y: Math.floor(yCoord)})[2];
@@ -24,4 +24,9 @@ export const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
     const q = yCoord - Math.floor(yCoord);
 
     return C + ((D - C) * p) + ((A - C) * q) + ((B - A + C - D) * p * q);
+};
+
+module.exports = {
+    "Bilinear": bilinearInterpolation,
+    "Closest Neighbour": closestNeighbourInterpolation
 };

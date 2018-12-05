@@ -13,6 +13,8 @@ import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import { crop } from "../../lib/ImageProcessing/crop";
+import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
+import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -405,6 +407,23 @@ class App extends Component {
     }
   };
 
+  rotateCurrentImage = ({degrees, rotateAndPaint, interpolationMethod}) => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else {
+      this.addNewImage(
+        imageRotation(
+          this.state.imagesInfos[index].imageBuffer,
+          degrees,
+          InterpolationMethods[interpolationMethod],
+          rotateAndPaint
+        )
+      );
+    }
+  };
+
   render() {
     return (
       <div>
@@ -424,6 +443,8 @@ class App extends Component {
             histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
             onCrop={this.cropCurrentImage}
+            interpolationMethods={Object.keys(InterpolationMethods)}
+            imageRotation={this.rotateCurrentImage}
           />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
