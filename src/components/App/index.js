@@ -16,6 +16,7 @@ import { crop } from "../../lib/ImageProcessing/crop";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
+import { verticalMirror } from "../../lib/ImageProcessing/verticalMirror";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -425,7 +426,7 @@ class App extends Component {
     }
   };
 
-  resizeCurrentImage= ({widthPercentage, heigthPercentage, interpolationMethod}) => {
+  resizeCurrentImage = ({widthPercentage, heigthPercentage, interpolationMethod}) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
@@ -440,7 +441,21 @@ class App extends Component {
         )
       );
     }
-  }
+  };
+
+  currentImageVerticalMirror = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else {
+      this.addNewImage(
+        verticalMirror(
+          this.state.imagesInfos[index].imageBuffer,
+        )
+      );
+    }
+  };
 
   render() {
     const { index } = this.state.selectedGridItem;
@@ -477,6 +492,7 @@ class App extends Component {
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}
             imageResizing={this.resizeCurrentImage}
+            verticalMirror={this.currentImageVerticalMirror}
           />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
