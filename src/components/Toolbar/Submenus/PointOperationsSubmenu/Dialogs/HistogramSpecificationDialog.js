@@ -6,7 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import SimpleListMenu from "../../../SimpleListMenu";
+import FilesListMenu from "../../../FilesListMenu";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
@@ -46,7 +46,7 @@ export default class HistogramSpecificationDialog extends React.Component {
             histogram specification to the current image
           </DialogContentText>
           <div className="center">
-            <SimpleListMenu
+            <FilesListMenu
               menuTitle="Selected image"
               options={this.props.activeImagesNames}
               onItemSelection={this.onChange}

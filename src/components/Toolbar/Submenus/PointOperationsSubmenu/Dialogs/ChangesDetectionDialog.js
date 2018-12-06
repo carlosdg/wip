@@ -9,7 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ChromePicker } from "react-color";
-import SimpleListMenu from "../../../SimpleListMenu";
+import FilesListMenu from "../../../FilesListMenu";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
@@ -69,7 +69,7 @@ export default class ChangesDetectionDialog extends React.Component {
             will determine what is considered a difference and what not
           </DialogContentText>
           <div className="center" style={{ justifyContent: "space-around" }}>
-            <SimpleListMenu
+            <FilesListMenu
               menuTitle="Selected image"
               options={this.props.activeImagesNames}
               onItemSelection={this.onImgNameChange}

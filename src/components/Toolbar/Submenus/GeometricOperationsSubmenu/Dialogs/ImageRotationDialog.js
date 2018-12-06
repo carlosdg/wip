@@ -10,7 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from "@material-ui/core/Checkbox";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import SimpleListMenu from "../../../SimpleListMenu";
+import FilesListMenu from "../../../FilesListMenu";
 
 const styles = {
   inputsContainer: {
@@ -117,7 +117,7 @@ export default class ImageRotationDialog extends React.Component {
                 }}
               />
             </div>
-            <SimpleListMenu
+            <FilesListMenu
               menuTitle="Interpolation method"
               options={this.props.interpolationMethods}
               onItemSelection={this.onInterpolationMethodChange}
