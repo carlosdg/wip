@@ -19,6 +19,7 @@ const AppToolbar = props => (
         onCrop={props.onCrop}
       />
       <PointOperationsSubmenu
+        selectedImageInfo={props.selectedImageInfo}
         activeImagesNames={props.activeImagesNames}
         onGrayscale={props.onGrayscale}
         histogramEqualization={props.histogramEqualization}
@@ -30,6 +31,7 @@ const AppToolbar = props => (
         changesDetection={props.changesDetection}
       />
       <GeometricOperationsSubmenu
+        selectedImageInfo={props.selectedImageInfo}
         imageRotation={props.imageRotation}
         interpolationMethods={props.interpolationMethods}
       />
@@ -51,7 +53,9 @@ AppToolbar.propTypes = {
   histogramSpecification: PropTypes.func.isRequired,
   changesDetection: PropTypes.func.isRequired,
   interpolationMethods: PropTypes.array.isRequired,
-  imageRotation: PropTypes.func.isRequired
+  imageRotation: PropTypes.func.isRequired,
+  activeImagesNames: PropTypes.array.isRequired,
+  selectedImageInfo: PropTypes.object.isRequired
 };
 
 export default AppToolbar;

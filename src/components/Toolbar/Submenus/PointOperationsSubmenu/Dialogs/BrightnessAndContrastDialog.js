@@ -26,6 +26,8 @@ const styles = {
  */
 export default class BrightnessAndContrastDialog extends React.Component {
   static propTypes = {
+    oldBrightness: PropTypes.number.isRequired,
+    oldContrast: PropTypes.number.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired
@@ -35,8 +37,21 @@ export default class BrightnessAndContrastDialog extends React.Component {
     brightness: 0,
     brightnessErrorMessage: "",
     contrast: 0,
-    contrastErrorMessage: ""
+    contrastErrorMessage: "",
+    formChanged: false
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if ((!state.formChanged) && 
+        (props.oldBrightness !== state.oldBrightness ||
+        props.oldContrast !== state.oldContrast)) {
+      return {
+        brightness: props.oldBrightness.toFixed(2),
+        contrast: props.oldContrast.toFixed(2)
+      };
+    }
+    return null;
+  }
 
   /** General listener for a change on the brightness or contrast input */
   onChange = (
@@ -46,6 +61,9 @@ export default class BrightnessAndContrastDialog extends React.Component {
     minPossibleValue,
     maxPossibleValue
   ) => {
+    this.setState({
+      formChanged: true
+    })
     const value = Number.parseFloat(e.target.value);
 
     if (!isInRange(value, minPossibleValue, maxPossibleValue + 1)) {
@@ -69,9 +87,22 @@ export default class BrightnessAndContrastDialog extends React.Component {
   onContrastChange = e =>
     this.onChange(e, "contrast", "contrastErrorMessage", 0, 128);
 
-  onSubmit = () =>
+  onSubmit = () => {
     // TODO: if there is an error: show error message and don't submit
     this.props.onSubmit(this.state.brightness, this.state.contrast);
+    this.setState({
+      formChanged: false
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      formChanged: false,
+      brightnessErrorMessage: "",
+      contrastErrorMessage: ""
+    });
+    this.props.onClose();
+  };
 
   render() {
     return (
@@ -93,7 +124,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
               error={!!this.state.brightnessErrorMessage}
               label={this.state.brightnessErrorMessage}
               type="number"
-              placeholder="0"
+              placeholder={String(this.props.oldBrightness.toFixed(2))}
               value={this.state.brightness}
               onChange={this.onBrightnessChange}
               margin="dense"
@@ -108,7 +139,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
               error={!!this.state.contrastErrorMessage}
               label={this.state.contrastErrorMessage}
               type="number"
-              placeholder="0"
+              placeholder={String(this.props.oldContrast.toFixed(2))}
               value={this.state.contrast}
               onChange={this.onContrastChange}
               margin="dense"
@@ -122,7 +153,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.onClose} color="primary">
+          <Button onClick={this.onClose} color="primary">
             Cancel
           </Button>
           <Button onClick={this.onSubmit} color="primary">

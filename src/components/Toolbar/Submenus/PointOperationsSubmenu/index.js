@@ -20,6 +20,7 @@ import ChangesDetectionDialog from "./Dialogs/ChangesDetectionDialog";
  */
 export default class PointOperationsSubmenu extends React.Component {
   static propTypes = {
+    selectedImageInfo: PropTypes.object.isRequired,
     onGrayscale: PropTypes.func.isRequired,
     histogramEqualization: PropTypes.func.isRequired,
     linearTransformation: PropTypes.func.isRequired,
@@ -153,6 +154,8 @@ export default class PointOperationsSubmenu extends React.Component {
           }}
         />
         <BrightnessAndContrastDialog
+          oldBrightness={this.props.selectedImageInfo.brightness}
+          oldContrast={this.props.selectedImageInfo.contrast}
           isOpen={this.state.isLightnessAndContrastDialogOpen}
           onClose={this.handleDialogClose("isLightnessAndContrastDialogOpen")}
           onSubmit={(brightness, contrast) => {

@@ -425,13 +425,23 @@ class App extends Component {
   };
 
   render() {
+    const { index } = this.state.selectedGridItem;
+    let selectedImageInfo = {
+      width: (index >= 0) ?
+        this.state.imagesInfos[index].imageBuffer.width : 0,
+      height: (index >= 0) ?
+        this.state.imagesInfos[index].imageBuffer.height : 0,
+      brightness: (index >= 0) ?
+        this.state.histogramInfos[index].histogram.histogramInfo.mean : 0,
+      contrast: (index >= 0) ?
+        this.state.histogramInfos[index].histogram.histogramInfo.stdDev : 0
+    };
     return (
       <div>
         <div className="app-container">
           <AppToolbar
-            activeImagesNames={this.state.imagesInfos.map(img =>
-              img.key  
-            )}
+            selectedImageInfo={selectedImageInfo}
+            activeImagesNames={this.state.imagesInfos.map(img => img.key)}
             onFileInput={this.onNewImageFromFile}
             onShowHistogram={this.showHistogramOfCurrentImage}
             onDownload={this.downloadCurrentImage}
