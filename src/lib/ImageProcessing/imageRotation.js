@@ -44,7 +44,7 @@ export const imageRotation = (
 
     const inverseTransformation = (xCoord, yCoord) => {
         return {
-           x: (Math.cos(-radians) * xCoord) - (Math.sin(-radians) * yCoord),
+            x: (Math.cos(-radians) * xCoord) - (Math.sin(-radians) * yCoord),
             y: (Math.sin(-radians) * xCoord) + (Math.cos(-radians) * yCoord)
         };
     };
