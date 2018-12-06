@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
 import ImageRotationDialog from "./Dialogs/ImageRotationDialog";
+import ImageResizingDialog from "./Dialogs/ImageResizingDialog";
 
 /**
  * "Geometric Operations" Appbar Dropdown menu. Contains all the geometric operations
@@ -15,13 +16,16 @@ import ImageRotationDialog from "./Dialogs/ImageRotationDialog";
  */
 export default class GeometricOperationsSubmenu extends React.Component {
   static propTypes = {
+    selectedImageInfo: PropTypes.object.isRequired,
     interpolationMethods: PropTypes.array.isRequired,
-    imageRotation: PropTypes.func.isRequired
+    imageRotation: PropTypes.func.isRequired,
+    imageResizing: PropTypes.func.isRequired
   };
 
   state = {
     open: false,
-    isImageRotationDialogOpen: false
+    isImageRotationDialogOpen: false,
+    isImageResizingDialogOpen: false
   };
 
   handleDialogOpen = dialogStateName => () =>
@@ -80,6 +84,13 @@ export default class GeometricOperationsSubmenu extends React.Component {
                     >
                       Image rotation
                     </MenuItem>
+                    <MenuItem
+                      onClick={this.handleDialogOpen(
+                        "isImageResizingDialogOpen"
+                      )}
+                    >
+                      Image resizing
+                    </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -92,6 +103,17 @@ export default class GeometricOperationsSubmenu extends React.Component {
           onSubmit={(degrees, rotateAndPaint, interpolationMethod) => {
             this.handleDialogClose("isImageRotationDialogOpen")();
             this.props.imageRotation(degrees, rotateAndPaint, interpolationMethod);
+          }}
+          interpolationMethods={this.props.interpolationMethods}
+        />
+        <ImageResizingDialog
+          oldWidth={this.props.selectedImageInfo.width}
+          oldHeight={this.props.selectedImageInfo.height}
+          isOpen={this.state.isImageResizingDialogOpen}
+          onClose={this.handleDialogClose("isImageResizingDialogOpen")}
+          onSubmit={(widthPercentage, heightPercentage, interpolationMethod) => {
+            this.handleDialogClose("isImageResizingDialogOpen")();
+            this.props.imageResizing(widthPercentage, heightPercentage, interpolationMethod);
           }}
           interpolationMethods={this.props.interpolationMethods}
         />

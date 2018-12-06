@@ -32,8 +32,9 @@ const AppToolbar = props => (
       />
       <GeometricOperationsSubmenu
         selectedImageInfo={props.selectedImageInfo}
-        imageRotation={props.imageRotation}
         interpolationMethods={props.interpolationMethods}
+        imageRotation={props.imageRotation}
+        imageResizing={props.imageResizing}
       />
     </Toolbar>
   </AppBar>
@@ -55,7 +56,8 @@ AppToolbar.propTypes = {
   interpolationMethods: PropTypes.array.isRequired,
   imageRotation: PropTypes.func.isRequired,
   activeImagesNames: PropTypes.array.isRequired,
-  selectedImageInfo: PropTypes.object.isRequired
+  selectedImageInfo: PropTypes.object.isRequired,
+  imageResizing: PropTypes.func.isRequired
 };
 
 export default AppToolbar;

@@ -61,20 +61,19 @@ export default class BrightnessAndContrastDialog extends React.Component {
     minPossibleValue,
     maxPossibleValue
   ) => {
-    this.setState({
-      formChanged: true
-    })
     const value = Number.parseFloat(e.target.value);
 
     if (!isInRange(value, minPossibleValue, maxPossibleValue + 1)) {
       this.setState({
         [valueStateName]: e.target.value,
-        [errorMessageStateName]: `Required a number between ${minPossibleValue} and ${maxPossibleValue}`
+        [errorMessageStateName]: `Required a number between ${minPossibleValue} and ${maxPossibleValue}`,
+        formChanged: true
       });
     } else {
       this.setState({
         [valueStateName]: value,
-        [errorMessageStateName]: ""
+        [errorMessageStateName]: "",
+        formChanged: true
       });
     }
   };

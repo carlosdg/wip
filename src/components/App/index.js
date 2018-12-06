@@ -15,6 +15,7 @@ import { histogramEqualization } from "../../lib/ImageProcessing/histogramEquali
 import { crop } from "../../lib/ImageProcessing/crop";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
+import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -424,6 +425,23 @@ class App extends Component {
     }
   };
 
+  resizeCurrentImage= ({widthPercentage, heigthPercentage, interpolationMethod}) => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else {
+      this.addNewImage(
+        imageResizing(
+          this.state.imagesInfos[index].imageBuffer,
+          widthPercentage,
+          heigthPercentage,
+          InterpolationMethods[interpolationMethod]
+        )
+      );
+    }
+  }
+
   render() {
     const { index } = this.state.selectedGridItem;
     let selectedImageInfo = {
@@ -458,6 +476,7 @@ class App extends Component {
             onCrop={this.cropCurrentImage}
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}
+            imageResizing={this.resizeCurrentImage}
           />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
