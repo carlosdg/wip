@@ -20,7 +20,8 @@ export default class GeometricOperationsSubmenu extends React.Component {
     interpolationMethods: PropTypes.array.isRequired,
     imageRotation: PropTypes.func.isRequired,
     imageResizing: PropTypes.func.isRequired,
-    verticalMirror: PropTypes.func.isRequired
+    verticalMirror: PropTypes.func.isRequired,
+    horizontalMirror: PropTypes.func.isRequired
   };
 
   state = {
@@ -94,6 +95,9 @@ export default class GeometricOperationsSubmenu extends React.Component {
                     </MenuItem>
                     <MenuItem onClick={this.props.verticalMirror}>
                       Vertical mirror
+                    </MenuItem>
+                    <MenuItem onClick={this.props.horizontalMirror}>
+                      Horizontal mirror
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
