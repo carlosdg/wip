@@ -1,12 +1,12 @@
 import RgbaImageBuffer from "../RgbaImageBuffer";
 
 /**
- * Applies vertical mirror operation to the given image.
+ * Applies horizontal mirror operation to the given image.
  *
  * @param {RgbaImageBuffer} imgBuffer Image to transform
  * @returns {RgbaImageBuffer} Transformed image
  */
-export const verticalMirror = (
+export const horizontalMirror = (
   imgBuffer
 ) => {
   const width = imgBuffer.width;
@@ -35,12 +35,12 @@ export const verticalMirror = (
 }
 
 /**
- * Applies horizontal mirror operation to the given image.
+ * Applies vertical mirror operation to the given image.
  *
  * @param {RgbaImageBuffer} imgBuffer Image to transform
  * @returns {RgbaImageBuffer} Transformed image
  */
-export const horizontalMirror = (
+export const verticalMirror = (
   imgBuffer
 ) => {
   const width = imgBuffer.width;

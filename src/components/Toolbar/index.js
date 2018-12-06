@@ -37,6 +37,7 @@ const AppToolbar = props => (
         imageResizing={props.imageResizing}
         verticalMirror={props.verticalMirror}
         horizontalMirror={props.horizontalMirror}
+        imageTranspose={props.imageTranspose}
       />
     </Toolbar>
   </AppBar>
@@ -61,7 +62,8 @@ AppToolbar.propTypes = {
   selectedImageInfo: PropTypes.object.isRequired,
   imageResizing: PropTypes.func.isRequired,
   verticalMirror: PropTypes.func.isRequired,
-  horizontalMirror: PropTypes.func.isRequired
+  horizontalMirror: PropTypes.func.isRequired,
+  imageTranspose: PropTypes.func.isRequired
 };
 
 export default AppToolbar;

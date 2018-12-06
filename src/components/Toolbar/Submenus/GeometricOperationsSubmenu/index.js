@@ -21,7 +21,8 @@ export default class GeometricOperationsSubmenu extends React.Component {
     imageRotation: PropTypes.func.isRequired,
     imageResizing: PropTypes.func.isRequired,
     verticalMirror: PropTypes.func.isRequired,
-    horizontalMirror: PropTypes.func.isRequired
+    horizontalMirror: PropTypes.func.isRequired,
+    imageTranspose: PropTypes.func.isRequired
   };
 
   state = {
@@ -98,6 +99,9 @@ export default class GeometricOperationsSubmenu extends React.Component {
                     </MenuItem>
                     <MenuItem onClick={this.props.horizontalMirror}>
                       Horizontal mirror
+                    </MenuItem>
+                    <MenuItem onClick={this.props.imageTranspose}>
+                      Image Transpose
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

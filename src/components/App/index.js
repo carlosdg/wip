@@ -17,6 +17,7 @@ import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
 import { verticalMirror, horizontalMirror } from "../../lib/ImageProcessing/mirrorOperations";
+import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
@@ -471,6 +472,20 @@ class App extends Component {
     }
   };
 
+  applyImageTranspose = () => {
+    const { type, index } = this.state.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      this.notify("warning", "You first need to select an image");
+    } else {
+      this.addNewImage(
+        imageTranspose(
+          this.state.imagesInfos[index].imageBuffer,
+        )
+      );
+    }
+  }
+
   render() {
     const { index } = this.state.selectedGridItem;
     let selectedImageInfo = {
@@ -508,6 +523,7 @@ class App extends Component {
             imageResizing={this.resizeCurrentImage}
             verticalMirror={this.currentImageVerticalMirror}
             horizontalMirror={this.currentImageHorizontalMirror}
+            imageTranspose={this.applyImageTranspose}
           />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
