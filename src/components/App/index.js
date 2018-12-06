@@ -536,7 +536,11 @@ class App extends Component {
 
   getDisplayForPixelUnderMouse() {
     const currentPixelRgbaValue = `rgba(${this.state.pixelValue.join(", ")})`;
-
+    const { type, index } = this.state.selectedGridItem;
+    const sizeText = (this.state.imagesInfos[index] && type === "image") ?
+      "width: " + this.state.imagesInfos[index].region.width + ", " +
+      "height: " + this.state.imagesInfos[index].region.height + ", " :
+      "";
     return (
       <div
         style={{
@@ -548,6 +552,7 @@ class App extends Component {
           boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
         }}
       >
+        {sizeText}
         x: {this.state.pixelCoords.x}, y: {this.state.pixelCoords.y},
         <span
           style={{
