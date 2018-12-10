@@ -42,25 +42,14 @@ export default class ImageResizingDialog extends React.Component {
 
   state = {
     width: this.props.oldWidth,
-    widthPercentage: 100,
-    widthErrorMessage: "",
+    widthPercentage: 0,
+    widthErrorMessage: "Select an image",
     height: this.props.oldHeight,
-    heightPercentage: 100,
-    heightErrorMessage: "",
+    heightPercentage: 0,
+    heightErrorMessage: "Select an image",
     interpolationMethod: this.props.interpolationMethods[0],
     formChanged: false
   };
-
-  componentDidMount() {
-    if (this.props.oldHeight <= 0)
-      this.setState({
-        heightErrorMessage: "Height must be greater than 0"
-      });
-    if (this.props.oldWidth <= 0)
-      this.setState({
-        widthErrorMessage: "Width must be greater than 0"
-      });
-  }
 
   static getDerivedStateFromProps(props, state) {
     if ((!state.formChanged) && 
@@ -70,7 +59,18 @@ export default class ImageResizingDialog extends React.Component {
         height: props.oldHeight,
         width: props.oldWidth,
         widthPercentage: 100,
-        heightPercentage: 100
+        heightPercentage: 100,
+        widthErrorMessage: (props.oldWidth <= 0) ?
+          "Width must be greater than 0" : "",
+        heightErrorMessage: (props.oldHeight <= 0) ?
+          "Height must be greater than 0" : ""
+      };
+    }
+
+    if (props.oldHeight === 0 && props.oldWidth === 0) {
+      return {
+        widthErrorMessage: "Select an image",
+        heightErrorMessage: "Select an image"
       };
     }
     return null;
@@ -87,28 +87,31 @@ export default class ImageResizingDialog extends React.Component {
     isPercentage
   ) => {
 
+    const value = Number.parseFloat(e.target.value);
     let dimension;
     let percentage;
     if (!isPercentage) {
-      dimension = Math.round(e.target.value);
-      percentage = ((dimension * 100) / this.props[oldDimensionPropName]).toFixed(2);
+      dimension = Math.round(value);
+      percentage = ((dimension * 100) / this.props[oldDimensionPropName]);
     } else {
-      dimension = Math.floor((e.target.value / 100) * this.props[oldDimensionPropName]);
-      percentage = Number.parseFloat(e.target.value);
+      dimension = Math.floor((value / 100) * this.props[oldDimensionPropName]);
+      percentage = value;
     }
-    if (dimension < 1) {
+    if (dimension < 1 || Number.isNaN(value)) {
       this.setState({
         [dimensionStateName]: (isPercentage) ? 
-          dimension : Number.parseFloat(e.target.value),
+          "" : e.target.value,
         [percentageStateName]: (isPercentage) ?
-          Number.parseFloat(e.target.value) : percentage,
+          e.target.value : "",
         [errorMessageStateName]: dimensionName + " must be greater than 0",
         formChanged: true
       });
     } else {
       this.setState({
-        [dimensionStateName]: dimension,
-        [percentageStateName]: percentage,
+        [dimensionStateName]: (isPercentage) ? 
+          dimension : value,
+        [percentageStateName]: (isPercentage) ?
+          value : percentage,
         [errorMessageStateName]: "",
         formChanged: true
       });
@@ -175,7 +178,6 @@ export default class ImageResizingDialog extends React.Component {
       formChanged: false
     });
     const { widthPercentage, heightPercentage, interpolationMethod } = this.state;
-    console.log(widthPercentage.constructor.name)
     this.props.onSubmit({
       widthPercentage,
       heightPercentage,
@@ -185,9 +187,7 @@ export default class ImageResizingDialog extends React.Component {
 
   onClose = () => {
     this.setState({
-      formChanged: false,
-      widthErrorMessage: "",
-      heightErrorMessage: ""
+      formChanged: false
     });
     this.props.onClose();
   };

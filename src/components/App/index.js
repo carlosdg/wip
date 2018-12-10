@@ -427,7 +427,7 @@ class App extends Component {
     }
   };
 
-  resizeCurrentImage = ({widthPercentage, heigthPercentage, interpolationMethod}) => {
+  resizeCurrentImage = ({widthPercentage, heightPercentage, interpolationMethod}) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
@@ -437,7 +437,7 @@ class App extends Component {
         imageResizing(
           this.state.imagesInfos[index].imageBuffer,
           widthPercentage,
-          heigthPercentage,
+          heightPercentage,
           InterpolationMethods[interpolationMethod]
         )
       );

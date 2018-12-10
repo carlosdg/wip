@@ -96,9 +96,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
 
   onClose = () => {
     this.setState({
-      formChanged: false,
-      brightnessErrorMessage: "",
-      contrastErrorMessage: ""
+      formChanged: false
     });
     this.props.onClose();
   };

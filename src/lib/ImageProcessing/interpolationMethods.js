@@ -20,10 +20,11 @@ const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
     const B = imgBuffer.getPixel({x: Math.ceil(xCoord), y: Math.ceil(yCoord)})[2];
     const C = imgBuffer.getPixel({x: Math.floor(xCoord), y: Math.floor(yCoord)})[2];
     const D = imgBuffer.getPixel({x: Math.ceil(xCoord), y: Math.floor(yCoord)})[2];
-    const p = Math.ceil(xCoord) - xCoord;
+    const p = xCoord - Math.floor(xCoord);
     const q = yCoord - Math.floor(yCoord);
 
-    return C + ((D - C) * p) + ((A - C) * q) + ((B - A + C - D) * p * q);
+
+    return C + ((D - C) * p) + ((A - C) * q) + ((B + C - A - D) * p * q);
 };
 
 module.exports = {
