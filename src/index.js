@@ -10,6 +10,8 @@ import "../node_modules/react-resizable/css/styles.css";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { SnackbarProvider } from "notistack";
 import Button from "@material-ui/core/Button";
+import { Provider } from "mobx-react";
+import appStore from "./stores/appStore";
 
 // Material UI color theme
 const theme = createMuiTheme({
@@ -61,7 +63,9 @@ ReactDOM.render(
           </Button>
         ]}
       >
-        <App />
+        <Provider appStore={appStore}>
+          <App />
+        </Provider>
       </SnackbarProvider>
     </MuiThemeProvider>
   </div>,

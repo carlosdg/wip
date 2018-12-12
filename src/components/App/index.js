@@ -16,7 +16,10 @@ import { crop } from "../../lib/ImageProcessing/crop";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
-import { verticalMirror, horizontalMirror } from "../../lib/ImageProcessing/mirrorOperations";
+import {
+  verticalMirror,
+  horizontalMirror
+} from "../../lib/ImageProcessing/mirrorOperations";
 import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
 import * as ImageHelper from "../../lib/imageHelper";
 import * as GridLayoutHelper from "../../lib/grid/calculateLayout";
@@ -24,7 +27,11 @@ import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import CumulativeHistogram from "../../lib/CumulativeHistogram";
 import "./App.css";
 import { withSnackbar } from "notistack";
+import { observer, inject } from "mobx-react";
 
+@withSnackbar
+@inject("appStore")
+@observer
 class App extends Component {
   state = {
     /** All the information relative to the images loaded */
@@ -410,7 +417,7 @@ class App extends Component {
     }
   };
 
-  rotateCurrentImage = ({degrees, rotateAndPaint, interpolationMethod}) => {
+  rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
@@ -427,7 +434,11 @@ class App extends Component {
     }
   };
 
-  resizeCurrentImage = ({widthPercentage, heightPercentage, interpolationMethod}) => {
+  resizeCurrentImage = ({
+    widthPercentage,
+    heightPercentage,
+    interpolationMethod
+  }) => {
     const { type, index } = this.state.selectedGridItem;
 
     if (type !== "image" || index < 0) {
@@ -451,9 +462,7 @@ class App extends Component {
       this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
-        verticalMirror(
-          this.state.imagesInfos[index].imageBuffer,
-        )
+        verticalMirror(this.state.imagesInfos[index].imageBuffer)
       );
     }
   };
@@ -465,9 +474,7 @@ class App extends Component {
       this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
-        horizontalMirror(
-          this.state.imagesInfos[index].imageBuffer,
-        )
+        horizontalMirror(this.state.imagesInfos[index].imageBuffer)
       );
     }
   };
@@ -479,24 +486,24 @@ class App extends Component {
       this.notify("warning", "You first need to select an image");
     } else {
       this.addNewImage(
-        imageTranspose(
-          this.state.imagesInfos[index].imageBuffer,
-        )
+        imageTranspose(this.state.imagesInfos[index].imageBuffer)
       );
     }
-  }
+  };
 
   render() {
     const { index } = this.state.selectedGridItem;
     let selectedImageInfo = {
-      width: (index >= 0) ?
-        this.state.imagesInfos[index].imageBuffer.width : 0,
-      height: (index >= 0) ?
-        this.state.imagesInfos[index].imageBuffer.height : 0,
-      brightness: (index >= 0) ?
-        this.state.histogramInfos[index].histogram.histogramInfo.mean : 0,
-      contrast: (index >= 0) ?
-        this.state.histogramInfos[index].histogram.histogramInfo.stdDev : 0
+      width: index >= 0 ? this.state.imagesInfos[index].imageBuffer.width : 0,
+      height: index >= 0 ? this.state.imagesInfos[index].imageBuffer.height : 0,
+      brightness:
+        index >= 0
+          ? this.state.histogramInfos[index].histogram.histogramInfo.mean
+          : 0,
+      contrast:
+        index >= 0
+          ? this.state.histogramInfos[index].histogram.histogramInfo.stdDev
+          : 0
     };
     return (
       <div>
@@ -613,10 +620,15 @@ class App extends Component {
   getDisplayForPixelUnderMouse() {
     const currentPixelRgbaValue = `rgba(${this.state.pixelValue.join(", ")})`;
     const { type, index } = this.state.selectedGridItem;
-    const sizeText = (this.state.imagesInfos[index] && type === "image") ?
-      "width: " + this.state.imagesInfos[index].region.width + ", " +
-      "height: " + this.state.imagesInfos[index].region.height + ", " :
-      "";
+    const sizeText =
+      this.state.imagesInfos[index] && type === "image"
+        ? "width: " +
+          this.state.imagesInfos[index].region.width +
+          ", " +
+          "height: " +
+          this.state.imagesInfos[index].region.height +
+          ", "
+        : "";
     return (
       <div
         style={{
@@ -647,4 +659,4 @@ class App extends Component {
   }
 }
 
-export default withSnackbar(App);
+export default App;
