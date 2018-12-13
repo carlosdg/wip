@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import FileSubmenu from "./Submenus/FileSubmenu";
@@ -42,27 +41,6 @@ const AppToolbar = props => (
     </Toolbar>
   </AppBar>
 );
-
-AppToolbar.propTypes = {
-  onShowHistogram: PropTypes.func.isRequired,
-  onCrop: PropTypes.func.isRequired,
-  onGrayscale: PropTypes.func.isRequired,
-  histogramEqualization: PropTypes.func.isRequired,
-  linearTransformation: PropTypes.func.isRequired,
-  brightnessAndContrastAdjustment: PropTypes.func.isRequired,
-  gammaCorrection: PropTypes.func.isRequired,
-  imagesDifference: PropTypes.func.isRequired,
-  histogramSpecification: PropTypes.func.isRequired,
-  changesDetection: PropTypes.func.isRequired,
-  interpolationMethods: PropTypes.array.isRequired,
-  imageRotation: PropTypes.func.isRequired,
-  activeImagesNames: PropTypes.array.isRequired,
-  selectedImageInfo: PropTypes.object.isRequired,
-  imageResizing: PropTypes.func.isRequired,
-  verticalMirror: PropTypes.func.isRequired,
-  horizontalMirror: PropTypes.func.isRequired,
-  imageTranspose: PropTypes.func.isRequired
-};
 
 export default AppToolbar;
 

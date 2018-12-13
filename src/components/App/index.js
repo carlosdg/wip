@@ -11,7 +11,6 @@ import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
-import { crop } from "../../lib/ImageProcessing/crop";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
@@ -216,21 +215,6 @@ class App extends Component {
     }
   };
 
-  cropCurrentImage = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
-    } else {
-      this.addNewImage(
-        crop(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          this.props.appStore.imagesInfos[index].region
-        )
-      );
-    }
-  };
-
   rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
     const { type, index } = this.props.appStore.selectedGridItem;
 
@@ -346,7 +330,6 @@ class App extends Component {
             changesDetection={this.applyChangesDetection}
             histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
-            onCrop={this.cropCurrentImage}
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}
             imageResizing={this.resizeCurrentImage}
