@@ -20,8 +20,6 @@ import {
   horizontalMirror
 } from "../../lib/ImageProcessing/mirrorOperations";
 import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
-import * as ImageHelper from "../../lib/imageHelper";
-import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import "./App.css";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
@@ -59,65 +57,6 @@ class App extends Component {
   /** Adds all the information related to the given image buffer to the app */
   addNewImage = imageBuffer => {
     this.props.appStore.addImage(imageBuffer);
-  };
-
-  /** Listener for a file input event to load the input image to the application */
-  onNewImageFromFile = event => {
-    const files = event.target.files;
-
-    if (files.length !== 1 || !files[0]) {
-      this.notify("error", "Error reading image file");
-      return;
-    }
-
-    // Try to get the image and draw it to the canvas. If there is an error
-    // update the state.error
-    ImageHelper.loadFromObject(files[0])
-      .then(image => {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
-        context.drawImage(image, 0, 0);
-
-        const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const imageBuffer = RgbaImageBuffer.fromImageData(imgData);
-        this.addNewImage(imageBuffer);
-      })
-      .catch(() => {
-        this.notify("error", "Could not load image");
-      });
-  };
-
-  /** Downloads the selected region of the current selected image if any */
-  downloadCurrentImage = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
-    } else {
-      const imgInfo = this.props.appStore.imagesInfos[index];
-      const { left, top, width, height } = imgInfo.region;
-      const imageData = imgInfo.imageBuffer.toImageData();
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-
-      canvas.width = imageData.width;
-      canvas.height = imageData.height;
-      context.putImageData(imageData, 0, 0, left, top, width, height);
-
-      canvas.toBlob(
-        blob => {
-          const imgUrl = URL.createObjectURL(blob);
-          this.refs.downloadAnchor.href = imgUrl;
-          this.refs.downloadAnchor.click();
-          URL.revokeObjectURL(imgUrl);
-        },
-        null,
-        1
-      );
-    }
   };
 
   currentImageToGrayscale = () => {
@@ -396,9 +335,7 @@ class App extends Component {
             activeImagesNames={this.props.appStore.imagesInfos.map(
               img => img.key
             )}
-            onFileInput={this.onNewImageFromFile}
             onShowHistogram={this.props.appStore.showHistogramOfCurrentImage}
-            onDownload={this.downloadCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
             linearTransformation={this.currentImageLinearTransformation}
             brightnessAndContrastAdjustment={
@@ -423,17 +360,6 @@ class App extends Component {
           <footer className="footer">
             {this.getDisplayForPixelUnderMouse()}
           </footer>
-        </div>
-        <div>
-          <a
-            ref="downloadAnchor"
-            href="#download"
-            id="download"
-            hidden
-            download
-          >
-            This should not be visible. It is only used when downloading images
-          </a>
         </div>
       </div>
     );

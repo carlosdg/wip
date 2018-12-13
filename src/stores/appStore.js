@@ -17,7 +17,7 @@ class AppStoreSingleton {
   /** Value of the pixel that was last being pointed by the mouse */
   @observable pixelValue = [0, 0, 0, 255];
   /** Amount of removed images, needed for proper indexing images on the grid */
-  @observable removedImagesCount = 0;
+  _removedImagesCount = 0;
 
   @action addImage = imageBuffer => {
     const imageSection = {
@@ -29,9 +29,9 @@ class AppStoreSingleton {
     const histogram = new Histogram(imageBuffer);
     const cHistogram = new CumulativeHistogram(histogram.histogramValues);
     const imageKey = `Image ${this.imagesInfos.length +
-      this.removedImagesCount}`;
+      this._removedImagesCount}`;
     const histogramKey = `Histogram ${this.histogramInfos.length +
-      this.removedImagesCount}`;
+      this._removedImagesCount}`;
 
     this.imagesInfos.push({ key: imageKey, imageBuffer, region: imageSection });
 
@@ -68,7 +68,7 @@ class AppStoreSingleton {
     this.imagesInfos = this.imagesInfos.filter((_, i) => i !== index);
     this.gridLayouts = newLayouts;
     this.selectedGridItem = newSelectedItem;
-    this.removedImagesCount = this.removedImagesCount + 1;
+    this._removedImagesCount = this._removedImagesCount + 1;
   };
 
   @action updateImageRegion = (index, newRegion) =>

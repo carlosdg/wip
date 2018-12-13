@@ -44,8 +44,6 @@ const AppToolbar = props => (
 );
 
 AppToolbar.propTypes = {
-  onFileInput: PropTypes.func.isRequired,
-  onDownload: PropTypes.func.isRequired,
   onShowHistogram: PropTypes.func.isRequired,
   onCrop: PropTypes.func.isRequired,
   onGrayscale: PropTypes.func.isRequired,
