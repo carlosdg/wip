@@ -8,7 +8,7 @@ import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
 import LinearTransformationDialog from "./Dialogs/LinearTransformationDialog";
 import BrightnessAndContrastDialog from "./Dialogs/BrightnessAndContrastDialog";
-import GammaCorrectionDialog from "./Dialogs/gammaCorrectionDialog";
+import GammaCorrectionDialog from "./Dialogs/GammaCorrectionDialog";
 import ImageDifferenceDialog from "./Dialogs/ImageDifferenceDialog";
 import HistogramSpecificationDialog from "./Dialogs/HistogramSpecificationDialog";
 import ChangesDetectionDialog from "./Dialogs/ChangesDetectionDialog";
@@ -143,10 +143,6 @@ export default class PointOperationsSubmenu extends React.Component {
         <GammaCorrectionDialog
           isOpen={this.state.isGammaCorrectionDialogOpen}
           onClose={this.handleDialogClose("isGammaCorrectionDialogOpen")}
-          onSubmit={gammaValue => {
-            this.handleDialogClose("isGammaCorrectionDialogOpen")();
-            this.props.gammaCorrection(gammaValue);
-          }}
         />
         <ImageDifferenceDialog
           activeImagesNames={this.props.activeImagesNames}

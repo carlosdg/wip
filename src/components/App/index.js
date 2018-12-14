@@ -4,7 +4,6 @@ import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
-import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
 import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
@@ -25,21 +24,6 @@ import { observer, inject } from "mobx-react";
 @inject("appStore")
 @observer
 class App extends Component {
-  /**
-   * Notify the user of the given message with the given type
-   *
-   * @param {String} messageType Message type (error, warning, info, success)
-   * @param {String} message  Message to show to the user
-   *
-   */
-  notify = (messageType, message) => {
-    // "enqueueSnackbar" is provided by the "withSnackbar" Higher Order
-    // Component
-    this.props.enqueueSnackbar(message, {
-      variant: messageType
-    });
-  };
-
   /** Callback that updates the pixel value and coordinates currently under the
    * user's mouse */
   onMouseMoveOverImage = (pixelCoords, pixelValue) => {
@@ -51,34 +35,16 @@ class App extends Component {
     this.props.appStore.updateImageRegion(index, newRegion);
   };
 
-  /** Adds all the information related to the given image buffer to the app */
-  addNewImage = imageBuffer => {
-    this.props.appStore.addImage(imageBuffer);
-  };
-
   currentImageToGrayscale = () => {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         imageToGrayscale(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  currentImageGammaCorrection = gammaValue => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
-    } else {
-      this.addNewImage(
-        gammaCorrection(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          gammaValue
-        )
       );
     }
   };
@@ -91,14 +57,18 @@ class App extends Component {
     const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else if (imageBuffer === undefined) {
-      this.notify(
-        "error",
-        `Couldn't find an image with the selected name (${otherImgName})`
+      this.props.enqueueSnackbar(
+        `Couldn't find an image with the selected name (${otherImgName})`,
+        {
+          variant: "error"
+        }
       );
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         imagesDifference(
           this.props.appStore.imagesInfos[index].imageBuffer,
           imageBuffer
@@ -115,14 +85,18 @@ class App extends Component {
     const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else if (imageBuffer === undefined) {
-      this.notify(
-        "error",
-        `Couldn't find an image with the selected name (${imgName})`
+      this.props.enqueueSnackbar(
+        `Couldn't find an image with the selected name (${imgName})`,
+        {
+          variant: "error"
+        }
       );
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         changesDetection(
           this.props.appStore.imagesInfos[index].imageBuffer,
           imageBuffer,
@@ -140,17 +114,21 @@ class App extends Component {
     );
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else if (
       otherImgIndex < 0 ||
       otherImgIndex > this.props.appStore.imagesInfos.length
     ) {
-      this.notify(
-        "error",
-        `Couldn't find an image with the selected name (${otherImgName})`
+      this.props.enqueueSnackbar(
+        `Couldn't find an image with the selected name (${otherImgName})`,
+        {
+          variant: "error"
+        }
       );
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         histogramSpecification(
           this.props.appStore.imagesInfos[index].imageBuffer,
           this.props.appStore.histogramInfos[index].cHistogram,
@@ -164,9 +142,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         histogramEqualization(
           this.props.appStore.imagesInfos[index].imageBuffer,
           this.props.appStore.histogramInfos[index].cHistogram
@@ -179,9 +159,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         imageRotation(
           this.props.appStore.imagesInfos[index].imageBuffer,
           degrees,
@@ -200,9 +182,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         imageResizing(
           this.props.appStore.imagesInfos[index].imageBuffer,
           widthPercentage,
@@ -217,9 +201,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         verticalMirror(this.props.appStore.imagesInfos[index].imageBuffer)
       );
     }
@@ -229,9 +215,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         horizontalMirror(this.props.appStore.imagesInfos[index].imageBuffer)
       );
     }
@@ -241,9 +229,11 @@ class App extends Component {
     const { type, index } = this.props.appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
+      this.props.enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
     } else {
-      this.addNewImage(
+      this.props.appStore.addImage(
         imageTranspose(this.props.appStore.imagesInfos[index].imageBuffer)
       );
     }
@@ -279,9 +269,7 @@ class App extends Component {
             activeImagesNames={this.props.appStore.imagesInfos.map(
               img => img.key
             )}
-            onShowHistogram={this.props.appStore.showHistogramOfCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
-            gammaCorrection={this.currentImageGammaCorrection}
             imagesDifference={this.applyImagesDifference}
             changesDetection={this.applyChangesDetection}
             histogramSpecification={this.applyHistogramSpecification}

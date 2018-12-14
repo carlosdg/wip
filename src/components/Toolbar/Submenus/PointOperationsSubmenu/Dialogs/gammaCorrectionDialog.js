@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withSnackbar } from "notistack";
+import { observer, inject } from "mobx-react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -9,6 +11,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { isInRange } from "../../../../../lib/Checks";
+import { gammaCorrection } from "../../../../../lib/ImageProcessing/gammaCorrection";
 
 const styles = {
   inputsContainer: {
@@ -24,16 +27,18 @@ const styles = {
  * Dialog to prompt the user for the gamma value for the new
  * image on the gamma correction operation
  */
-export default class GammaCorrectionDialog extends React.Component {
+@withSnackbar
+@inject("appStore")
+@observer
+class GammaCorrectionDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired
   };
 
   state = {
     gamma: 0,
-    gammaErrorMessage: "",
+    gammaErrorMessage: ""
   };
 
   /** General listener for a change on the gamma input */
@@ -62,9 +67,25 @@ export default class GammaCorrectionDialog extends React.Component {
       "Required a value equal or greater than 0"
     );
 
-  onSubmit = () =>
-    // TODO: if there is an error: show error message and don't submit
-    this.props.onSubmit(this.state.gamma);
+  onSubmit = () => {
+    const { appStore, enqueueSnackbar } = this.props;
+    const { type, index } = appStore.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
+    } else {
+      appStore.addImage(
+        gammaCorrection(
+          appStore.imagesInfos[index].imageBuffer,
+          this.state.gamma
+        )
+      );
+    }
+
+    this.props.onClose();
+  };
 
   render() {
     return (
@@ -74,9 +95,7 @@ export default class GammaCorrectionDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Gamma correction
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">Gamma correction</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please, enter the gamma value for the new image
@@ -111,3 +130,5 @@ export default class GammaCorrectionDialog extends React.Component {
     );
   }
 }
+
+export default GammaCorrectionDialog;
