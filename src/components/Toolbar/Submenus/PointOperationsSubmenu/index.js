@@ -148,10 +148,6 @@ export default class PointOperationsSubmenu extends React.Component {
         <LinearTransformationDialog
           isOpen={this.state.isLinearTransformDialogOpen}
           onClose={this.handleDialogClose("isLinearTransformDialogOpen")}
-          onSubmit={coordinates => {
-            this.handleDialogClose("isLinearTransformDialogOpen")();
-            this.props.linearTransformation(coordinates);
-          }}
         />
         <BrightnessAndContrastDialog
           oldBrightness={this.props.selectedImageInfo.brightness}

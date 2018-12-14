@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withSnackbar } from "notistack";
+import { observer, inject } from "mobx-react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -14,6 +16,7 @@ import {
   LineSeries
 } from "react-vis";
 import InputCoordinate from "./InputCoordinate";
+import { linearTransformation } from "../../../../../../lib/ImageProcessing/linearTransformation";
 
 const styles = {
   center: {
@@ -28,43 +31,65 @@ const styles = {
 /**
  * Dialog to ask the user for the linear sections for a linear transformation
  */
-export default class LinearTransformationDialog extends React.Component {
+@withSnackbar
+@inject("appStore")
+@observer
+class LinearTransformationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired
   };
 
   state = {
     /** List of coordinates */
-    data: [{ x: 0, y: 0 }, { x: 255, y: 255 }]
+    coords: [{ x: 0, y: 0 }, { x: 255, y: 255 }]
   };
 
   /** Returns a listener for when the user changes some coordinate */
-  onDataChange = index => newData => {
+  onDataChange = index => newCoords => {
     this.setState(prevState => ({
-      data: prevState.data.map((coord, i) => (i === index ? newData : coord))
+      coords: prevState.coords.map((coord, i) =>
+        i === index ? newCoords : coord
+      )
     }));
   };
 
   /** Returns a listener for when the user deletes some coordinate */
   onDataDelete = index => () => {
     this.setState(prevState => ({
-      data: prevState.data.filter((_, i) => i !== index)
+      coords: prevState.coords.filter((_, i) => i !== index)
     }));
   };
 
   /** Listener for when the user wants to add a new coordinate */
   addNewCoordinate = () => {
     const newCoord =
-      this.state.data.length < 1
+      this.state.coords.length < 1
         ? { x: 0, y: 0 }
-        : this.state.data.slice(-1)[0];
+        : this.state.coords.slice(-1)[0];
 
-    this.setState(prevState => ({ data: [...prevState.data, newCoord] }));
+    this.setState(prevState => ({ coords: [...prevState.coords, newCoord] }));
   };
 
-  onSubmit = () => this.props.onSubmit(this.state.data);
+  onSubmit = () => {
+    const { enqueueSnackbar, appStore, onClose } = this.props;
+    const { type, index } = appStore.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
+    } else {
+      appStore.addImage(
+        linearTransformation(
+          appStore.imagesInfos[index].imageBuffer,
+          this.state.coords
+        )
+      );
+    }
+
+    onClose();
+  };
 
   render() {
     return (
@@ -84,7 +109,7 @@ export default class LinearTransformationDialog extends React.Component {
             <XYPlot width={300} height={300}>
               <HorizontalGridLines />
               <LineSeries
-                data={this.state.data}
+                data={this.state.coords}
                 xDomain={[0, 255]}
                 yDomain={[0, 255]}
               />
@@ -104,7 +129,7 @@ export default class LinearTransformationDialog extends React.Component {
           </div>
 
           <div>
-            {this.state.data.map((coord, i) => (
+            {this.state.coords.map((coord, i) => (
               <InputCoordinate
                 key={i}
                 coordinate={coord}
@@ -126,3 +151,4 @@ export default class LinearTransformationDialog extends React.Component {
     );
   }
 }
+export default LinearTransformationDialog;
