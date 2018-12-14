@@ -5,7 +5,6 @@ import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
-import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
@@ -73,37 +72,6 @@ class App extends Component {
           imageBuffer,
           threshold,
           rgbaColor
-        )
-      );
-    }
-  };
-
-  applyHistogramSpecification = otherImgName => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-    const otherImgIndex = this.props.appStore.imagesInfos.findIndex(
-      ({ key }) => key === otherImgName
-    );
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else if (
-      otherImgIndex < 0 ||
-      otherImgIndex > this.props.appStore.imagesInfos.length
-    ) {
-      this.props.enqueueSnackbar(
-        `Couldn't find an image with the selected name (${otherImgName})`,
-        {
-          variant: "error"
-        }
-      );
-    } else {
-      this.props.appStore.addImage(
-        histogramSpecification(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          this.props.appStore.histogramInfos[index].cHistogram,
-          this.props.appStore.histogramInfos[otherImgIndex].cHistogram
         )
       );
     }
@@ -220,16 +188,6 @@ class App extends Component {
       height:
         index >= 0
           ? this.props.appStore.imagesInfos[index].imageBuffer.height
-          : 0,
-      brightness:
-        index >= 0
-          ? this.props.appStore.histogramInfos[index].histogram.histogramInfo
-              .mean
-          : 0,
-      contrast:
-        index >= 0
-          ? this.props.appStore.histogramInfos[index].histogram.histogramInfo
-              .stdDev
           : 0
     };
     return (
@@ -237,12 +195,8 @@ class App extends Component {
         <div className="app-container">
           <AppToolbar
             selectedImageInfo={selectedImageInfo}
-            activeImagesNames={this.props.appStore.imagesInfos.map(
-              img => img.key
-            )}
             onGrayscale={this.currentImageToGrayscale}
             changesDetection={this.applyChangesDetection}
-            histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}

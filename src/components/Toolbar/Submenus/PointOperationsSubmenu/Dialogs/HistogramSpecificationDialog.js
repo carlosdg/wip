@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withSnackbar } from "notistack";
+import { observer, inject } from "mobx-react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -7,16 +9,19 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FilesListMenu from "../../../FilesListMenu";
+import { histogramSpecification } from "../../../../../lib/ImageProcessing/histogramSpecification";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
  * histogram specification
  */
-export default class HistogramSpecificationDialog extends React.Component {
+@withSnackbar
+@inject("appStore")
+@observer
+class HistogramSpecificationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired
   };
 
   state = {
@@ -28,10 +33,47 @@ export default class HistogramSpecificationDialog extends React.Component {
       imgName: e.selectedItemName
     });
 
-  onSubmit = () =>
-    this.props.onSubmit(this.state.imgName);
+  onSubmit = () => {
+    const otherImgName = this.state.imgName;
+    const { appStore, enqueueSnackbar } = this.props;
+
+    const { type, index } = appStore.selectedGridItem;
+    const otherImgIndex = appStore.imagesInfos.findIndex(
+      ({ key }) => key === otherImgName
+    );
+
+    if (type !== "image" || index < 0) {
+      enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
+    } else if (
+      otherImgIndex < 0 ||
+      otherImgIndex > appStore.imagesInfos.length
+    ) {
+      enqueueSnackbar(
+        `Couldn't find an image with the selected name (${otherImgName})`,
+        {
+          variant: "error"
+        }
+      );
+    } else {
+      appStore.addImage(
+        histogramSpecification(
+          appStore.imagesInfos[index].imageBuffer,
+          appStore.histogramInfos[index].cHistogram,
+          appStore.histogramInfos[otherImgIndex].cHistogram
+        )
+      );
+    }
+
+    this.props.onClose();
+  };
 
   render() {
+    const activeImagesNames = this.props.appStore.imagesInfos.map(
+      img => img.key
+    );
+
     return (
       <Dialog
         open={this.props.isOpen}
@@ -39,16 +81,18 @@ export default class HistogramSpecificationDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Histogram Specificacion</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          Histogram Specificacion
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please, select the image with the histogram to perform the
-            histogram specification to the current image
+            Please, select the image with the histogram to perform the histogram
+            specification to the current image
           </DialogContentText>
           <div className="center">
             <FilesListMenu
               menuTitle="Selected image"
-              options={this.props.activeImagesNames}
+              options={activeImagesNames}
               onItemSelection={this.onChange}
             />
           </div>
@@ -65,3 +109,5 @@ export default class HistogramSpecificationDialog extends React.Component {
     );
   }
 }
+
+export default HistogramSpecificationDialog;
