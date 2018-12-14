@@ -4,7 +4,6 @@ import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
-import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
@@ -43,36 +42,6 @@ class App extends Component {
     } else {
       this.props.appStore.addImage(
         imageToGrayscale(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  applyChangesDetection = ({ imgName, rgbaColor, threshold }) => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-    const otherImageInfo = this.props.appStore.imagesInfos.find(
-      ({ key }) => key === imgName
-    );
-    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else if (imageBuffer === undefined) {
-      this.props.enqueueSnackbar(
-        `Couldn't find an image with the selected name (${imgName})`,
-        {
-          variant: "error"
-        }
-      );
-    } else {
-      this.props.appStore.addImage(
-        changesDetection(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          imageBuffer,
-          threshold,
-          rgbaColor
-        )
       );
     }
   };
@@ -196,7 +165,6 @@ class App extends Component {
           <AppToolbar
             selectedImageInfo={selectedImageInfo}
             onGrayscale={this.currentImageToGrayscale}
-            changesDetection={this.applyChangesDetection}
             histogramEqualization={this.currentImageHistogramEqualization}
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}

@@ -153,13 +153,8 @@ export default class PointOperationsSubmenu extends React.Component {
           onClose={this.handleDialogClose("isHistogramSpecificationDialogOpen")}
         />
         <ChangesDetectionDialog
-          activeImagesNames={this.props.activeImagesNames}
           isOpen={this.state.isChangesDetectionDialogOpen}
           onClose={this.handleDialogClose("isChangesDetectionDialogOpen")}
-          onSubmit={userInput => {
-            this.handleDialogClose("isChangesDetectionDialogOpen")();
-            this.props.changesDetection(userInput);
-          }}
         />
       </div>
     );
