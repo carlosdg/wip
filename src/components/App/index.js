@@ -4,8 +4,6 @@ import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
-import { linearTransformation } from "../../lib/ImageProcessing/linearTransformation";
-import { brightnessAndContrastAdjustment } from "../../lib/ImageProcessing/brightnessAndContrastAdjustment";
 import { gammaCorrection } from "../../lib/ImageProcessing/gammaCorrection";
 import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
@@ -66,44 +64,6 @@ class App extends Component {
     } else {
       this.addNewImage(
         imageToGrayscale(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  currentImageLinearTransformation = coordinates => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
-    } else {
-      this.addNewImage(
-        linearTransformation(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          coordinates
-        )
-      );
-    }
-  };
-
-  currentImageBrightnessAndContrastAdjustment = (
-    newBrightness,
-    newContrast
-  ) => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.notify("warning", "You first need to select an image");
-    } else {
-      this.addNewImage(
-        brightnessAndContrastAdjustment(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          this.props.appStore.histogramInfos[index].histogram.histogramInfo
-            .mean,
-          this.props.appStore.histogramInfos[index].histogram.histogramInfo
-            .stdDev,
-          newBrightness,
-          newContrast
-        )
       );
     }
   };
@@ -321,10 +281,6 @@ class App extends Component {
             )}
             onShowHistogram={this.props.appStore.showHistogramOfCurrentImage}
             onGrayscale={this.currentImageToGrayscale}
-            linearTransformation={this.currentImageLinearTransformation}
-            brightnessAndContrastAdjustment={
-              this.currentImageBrightnessAndContrastAdjustment
-            }
             gammaCorrection={this.currentImageGammaCorrection}
             imagesDifference={this.applyImagesDifference}
             changesDetection={this.applyChangesDetection}

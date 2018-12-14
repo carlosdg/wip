@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -19,18 +18,6 @@ import ChangesDetectionDialog from "./Dialogs/ChangesDetectionDialog";
  * options that the user can choose
  */
 export default class PointOperationsSubmenu extends React.Component {
-  static propTypes = {
-    selectedImageInfo: PropTypes.object.isRequired,
-    onGrayscale: PropTypes.func.isRequired,
-    histogramEqualization: PropTypes.func.isRequired,
-    linearTransformation: PropTypes.func.isRequired,
-    brightnessAndContrastAdjustment: PropTypes.func.isRequired,
-    gammaCorrection: PropTypes.func.isRequired,
-    imagesDifference: PropTypes.func.isRequired,
-    histogramSpecification: PropTypes.func.isRequired,
-    changesDetection: PropTypes.func.isRequired
-  };
-
   state = {
     open: false,
     isLinearTransformDialogOpen: false,
@@ -150,14 +137,8 @@ export default class PointOperationsSubmenu extends React.Component {
           onClose={this.handleDialogClose("isLinearTransformDialogOpen")}
         />
         <BrightnessAndContrastDialog
-          oldBrightness={this.props.selectedImageInfo.brightness}
-          oldContrast={this.props.selectedImageInfo.contrast}
           isOpen={this.state.isLightnessAndContrastDialogOpen}
           onClose={this.handleDialogClose("isLightnessAndContrastDialogOpen")}
-          onSubmit={(brightness, contrast) => {
-            this.handleDialogClose("isLightnessAndContrastDialogOpen")();
-            this.props.brightnessAndContrastAdjustment(brightness, contrast);
-          }}
         />
         <GammaCorrectionDialog
           isOpen={this.state.isGammaCorrectionDialogOpen}

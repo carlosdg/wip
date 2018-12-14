@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withSnackbar } from "notistack";
+import { observer, inject } from "mobx-react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -9,6 +11,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { isInRange } from "../../../../../lib/Checks";
+import { brightnessAndContrastAdjustment } from "../../../../../lib/ImageProcessing/brightnessAndContrastAdjustment";
 
 const styles = {
   inputsContainer: {
@@ -24,13 +27,13 @@ const styles = {
  * Dialog to prompt the user for the new brightness and contrast for the new
  * image on the adjust brightness and contrast operation
  */
-export default class BrightnessAndContrastDialog extends React.Component {
+@withSnackbar
+@inject("appStore")
+@observer
+class BrightnessAndContrastDialog extends React.Component {
   static propTypes = {
-    oldBrightness: PropTypes.number.isRequired,
-    oldContrast: PropTypes.number.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired
   };
 
   state = {
@@ -42,12 +45,23 @@ export default class BrightnessAndContrastDialog extends React.Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    if ((!state.formChanged) && 
-        (props.oldBrightness !== state.oldBrightness ||
-        props.oldContrast !== state.oldContrast)) {
+    const { histogramInfos, selectedGridItem } = props.appStore;
+    let oldBrightness = state.brightness;
+    let oldContrast = state.contrast;
+
+    if (selectedGridItem.index >= 0) {
+      const { histogramInfo } = histogramInfos[
+        selectedGridItem.index
+      ].histogram;
+
+      oldBrightness = histogramInfo.mean;
+      oldContrast = histogramInfo.stdDev;
+    }
+
+    if (!state.formChanged) {
       return {
-        brightness: props.oldBrightness.toFixed(2),
-        contrast: props.oldContrast.toFixed(2)
+        brightness: +oldBrightness.toFixed(2),
+        contrast: +oldContrast.toFixed(2)
       };
     }
     return null;
@@ -87,11 +101,27 @@ export default class BrightnessAndContrastDialog extends React.Component {
     this.onChange(e, "contrast", "contrastErrorMessage", 0, 128);
 
   onSubmit = () => {
-    // TODO: if there is an error: show error message and don't submit
-    this.props.onSubmit(this.state.brightness, this.state.contrast);
-    this.setState({
-      formChanged: false
-    });
+    const { brightness, contrast } = this.state;
+    const { appStore, enqueueSnackbar } = this.props;
+    const { type, index } = appStore.selectedGridItem;
+
+    if (type !== "image" || index < 0) {
+      enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
+    } else {
+      appStore.addImage(
+        brightnessAndContrastAdjustment(
+          appStore.imagesInfos[index].imageBuffer,
+          appStore.histogramInfos[index].histogram.histogramInfo.mean,
+          appStore.histogramInfos[index].histogram.histogramInfo.stdDev,
+          brightness,
+          contrast
+        )
+      );
+    }
+
+    this.onClose();
   };
 
   onClose = () => {
@@ -121,7 +151,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
               error={!!this.state.brightnessErrorMessage}
               label={this.state.brightnessErrorMessage}
               type="number"
-              placeholder={String(this.props.oldBrightness.toFixed(2))}
+              placeholder={String(this.state.brightness)}
               value={this.state.brightness}
               onChange={this.onBrightnessChange}
               margin="dense"
@@ -136,7 +166,7 @@ export default class BrightnessAndContrastDialog extends React.Component {
               error={!!this.state.contrastErrorMessage}
               label={this.state.contrastErrorMessage}
               type="number"
-              placeholder={String(this.props.oldContrast.toFixed(2))}
+              placeholder={String(this.state.contrast)}
               value={this.state.contrast}
               onChange={this.onContrastChange}
               margin="dense"
@@ -161,3 +191,5 @@ export default class BrightnessAndContrastDialog extends React.Component {
     );
   }
 }
+
+export default BrightnessAndContrastDialog;
