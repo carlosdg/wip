@@ -148,10 +148,6 @@ export default class PointOperationsSubmenu extends React.Component {
           activeImagesNames={this.props.activeImagesNames}
           isOpen={this.state.isImageDifferenceDialogOpen}
           onClose={this.handleDialogClose("isImageDifferenceDialogOpen")}
-          onSubmit={imgName => {
-            this.handleDialogClose("isImageDifferenceDialogOpen")();
-            this.props.imagesDifference(imgName);
-          }}
         />
         <HistogramSpecificationDialog
           activeImagesNames={this.props.activeImagesNames}

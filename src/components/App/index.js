@@ -4,7 +4,6 @@ import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
-import { imagesDifference } from "../../lib/ImageProcessing/imagesDifference";
 import { changesDetection } from "../../lib/ImageProcessing/changesDetection";
 import { histogramSpecification } from "../../lib/ImageProcessing/histogramSpecification";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
@@ -45,34 +44,6 @@ class App extends Component {
     } else {
       this.props.appStore.addImage(
         imageToGrayscale(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  applyImagesDifference = otherImgName => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-    const otherImageInfo = this.props.appStore.imagesInfos.find(
-      ({ key }) => key === otherImgName
-    );
-    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else if (imageBuffer === undefined) {
-      this.props.enqueueSnackbar(
-        `Couldn't find an image with the selected name (${otherImgName})`,
-        {
-          variant: "error"
-        }
-      );
-    } else {
-      this.props.appStore.addImage(
-        imagesDifference(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          imageBuffer
-        )
       );
     }
   };
@@ -270,7 +241,6 @@ class App extends Component {
               img => img.key
             )}
             onGrayscale={this.currentImageToGrayscale}
-            imagesDifference={this.applyImagesDifference}
             changesDetection={this.applyChangesDetection}
             histogramSpecification={this.applyHistogramSpecification}
             histogramEqualization={this.currentImageHistogramEqualization}
