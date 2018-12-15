@@ -53,6 +53,7 @@ export default class PointOperationsSubmenu extends React.Component {
           style={this.state.open ? {} : { display: "none" }}
           anchorEl={this.anchorEl}
           transition
+          disablePortal
         >
           <Paper onClick={this.handleClose}>
             <ClickAwayListener onClickAway={this.handleClose}>

@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
@@ -45,26 +44,21 @@ export default class ImageSubmenu extends React.Component {
         >
           Image
         </Button>
-        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              id="menu-list-grow"
-              style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom"
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={this.handleClose}>
-                  <MenuList>
-                    <ShowHistogramMenuItem />
-                    <CropMenuItem />
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
+        <Popper
+          open={open}
+          style={this.state.open ? {} : { display: "none" }}
+          anchorEl={this.anchorEl}
+          transition
+          disablePortal
+        >
+          <Paper onClick={this.handleClose}>
+            <ClickAwayListener onClickAway={this.handleClose}>
+              <MenuList>
+                <ShowHistogramMenuItem />
+                <CropMenuItem />
+              </MenuList>
+            </ClickAwayListener>
+          </Paper>
         </Popper>
       </div>
     );
