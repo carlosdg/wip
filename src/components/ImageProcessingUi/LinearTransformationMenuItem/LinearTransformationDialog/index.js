@@ -16,7 +16,7 @@ import {
   LineSeries
 } from "react-vis";
 import InputCoordinate from "./InputCoordinate";
-import { linearTransformation } from "../../../../../../lib/ImageProcessing/linearTransformation";
+import { linearTransformation } from "../../../../lib/ImageProcessing/linearTransformation";
 
 const styles = {
   center: {

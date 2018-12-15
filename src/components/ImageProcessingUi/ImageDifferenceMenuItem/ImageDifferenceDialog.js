@@ -8,8 +8,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FilesListMenu from "../../../FilesListMenu";
-import { imagesDifference } from "../../../../../lib/ImageProcessing/imagesDifference";
+import FilesListMenu from "../../Toolbar/FilesListMenu";
+import { imagesDifference } from "../../../lib/ImageProcessing/imagesDifference";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the

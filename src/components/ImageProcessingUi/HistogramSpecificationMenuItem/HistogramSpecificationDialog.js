@@ -8,8 +8,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FilesListMenu from "../../../FilesListMenu";
-import { histogramSpecification } from "../../../../../lib/ImageProcessing/histogramSpecification";
+import FilesListMenu from "../../Toolbar/FilesListMenu";
+import { histogramSpecification } from "../../../lib/ImageProcessing/histogramSpecification";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the

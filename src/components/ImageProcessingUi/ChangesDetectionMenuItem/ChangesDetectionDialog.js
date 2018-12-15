@@ -11,8 +11,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ChromePicker } from "react-color";
-import FilesListMenu from "../../../FilesListMenu";
-import { changesDetection } from "../../../../../lib/ImageProcessing/changesDetection";
+import FilesListMenu from "../../Toolbar/FilesListMenu";
+import { changesDetection } from "../../../lib/ImageProcessing/changesDetection";
 
 /**
  * Dialog to prompt the user for the image name of the image to do the
