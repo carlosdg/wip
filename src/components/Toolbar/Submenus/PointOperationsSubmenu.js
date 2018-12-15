@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
@@ -11,6 +10,8 @@ import GammaCorrectionMenuItem from "../../ImageProcessingUi/GammaCorrectionMenu
 import ImageDifferenceMenuItem from "../../ImageProcessingUi/ImageDifferenceMenuItem";
 import ChangesDetectionMenuItem from "../../ImageProcessingUi/ChangesDetectionMenuItem";
 import HistogramSpecificationMenuItem from "../../ImageProcessingUi/HistogramSpecificationMenuItem";
+import GrayscaleMenuItem from "../../ImageProcessingUi/GrayscaleMenuItem";
+import HistogramEqualizationMenuItem from "../../ImageProcessingUi/HistogramEqualizationMenuItem";
 
 /**
  * "Point Operations" Appbar Dropdown menu. Contains all the point operations
@@ -56,18 +57,14 @@ export default class PointOperationsSubmenu extends React.Component {
           <Paper onClick={this.handleClose}>
             <ClickAwayListener onClickAway={this.handleClose}>
               <MenuList>
+                <GrayscaleMenuItem />
                 <LinearTransformationMenuItem />
                 <BrightnessAndContrastMenuItem />
                 <GammaCorrectionMenuItem />
                 <ImageDifferenceMenuItem />
                 <ChangesDetectionMenuItem />
                 <HistogramSpecificationMenuItem />
-                <MenuItem onClick={this.props.onGrayscale}>
-                  To Grayscale
-                </MenuItem>
-                <MenuItem onClick={this.props.histogramEqualization}>
-                  Histogram Equalization
-                </MenuItem>
+                <HistogramEqualizationMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>

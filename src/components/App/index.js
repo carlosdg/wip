@@ -3,8 +3,6 @@ import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
-import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
-import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
 import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
 import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
@@ -30,37 +28,6 @@ class App extends Component {
   /** Returns a callback that updates the region of the asked image info */
   onImageRegionSelection = index => newRegion => {
     this.props.appStore.updateImageRegion(index, newRegion);
-  };
-
-  currentImageToGrayscale = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        imageToGrayscale(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  currentImageHistogramEqualization = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        histogramEqualization(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          this.props.appStore.histogramInfos[index].cHistogram
-        )
-      );
-    }
   };
 
   rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
@@ -164,8 +131,6 @@ class App extends Component {
         <div className="app-container">
           <AppToolbar
             selectedImageInfo={selectedImageInfo}
-            onGrayscale={this.currentImageToGrayscale}
-            histogramEqualization={this.currentImageHistogramEqualization}
             interpolationMethods={Object.keys(InterpolationMethods)}
             imageRotation={this.rotateCurrentImage}
             imageResizing={this.resizeCurrentImage}
