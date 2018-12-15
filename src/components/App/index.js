@@ -3,9 +3,6 @@ import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
-import InterpolationMethods from "../../lib/ImageProcessing/interpolationMethods";
-import { imageRotation } from "../../lib/ImageProcessing/imageRotation";
-import { imageResizing } from "../../lib/ImageProcessing/imageResizing";
 import {
   verticalMirror,
   horizontalMirror
@@ -28,48 +25,6 @@ class App extends Component {
   /** Returns a callback that updates the region of the asked image info */
   onImageRegionSelection = index => newRegion => {
     this.props.appStore.updateImageRegion(index, newRegion);
-  };
-
-  rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        imageRotation(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          degrees,
-          InterpolationMethods[interpolationMethod],
-          rotateAndPaint
-        )
-      );
-    }
-  };
-
-  resizeCurrentImage = ({
-    widthPercentage,
-    heightPercentage,
-    interpolationMethod
-  }) => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        imageResizing(
-          this.props.appStore.imagesInfos[index].imageBuffer,
-          widthPercentage,
-          heightPercentage,
-          InterpolationMethods[interpolationMethod]
-        )
-      );
-    }
   };
 
   currentImageVerticalMirror = () => {
@@ -115,25 +70,10 @@ class App extends Component {
   };
 
   render() {
-    const { index } = this.props.appStore.selectedGridItem;
-    let selectedImageInfo = {
-      width:
-        index >= 0
-          ? this.props.appStore.imagesInfos[index].imageBuffer.width
-          : 0,
-      height:
-        index >= 0
-          ? this.props.appStore.imagesInfos[index].imageBuffer.height
-          : 0
-    };
     return (
       <div>
         <div className="app-container">
           <AppToolbar
-            selectedImageInfo={selectedImageInfo}
-            interpolationMethods={Object.keys(InterpolationMethods)}
-            imageRotation={this.rotateCurrentImage}
-            imageResizing={this.resizeCurrentImage}
             verticalMirror={this.currentImageVerticalMirror}
             horizontalMirror={this.currentImageHorizontalMirror}
             imageTranspose={this.applyImageTranspose}

@@ -7,10 +7,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FilesListMenu from "../../../FilesListMenu";
+import FilesListMenu from "../../Toolbar/FilesListMenu";
 
 const styles = {
   inputsContainer: {
@@ -60,14 +60,14 @@ export default class ImageRotationDialog extends React.Component {
         degreesErrorMessage: ""
       });
     }
-  }
-  
+  };
+
   /** Listener for when the user changes the rotate and paint*/
   onRotateAndPaintChange = e => {
     this.setState({
       rotateAndPaint: e.target.checked
     });
-  }
+  };
 
   /** Listener for when the user changes the interpolation method */
   onInterpolationMethodChange = e =>
@@ -92,9 +92,7 @@ export default class ImageRotationDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Image rotation
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">Image rotation</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please, enter the rotation parameters

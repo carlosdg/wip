@@ -8,7 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FilesListMenu from "../../../FilesListMenu";
+import FilesListMenu from "../../Toolbar/FilesListMenu";
 
 const styles = {
   inputsContainer: {
@@ -22,7 +22,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     marginTop: "0.4rem",
-    marginBottom: "0.4rem",
+    marginBottom: "0.4rem"
   }
 };
 
@@ -42,35 +42,40 @@ export default class ImageResizingDialog extends React.Component {
 
   state = {
     width: this.props.oldWidth,
-    widthPercentage: 0,
-    widthErrorMessage: "Select an image",
+    widthPercentage: 100,
+    widthErrorMessage: "",
     height: this.props.oldHeight,
-    heightPercentage: 0,
-    heightErrorMessage: "Select an image",
+    heightPercentage: 100,
+    heightErrorMessage: "",
     interpolationMethod: this.props.interpolationMethods[0],
     formChanged: false
   };
 
   static getDerivedStateFromProps(props, state) {
-    if ((!state.formChanged) && 
-        (props.oldHeight !== state.height ||
-        props.oldWidth !== state.width)) {
+    if (
+      !state.formChanged &&
+      (props.oldHeight !== state.height || props.oldWidth !== state.width)
+    ) {
       return {
         height: props.oldHeight,
         width: props.oldWidth,
         widthPercentage: 100,
         heightPercentage: 100,
-        widthErrorMessage: (props.oldWidth <= 0) ?
-          "Width must be greater than 0" : "",
-        heightErrorMessage: (props.oldHeight <= 0) ?
-          "Height must be greater than 0" : ""
+        widthErrorMessage:
+          props.oldWidth <= 0 ? "Width must be greater than 0" : "",
+        heightErrorMessage:
+          props.oldHeight <= 0 ? "Height must be greater than 0" : ""
       };
     }
 
     if (props.oldHeight === 0 && props.oldWidth === 0) {
       return {
         widthErrorMessage: "Select an image",
-        heightErrorMessage: "Select an image"
+        heightErrorMessage: "Select an image",
+        width: 0,
+        widthPercentage: 0,
+        height: 0,
+        heightPercentage: 0
       };
     }
     return null;
@@ -86,32 +91,27 @@ export default class ImageResizingDialog extends React.Component {
     errorMessageStateName,
     isPercentage
   ) => {
-
     const value = Number.parseFloat(e.target.value);
     let dimension;
     let percentage;
     if (!isPercentage) {
       dimension = Math.round(value);
-      percentage = ((dimension * 100) / this.props[oldDimensionPropName]);
+      percentage = (dimension * 100) / this.props[oldDimensionPropName];
     } else {
       dimension = Math.floor((value / 100) * this.props[oldDimensionPropName]);
       percentage = value;
     }
     if (dimension < 1 || Number.isNaN(value)) {
       this.setState({
-        [dimensionStateName]: (isPercentage) ? 
-          "" : e.target.value,
-        [percentageStateName]: (isPercentage) ?
-          e.target.value : "",
+        [dimensionStateName]: isPercentage ? "" : e.target.value,
+        [percentageStateName]: isPercentage ? e.target.value : "",
         [errorMessageStateName]: dimensionName + " must be greater than 0",
         formChanged: true
       });
     } else {
       this.setState({
-        [dimensionStateName]: (isPercentage) ? 
-          dimension : value,
-        [percentageStateName]: (isPercentage) ?
-          value : percentage,
+        [dimensionStateName]: isPercentage ? dimension : value,
+        [percentageStateName]: isPercentage ? value : percentage,
         [errorMessageStateName]: "",
         formChanged: true
       });
@@ -121,48 +121,48 @@ export default class ImageResizingDialog extends React.Component {
   /** Listener for when the user changes width input */
   onWidthChange = e =>
     this.onDimensionsChange(
-      e, 
-      "Width", 
-      "width", 
-      "oldWidth", 
-      "widthPercentage", 
-      "widthErrorMessage", 
+      e,
+      "Width",
+      "width",
+      "oldWidth",
+      "widthPercentage",
+      "widthErrorMessage",
       false
     );
 
   /** Listener for when the user changes height input */
-  onHeightChange = e => 
+  onHeightChange = e =>
     this.onDimensionsChange(
-      e, 
-      "Height", 
-      "height", 
-      "oldHeight", 
-      "heightPercentage", 
-      "heightErrorMessage", 
+      e,
+      "Height",
+      "height",
+      "oldHeight",
+      "heightPercentage",
+      "heightErrorMessage",
       false
     );
-  
+
   /** Listener for when the user changes width percentage input */
-  onWidthPercentageChange = e => 
+  onWidthPercentageChange = e =>
     this.onDimensionsChange(
-      e, 
-      "Width", 
-      "width", 
-      "oldWidth", 
-      "widthPercentage", 
-      "widthErrorMessage", 
+      e,
+      "Width",
+      "width",
+      "oldWidth",
+      "widthPercentage",
+      "widthErrorMessage",
       true
     );
 
   /** Listener for when the user changes height percentage input */
-  onHeightPercentageChange = e => 
+  onHeightPercentageChange = e =>
     this.onDimensionsChange(
-      e, 
-      "Height", 
-      "height", 
-      "oldHeight", 
-      "heightPercentage", 
-      "heightErrorMessage", 
+      e,
+      "Height",
+      "height",
+      "oldHeight",
+      "heightPercentage",
+      "heightErrorMessage",
       true
     );
 
@@ -177,7 +177,11 @@ export default class ImageResizingDialog extends React.Component {
     this.setState({
       formChanged: false
     });
-    const { widthPercentage, heightPercentage, interpolationMethod } = this.state;
+    const {
+      widthPercentage,
+      heightPercentage,
+      interpolationMethod
+    } = this.state;
     this.props.onSubmit({
       widthPercentage,
       heightPercentage,
@@ -200,52 +204,50 @@ export default class ImageResizingDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Image resizing
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">Image resizing</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please, enter the resizing parameters
           </DialogContentText>
-            <div style={styles.center}>
-              <TextField
-                error={!!this.state.widthErrorMessage}
-                label={this.state.widthErrorMessage}
-                type="number"
-                placeholder={String(this.props.oldWidth)}
-                value={this.state.width}
-                onChange={this.onWidthChange}
-                margin="dense"
-                style={styles.input}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">Width: </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">px </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                error={!!this.state.heightErrorMessage}
-                label={this.state.heightErrorMessage}
-                type="number"
-                placeholder={String(this.props.oldHeight)}
-                value={this.state.height}
-                onChange={this.onHeightChange}
-                margin="dense"
-                style={styles.input}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">Height: </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">px </InputAdornment>
-                  )
-                }}
-              />
-            </div>
-            <div className="center" style={styles.inputsContainer}>
+          <div style={styles.center}>
+            <TextField
+              error={!!this.state.widthErrorMessage}
+              label={this.state.widthErrorMessage}
+              type="number"
+              placeholder={String(this.props.oldWidth)}
+              value={this.state.width}
+              onChange={this.onWidthChange}
+              margin="dense"
+              style={styles.input}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">Width: </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">px </InputAdornment>
+                )
+              }}
+            />
+            <TextField
+              error={!!this.state.heightErrorMessage}
+              label={this.state.heightErrorMessage}
+              type="number"
+              placeholder={String(this.props.oldHeight)}
+              value={this.state.height}
+              onChange={this.onHeightChange}
+              margin="dense"
+              style={styles.input}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">Height: </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">px </InputAdornment>
+                )
+              }}
+            />
+          </div>
+          <div className="center" style={styles.inputsContainer}>
             <div style={styles.center}>
               <TextField
                 error={!!this.state.widthErrorMessage}
@@ -258,7 +260,9 @@ export default class ImageResizingDialog extends React.Component {
                 style={styles.input}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">Percentage: </InputAdornment>
+                    <InputAdornment position="start">
+                      Percentage:{" "}
+                    </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position="end">% </InputAdornment>
@@ -276,7 +280,9 @@ export default class ImageResizingDialog extends React.Component {
                 style={styles.input}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">Percentage: </InputAdornment>
+                    <InputAdornment position="start">
+                      Percentage:{" "}
+                    </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position="end">% </InputAdornment>
@@ -302,4 +308,4 @@ export default class ImageResizingDialog extends React.Component {
       </Dialog>
     );
   }
-};
+}
