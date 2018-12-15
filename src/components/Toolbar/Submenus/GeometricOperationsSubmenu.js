@@ -1,12 +1,14 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
-import ImageRotationMenuItem from "../../../ImageProcessingUi/ImageRotationMenuItem";
-import ImageResizeMenuItem from "../../../ImageProcessingUi/ImageResizeMenuItem";
+import ImageRotationMenuItem from "../../ImageProcessingUi/ImageRotationMenuItem";
+import ImageResizeMenuItem from "../../ImageProcessingUi/ImageResizeMenuItem";
+import VerticalMirrorMenuItem from "../../ImageProcessingUi/VerticalMirrorMenuItem";
+import HorizontalMirrorMenuItem from "../../ImageProcessingUi/HorizontalMirrorMenuItem";
+import ImageTransposeMenuItem from "../../ImageProcessingUi/ImageTransposeMenuItem";
 
 /**
  * "Geometric Operations" Appbar Dropdown menu. Contains all the geometric operations
@@ -54,15 +56,9 @@ export default class GeometricOperationsSubmenu extends React.Component {
               <MenuList>
                 <ImageRotationMenuItem />
                 <ImageResizeMenuItem />
-                <MenuItem onClick={this.props.verticalMirror}>
-                  Vertical mirror
-                </MenuItem>
-                <MenuItem onClick={this.props.horizontalMirror}>
-                  Horizontal mirror
-                </MenuItem>
-                <MenuItem onClick={this.props.imageTranspose}>
-                  Image Transpose
-                </MenuItem>
+                <VerticalMirrorMenuItem />
+                <HorizontalMirrorMenuItem />
+                <ImageTransposeMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>

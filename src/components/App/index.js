@@ -3,11 +3,6 @@ import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
 import AppToolbar from "../Toolbar";
-import {
-  verticalMirror,
-  horizontalMirror
-} from "../../lib/ImageProcessing/mirrorOperations";
-import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
 import "./App.css";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
@@ -27,57 +22,11 @@ class App extends Component {
     this.props.appStore.updateImageRegion(index, newRegion);
   };
 
-  currentImageVerticalMirror = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        verticalMirror(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  currentImageHorizontalMirror = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        horizontalMirror(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
-  applyImageTranspose = () => {
-    const { type, index } = this.props.appStore.selectedGridItem;
-
-    if (type !== "image" || index < 0) {
-      this.props.enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      this.props.appStore.addImage(
-        imageTranspose(this.props.appStore.imagesInfos[index].imageBuffer)
-      );
-    }
-  };
-
   render() {
     return (
       <div>
         <div className="app-container">
-          <AppToolbar
-            verticalMirror={this.currentImageVerticalMirror}
-            horizontalMirror={this.currentImageHorizontalMirror}
-            imageTranspose={this.applyImageTranspose}
-          />
+          <AppToolbar />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
           </main>

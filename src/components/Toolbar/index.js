@@ -9,35 +9,10 @@ import GeometricOperationsSubmenu from "./Submenus/GeometricOperationsSubmenu";
 const AppToolbar = props => (
   <AppBar position="static">
     <Toolbar>
-      <FileSubmenu
-        onFileInput={props.onFileInput}
-        onDownload={props.onDownload}
-      />
-      <ImageSubmenu
-        onShowHistogram={props.onShowHistogram}
-        onCrop={props.onCrop}
-      />
-      <PointOperationsSubmenu
-        selectedImageInfo={props.selectedImageInfo}
-        activeImagesNames={props.activeImagesNames}
-        onGrayscale={props.onGrayscale}
-        histogramEqualization={props.histogramEqualization}
-        linearTransformation={props.linearTransformation}
-        brightnessAndContrastAdjustment={props.brightnessAndContrastAdjustment}
-        gammaCorrection={props.gammaCorrection}
-        imagesDifference={props.imagesDifference}
-        histogramSpecification={props.histogramSpecification}
-        changesDetection={props.changesDetection}
-      />
-      <GeometricOperationsSubmenu
-        selectedImageInfo={props.selectedImageInfo}
-        interpolationMethods={props.interpolationMethods}
-        imageRotation={props.imageRotation}
-        imageResizing={props.imageResizing}
-        verticalMirror={props.verticalMirror}
-        horizontalMirror={props.horizontalMirror}
-        imageTranspose={props.imageTranspose}
-      />
+      <FileSubmenu />
+      <ImageSubmenu />
+      <PointOperationsSubmenu />
+      <GeometricOperationsSubmenu />
     </Toolbar>
   </AppBar>
 );
