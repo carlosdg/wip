@@ -6,7 +6,7 @@ import AppToolbar from "../Toolbar";
 import "./App.css";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
-// import SelectionOverlay from "../Overlays/SelectionOverlay";
+import SelectionOverlay from "../Overlays/SelectionOverlay";
 import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 
@@ -36,6 +36,23 @@ class App extends Component {
 
     if (newRegion.width !== 0 && newRegion.height !== 0) {
       this.props.appStore.updateImageRegion(index, newRegion);
+    }
+  };
+
+  getImageOverlay = () => {
+    switch (this.props.appStore.imageSelectionMehod) {
+      case "selection":
+        return ({ originCoords, endCoords }) => (
+          <SelectionOverlay originCoords={originCoords} endCoords={endCoords} />
+        );
+      case "profile":
+        return ({ originCoords, endCoords }) => (
+          <LineOverlay originCoords={originCoords} endCoords={endCoords} />
+        );
+      default:
+        throw new Error(
+          `Invalid option ${this.props.appStore.imageSelectionMehod}`
+        );
     }
   };
 
@@ -94,12 +111,7 @@ class App extends Component {
               onMouseMove={this.onMouseMoveOverImage}
               onSelection={this.onImageRegionSelection(index)}
             >
-              {({ originCoords, endCoords }) => (
-                <LineOverlay
-                  originCoords={originCoords}
-                  endCoords={endCoords}
-                />
-              )}
+              {this.getImageOverlay()}
             </ImageComponent>
           </div>
         </div>

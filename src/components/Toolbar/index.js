@@ -5,8 +5,9 @@ import FileSubmenu from "./Submenus/FileSubmenu";
 import ImageSubmenu from "./Submenus/ImageSubmenu";
 import PointOperationsSubmenu from "./Submenus/PointOperationsSubmenu";
 import GeometricOperationsSubmenu from "./Submenus/GeometricOperationsSubmenu";
+import SelectionToolbar from "./SelectionToolbar";
 
-const AppToolbar = props => (
+const AppToolbar = () => (
   <AppBar position="static">
     <Toolbar>
       <FileSubmenu />
@@ -14,6 +15,7 @@ const AppToolbar = props => (
       <PointOperationsSubmenu />
       <GeometricOperationsSubmenu />
     </Toolbar>
+    <SelectionToolbar />
   </AppBar>
 );
 

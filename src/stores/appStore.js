@@ -10,6 +10,8 @@ class AppStoreSingleton {
   @observable histogramInfos = [];
   /** Grid layouts for the elements on screen */
   @observable gridLayouts = GridLayoutHelper.createNewSetOfLayouts();
+  /** Indicates the current method for selecting a part of the image */
+  @observable imageSelectionMehod = "selection";
   /** Information of the current grid item being selected (item type & index) */
   @observable selectedGridItem = { type: "", index: -1 };
   /** Coordenates of the pixel that was last being pointed by the mouse */
@@ -113,6 +115,10 @@ class AppStoreSingleton {
   @action setCurrentPixel = (coords, value) => {
     this.pixelCoords = coords;
     this.pixelValue = value;
+  };
+
+  @action updateImageSelectionMehod = newMethodType => {
+    this.imageSelectionMehod = newMethodType;
   };
 
   isGridItemSelected = (type, index) =>

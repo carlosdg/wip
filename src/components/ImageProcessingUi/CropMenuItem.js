@@ -10,12 +10,20 @@ import { crop } from "../../lib/ImageProcessing/crop";
 class CropMenuItem extends React.Component {
   cropCurrentImage = () => {
     const { enqueueSnackbar, appStore } = this.props;
+    const { imageSelectionMehod } = appStore;
     const { type, index } = appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
+    } else if (imageSelectionMehod !== "selection") {
+      enqueueSnackbar(
+        "You need to select a part of the image with the selection tool",
+        {
+          variant: "error"
+        }
+      );
     } else {
       const { addImage, imagesInfos } = appStore;
       addImage(crop(imagesInfos[index].imageBuffer, imagesInfos[index].region));
