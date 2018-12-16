@@ -6,7 +6,8 @@ import AppToolbar from "../Toolbar";
 import "./App.css";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
-import SelectionOverlay from "../Overlays/SelectionOverlay";
+// import SelectionOverlay from "../Overlays/SelectionOverlay";
+import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 
 @withSnackbar
@@ -25,6 +26,7 @@ class App extends Component {
       mouseDownCoords,
       mouseUpCoords
     );
+
     const newRegion = {
       top,
       left,
@@ -32,7 +34,9 @@ class App extends Component {
       height: bottom - top
     };
 
-    this.props.appStore.updateImageRegion(index, newRegion);
+    if (newRegion.width !== 0 && newRegion.height !== 0) {
+      this.props.appStore.updateImageRegion(index, newRegion);
+    }
   };
 
   render() {
@@ -91,7 +95,7 @@ class App extends Component {
               onSelection={this.onImageRegionSelection(index)}
             >
               {({ originCoords, endCoords }) => (
-                <SelectionOverlay
+                <LineOverlay
                   originCoords={originCoords}
                   endCoords={endCoords}
                 />
