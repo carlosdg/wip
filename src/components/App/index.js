@@ -6,6 +6,8 @@ import AppToolbar from "../Toolbar";
 import "./App.css";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
+import SelectionOverlay from "../Overlays/SelectionOverlay";
+import { calculateRect } from "../../lib/coordinates";
 
 @withSnackbar
 @inject("appStore")
@@ -18,7 +20,18 @@ class App extends Component {
   };
 
   /** Returns a callback that updates the region of the asked image info */
-  onImageRegionSelection = index => newRegion => {
+  onImageRegionSelection = index => ({ mouseDownCoords, mouseUpCoords }) => {
+    const { top, left, right, bottom } = calculateRect(
+      mouseDownCoords,
+      mouseUpCoords
+    );
+    const newRegion = {
+      top,
+      left,
+      width: right - left,
+      height: bottom - top
+    };
+
     this.props.appStore.updateImageRegion(index, newRegion);
   };
 
@@ -76,7 +89,14 @@ class App extends Component {
               rgbaImage={imageBuffer}
               onMouseMove={this.onMouseMoveOverImage}
               onSelection={this.onImageRegionSelection(index)}
-            />
+            >
+              {({ originCoords, endCoords }) => (
+                <SelectionOverlay
+                  originCoords={originCoords}
+                  endCoords={endCoords}
+                />
+              )}
+            </ImageComponent>
           </div>
         </div>
       </InteractiveGrid.Item>

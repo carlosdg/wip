@@ -44,3 +44,14 @@ export function mapToRelativeCoordinates(coords, parentElementBoundingBox) {
     y: coords.clientY - Math.ceil(top)
   };
 }
+
+/** Returns an object describing the rectangle enclosed by the 2 given
+ * coordinates */
+export function calculateRect(coords1, coords2) {
+  const left = Math.min(coords1.x, coords2.x);
+  const right = Math.max(coords1.x, coords2.x);
+  const top = Math.min(coords1.y, coords2.y);
+  const bottom = Math.max(coords1.y, coords2.y);
+
+  return { left, right, top, bottom };
+}

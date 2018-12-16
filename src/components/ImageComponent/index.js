@@ -1,37 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Overlay from "./Overlay";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import * as Coordinates from "../../lib/coordinates";
-
-/**
- * Returns an object defining the rectangle given by the two coordinates
- *
- * @param {Object} coords1 {x: number, y: number} First corner of the rectangle
- * @param {Object} coords2 {x: number, y: number} First corner of the rectangle
- * @returns {Object} { left, right, top, bottom } An object defining the sides
- * of the rectangle
- */
-const calculateRect = (coords1, coords2) => {
-  const left = Math.min(coords1.x, coords2.x);
-  const right = Math.max(coords1.x, coords2.x);
-  const top = Math.min(coords1.y, coords2.y);
-  const bottom = Math.max(coords1.y, coords2.y);
-
-  return { left, right, top, bottom };
-};
-
-/**
- * Returns whether the two given coordinates form a rectangle with a width or
- * height of 0 or not.
- *
- * @param {Object} coords1 {x: number, y: number}
- * @param {Object} coords2 {x: number, y: number}
- * @returns {boolean} Whether the two coordinates define a rectangle with some
- * dimension of 0
- */
-const areCoordinatesAligned = (coords1, coords2) =>
-  coords1.x === coords2.x || coords1.y === coords2.y;
 
 // FIXME: the selection functionality doesn't work well when:
 // - The mouse up event is done outside the component
@@ -47,7 +17,8 @@ class ImageComponent extends Component {
      * image and the pixel value at that position */
     onMouseMove: PropTypes.func,
     /** Called when the user selects a region of the image */
-    onSelection: PropTypes.func.isRequired
+    onSelection: PropTypes.func.isRequired,
+    children: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -142,7 +113,8 @@ class ImageComponent extends Component {
     }
 
     if (
-      areCoordinatesAligned(mouseDownOriginCoordinates, currentMouseCoordinates)
+      mouseDownOriginCoordinates.x === currentMouseCoordinates.x &&
+      mouseDownOriginCoordinates.y === currentMouseCoordinates.y
     ) {
       this.setState({
         isMouseDown: false,
@@ -150,29 +122,22 @@ class ImageComponent extends Component {
         currentMouseCoordinates: { x: -1, y: -1 }
       });
       const { width, height } = this.props.rgbaImage;
-      this.props.onSelection({ top: 0, left: 0, width, height });
+      this.props.onSelection({
+        mouseDownCoords: { x: 0, y: 0 },
+        mouseUpCoords: { x: width, y: height }
+      });
     } else {
       this.setState({ isMouseDown: false });
-      const { top, left, right, bottom } = calculateRect(
-        mouseDownOriginCoordinates,
-        currentMouseCoordinates
-      );
       this.props.onSelection({
-        top,
-        left,
-        width: right - left + 1,
-        height: bottom - top + 1
+        mouseDownCoords: mouseDownOriginCoordinates,
+        mouseUpCoords: currentMouseCoordinates
       });
     }
   };
 
   render() {
-    const overlayPosition = calculateRect(
-      this.state.mouseDownOriginCoordinates,
-      this.state.currentMouseCoordinates
-    );
+    const { mouseDownOriginCoordinates, currentMouseCoordinates } = this.state;
 
-    // TODO: check if loading
     return (
       <div
         style={{
@@ -190,7 +155,10 @@ class ImageComponent extends Component {
             maxHeight: "100%"
           }}
         />
-        <Overlay position={overlayPosition} />
+        {this.props.children({
+          originCoords: mouseDownOriginCoordinates,
+          endCoords: currentMouseCoordinates
+        })}
       </div>
     );
   }
