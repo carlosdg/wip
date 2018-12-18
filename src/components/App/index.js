@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
+import ProfileComponent from "../ProfileComponent";
 import AppToolbar from "../Toolbar";
 import "./App.css";
 import { withSnackbar } from "notistack";
@@ -89,7 +90,12 @@ class App extends Component {
               ? this.getHistogramGridItem(histogramInfo, index)
               : null
           )
-          .filter(element => element !== null)}
+          .filter(element => element !== null
+        )}
+        {this.props.appStore.profilesInfos
+          .map((profile, index) =>
+            this.getProfileGridItem(profile, index)
+        )}
       </InteractiveGrid.Grid>
     );
   }
@@ -137,6 +143,23 @@ class App extends Component {
     );
   }
 
+  getProfileGridItem({profileValues, key}, index) {
+    return (
+      <InteractiveGrid.Item
+        key={key}
+        id={index}
+        name={key}
+        onDelete={this.props.appStore.removeProfile}
+        onSelect={() => this.props.appStore.updateSelectedProfileItem(index)}
+        isSelected={this.props.appStore.isGridItemSelected("profile", index)}
+      >
+        <ProfileComponent
+          profileValues={profileValues}
+        />
+      </InteractiveGrid.Item>
+    );
+  }
+
   getDisplayForPixelUnderMouse() {
     const {
       pixelValue,
@@ -148,7 +171,7 @@ class App extends Component {
 
     const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
     const sizeText =
-      imagesInfos[index] && type === "image"
+      type === "image" && imagesInfos[index] 
         ? "width: " +
           imagesInfos[index].region.width +
           ", " +

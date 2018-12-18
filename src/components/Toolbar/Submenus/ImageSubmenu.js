@@ -6,6 +6,7 @@ import Popper from "@material-ui/core/Popper";
 import MenuList from "@material-ui/core/MenuList";
 import ShowHistogramMenuItem from "../../ImageProcessingUi/ShowHistogramMenuItem";
 import CropMenuItem from "../../ImageProcessingUi/CropMenuItem";
+import ProfileMenuItem from "../../ImageProcessingUi/ProfileMenuItem";
 
 /**
  * "Image" Appbar Dropdown menu. Contains all the general options that the user
@@ -56,6 +57,7 @@ export default class ImageSubmenu extends React.Component {
               <MenuList>
                 <ShowHistogramMenuItem />
                 <CropMenuItem />
+                <ProfileMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>

@@ -8,6 +8,8 @@ class AppStoreSingleton {
   @observable imagesInfos = [];
   /** All the information relative to the histograms of each image */
   @observable histogramInfos = [];
+  /** All the information relative to the profiles  */
+  @observable profilesInfos = [];
   /** Grid layouts for the elements on screen */
   @observable gridLayouts = GridLayoutHelper.createNewSetOfLayouts();
   /** Indicates the current method for selecting a part of the image */
@@ -20,6 +22,8 @@ class AppStoreSingleton {
   @observable pixelValue = [0, 0, 0, 255];
   /** Amount of removed images, needed for proper indexing images on the grid */
   _removedImagesCount = 0;
+  /** Amount of added profiles, needed for proper indexing profiles on the grid */
+  _profilesCount = 0;
 
   @action addImage = imageBuffer => {
     const imageSection = {
@@ -47,6 +51,30 @@ class AppStoreSingleton {
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
       this.gridLayouts,
       [imageKey]
+    );
+  };
+
+  @action addProfile = (
+    profileValues,
+    firstDerivativeProfileValues
+  ) => {
+    this._profilesCount = this._profilesCount + 1;
+    const profileKey = `Profile ${this._profilesCount}`;
+
+    const firstDerivativeKey = "First derivative of " + profileKey;
+
+    this.profilesInfos.push({
+      key: profileKey, 
+      profileValues
+    });
+    this.profilesInfos.push({
+      key: firstDerivativeKey,
+      profileValues: firstDerivativeProfileValues
+    });
+
+    this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
+      this.gridLayouts,
+      [profileKey, firstDerivativeKey]
     );
   };
 
@@ -90,6 +118,25 @@ class AppStoreSingleton {
     }
   };
 
+  @action removeProfile = index => {
+    const newLayouts = GridLayoutHelper.removeElementsFromLayout(
+      this.gridLayouts,
+      [this.profilesInfos[index].key]
+    );
+    let newSelectedItem = { ...this.selectedGridItem };
+
+    if (index <= newSelectedItem.index) {
+      newSelectedItem.index -= 1;
+      if (newSelectedItem.index < 0) {
+        newSelectedItem.type = "";
+      }
+    }
+
+    this.profilesInfos = this.profilesInfos.filter((_, i) => i !== index);
+    this.gridLayouts = newLayouts;
+    this.selectedGridItem = newSelectedItem;
+  };
+
   @action showHistogramOfCurrentImage = () => {
     const { type, index } = this.selectedGridItem;
 
@@ -111,6 +158,9 @@ class AppStoreSingleton {
 
   @action updateSelectedHistogramItem = index =>
     (this.selectedGridItem = { type: "histogram", index });
+
+  @action updateSelectedProfileItem = index =>
+    (this.selectedGridItem = { type: "profile", index });
 
   @action setCurrentPixel = (coords, value) => {
     this.pixelCoords = coords;
