@@ -48,6 +48,7 @@ export default class ImageResizingDialog extends React.Component {
     heightPercentage: 100,
     heightErrorMessage: "",
     interpolationMethod: this.props.interpolationMethods[0],
+    selectedInterpolationMethodIndex: 0,
     formChanged: false
   };
 
@@ -169,7 +170,8 @@ export default class ImageResizingDialog extends React.Component {
   /** Listener for when the user changes the interpolation method */
   onInterpolationMethodChange = e =>
     this.setState({
-      interpolationMethod: e.selectedItemName
+      interpolationMethod: e.selectedItemName,
+      selectedInterpolationMethodIndex: e.selectedItemIndex
     });
 
   onSubmit = () => {
@@ -294,6 +296,7 @@ export default class ImageResizingDialog extends React.Component {
               menuTitle="Interpolation method"
               options={this.props.interpolationMethods}
               onItemSelection={this.onInterpolationMethodChange}
+              selectedItemIndex={this.state.selectedInterpolationMethodIndex}
             />
           </div>
         </DialogContent>

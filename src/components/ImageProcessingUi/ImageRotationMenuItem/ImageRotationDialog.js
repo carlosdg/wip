@@ -44,7 +44,8 @@ export default class ImageRotationDialog extends React.Component {
     degrees: 0,
     degreesErrorMessage: "",
     rotateAndPaint: false,
-    interpolationMethod: this.props.interpolationMethods[0]
+    interpolationMethod: this.props.interpolationMethods[0],
+    selectedInterpolationMethodIndex: 0
   };
 
   /** Listener for when the user changes the degrees input value */
@@ -72,7 +73,8 @@ export default class ImageRotationDialog extends React.Component {
   /** Listener for when the user changes the interpolation method */
   onInterpolationMethodChange = e =>
     this.setState({
-      interpolationMethod: e.selectedItemName
+      interpolationMethod: e.selectedItemName,
+      selectedInterpolationMethodIndex: e.selectedItemIndex
     });
 
   onSubmit = () => {
@@ -120,6 +122,7 @@ export default class ImageRotationDialog extends React.Component {
               options={this.props.interpolationMethods}
               onItemSelection={this.onInterpolationMethodChange}
               isDisabled={this.state.rotateAndPaint}
+              selectedItemIndex={this.state.selectedInterpolationMethodIndex}
             />
             <FormControlLabel
               control={

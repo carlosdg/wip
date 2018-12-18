@@ -16,7 +16,7 @@ const styles = theme => ({
 class FilesListMenu extends React.Component {
   state = {
     anchorEl: null,
-    selectedIndex: 0,
+    selectedIndex: this.props.selectedItemIndex,
   };
 
   handleClickListItem = event => {
@@ -26,6 +26,7 @@ class FilesListMenu extends React.Component {
   handleMenuItemClick = (event, index, selectedItemName) => {
     this.setState({ selectedIndex: index, anchorEl: null });
     event["selectedItemName"] = selectedItemName;
+    event["selectedItemIndex"] = index;
     this.props.onItemSelection(event);
   };
 
