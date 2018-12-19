@@ -17,7 +17,7 @@ class ProfileMenuItem extends React.Component {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
-    } else if (imageSelectionMehod !== "profile") {
+    } else if (imageSelectionMehod !== "line") {
       enqueueSnackbar(
         "You need to select a line inside the image with the profile tool",
         {

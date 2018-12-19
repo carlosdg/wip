@@ -46,7 +46,7 @@ class App extends Component {
         return ({ originCoords, endCoords }) => (
           <SelectionOverlay originCoords={originCoords} endCoords={endCoords} />
         );
-      case "profile":
+      case "line":
         return ({ originCoords, endCoords }) => (
           <LineOverlay originCoords={originCoords} endCoords={endCoords} />
         );
@@ -66,6 +66,7 @@ class App extends Component {
             <div className="main__wrapper">{this.getGridComponent()}</div>
           </main>
           <footer className="footer">
+            {this.getDisplayForImageDimensions()}
             {this.getDisplayForPixelUnderMouse()}
           </footer>
         </div>
@@ -151,7 +152,7 @@ class App extends Component {
         name={profileInfo.key}
         onDelete={this.props.appStore.removeProfile}
         onSelect={() => this.props.appStore.updateSelectedProfileItem(index)}
-        isSelected={this.props.appStore.isGridItemSelected("profile", index)}
+        isSelected={this.props.appStore.isGridItemSelected("line", index)}
       >
         <ProfilesComponent
           info={profileInfo}
@@ -160,25 +161,24 @@ class App extends Component {
     );
   }
 
-  getDisplayForPixelUnderMouse() {
+  getDisplayForImageDimensions() {
     const {
       pixelValue,
-      pixelCoords,
       selectedGridItem,
-      imagesInfos
+      imagesInfos,
+      imageSelectionMehod
     } = this.props.appStore;
     const { type, index } = selectedGridItem;
 
+    if (type !== "image" || !imagesInfos[index])
+      return;
+
     const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
-    const sizeText =
-      type === "image" && imagesInfos[index] 
-        ? "width: " +
-          imagesInfos[index].region.width +
-          ", " +
-          "height: " +
-          imagesInfos[index].region.height +
-          ", "
-        : "";
+    const sizeText = (imageSelectionMehod === "selection") ?
+      "width: " + imagesInfos[index].region.width +
+      ", height: " + imagesInfos[index].region.height :
+      "width: " + imagesInfos[index].imageBuffer.width +
+      ", height: " + imagesInfos[index].imageBuffer.height;
 
     return (
       <div
@@ -192,6 +192,28 @@ class App extends Component {
         }}
       >
         {sizeText}
+      </div>
+    );
+  }
+
+  getDisplayForPixelUnderMouse() {
+    const {
+      pixelValue,
+      pixelCoords,
+    } = this.props.appStore;
+
+    const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
+    return (
+      <div
+        style={{
+          display: "inline-block",
+          margin: "0.5rem",
+          padding: "0.5rem",
+          borderRadius: "5px",
+          border: `1px solid ${currentPixelRgbaValue}`,
+          boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
+        }}
+      >
         x: {pixelCoords.x}, y: {pixelCoords.y},
         <span
           style={{

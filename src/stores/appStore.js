@@ -157,7 +157,7 @@ class AppStoreSingleton {
     (this.selectedGridItem = { type: "histogram", index });
 
   @action updateSelectedProfileItem = index =>
-    (this.selectedGridItem = { type: "profile", index });
+    (this.selectedGridItem = { type: "line", index });
 
   @action setCurrentPixel = (coords, value) => {
     this.pixelCoords = coords;

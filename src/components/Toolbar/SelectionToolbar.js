@@ -40,7 +40,7 @@ class SelectionToolbar extends React.Component {
         </Button>
         <Button
           style={
-            imageSelectionMehod !== "profile"
+            imageSelectionMehod !== "line"
               ? { margin: "0 0.5rem" }
               : {
                   margin: "0 0.5rem",
@@ -48,10 +48,10 @@ class SelectionToolbar extends React.Component {
                   color: "white"
                 }
           }
-          onClick={() => updateImageSelectionMehod("profile")}
+          onClick={() => updateImageSelectionMehod("line")}
         >
           <EditIcon style={{ marginRight: "0.5rem" }} />
-          Profile
+          Line
         </Button>
       </Toolbar>
     );
