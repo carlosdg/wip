@@ -68,21 +68,15 @@ class GammaCorrectionDialog extends React.Component {
     );
 
   onSubmit = () => {
-    const { appStore, enqueueSnackbar } = this.props;
-    const { type, index } = appStore.selectedGridItem;
+    const { appStore } = this.props;
+    const { index } = appStore.selectedGridItem;
 
-    if (type !== "image" || index < 0) {
-      enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      appStore.addImage(
-        gammaCorrection(
-          appStore.imagesInfos[index].imageBuffer,
-          this.state.gamma
-        )
-      );
-    }
+    appStore.addImage(
+      gammaCorrection(
+        appStore.imagesInfos[index].imageBuffer,
+        this.state.gamma
+      )
+    );
 
     this.props.onClose();
   };

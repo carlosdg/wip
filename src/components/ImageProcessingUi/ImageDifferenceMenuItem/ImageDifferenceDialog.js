@@ -36,17 +36,13 @@ class ImageDifferenceDialog extends React.Component {
   onSubmit = () => {
     const otherImgName = this.state.imgName;
     const { appStore, enqueueSnackbar } = this.props;
-    const { type, index } = appStore.selectedGridItem;
+    const { index } = appStore.selectedGridItem;
     const otherImageInfo = appStore.imagesInfos.find(
       ({ key }) => key === otherImgName
     );
     const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
 
-    if (type !== "image" || index < 0) {
-      enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else if (imageBuffer === undefined) {
+    if (imageBuffer === undefined) {
       enqueueSnackbar(
         `Couldn't find an image with the selected name (${otherImgName})`,
         {

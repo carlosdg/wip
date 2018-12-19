@@ -14,10 +14,7 @@ class ImageRotationMenuItem extends React.Component {
     isDialogOpen: false
   };
 
-  openDialog = () => this.setState({ isDialogOpen: true });
-  closeDialog = () => this.setState({ isDialogOpen: false });
-
-  rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
+  openDialog = () => {
     const { appStore, enqueueSnackbar } = this.props;
     const { type, index } = appStore.selectedGridItem;
 
@@ -25,16 +22,26 @@ class ImageRotationMenuItem extends React.Component {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
-    } else {
-      appStore.addImage(
-        imageRotation(
-          appStore.imagesInfos[index].imageBuffer,
-          degrees,
-          InterpolationMethods[interpolationMethod],
-          rotateAndPaint
-        )
-      );
+      return;
     }
+
+    this.setState({ isDialogOpen: true });
+  }
+
+  closeDialog = () => this.setState({ isDialogOpen: false });
+
+  rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
+    const { appStore } = this.props;
+    const { index } = appStore.selectedGridItem;
+
+    appStore.addImage(
+      imageRotation(
+        appStore.imagesInfos[index].imageBuffer,
+        degrees,
+        InterpolationMethods[interpolationMethod],
+        rotateAndPaint
+      )
+    );
   };
 
   render() {

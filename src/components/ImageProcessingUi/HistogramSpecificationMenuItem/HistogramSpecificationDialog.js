@@ -36,17 +36,12 @@ class HistogramSpecificationDialog extends React.Component {
   onSubmit = () => {
     const otherImgName = this.state.imgName;
     const { appStore, enqueueSnackbar } = this.props;
-
-    const { type, index } = appStore.selectedGridItem;
+    const { index } = appStore.selectedGridItem;
     const otherImgIndex = appStore.imagesInfos.findIndex(
       ({ key }) => key === otherImgName
     );
 
-    if (type !== "image" || index < 0) {
-      enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else if (
+    if (
       otherImgIndex < 0 ||
       otherImgIndex > appStore.imagesInfos.length
     ) {

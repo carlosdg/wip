@@ -72,21 +72,15 @@ class LinearTransformationDialog extends React.Component {
   };
 
   onSubmit = () => {
-    const { enqueueSnackbar, appStore, onClose } = this.props;
-    const { type, index } = appStore.selectedGridItem;
+    const { appStore, onClose } = this.props;
+    const { index } = appStore.selectedGridItem;
 
-    if (type !== "image" || index < 0) {
-      enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      appStore.addImage(
-        linearTransformation(
-          appStore.imagesInfos[index].imageBuffer,
-          this.state.coords
-        )
-      );
-    }
+    appStore.addImage(
+      linearTransformation(
+        appStore.imagesInfos[index].imageBuffer,
+        this.state.coords
+      )
+    );
 
     onClose();
   };

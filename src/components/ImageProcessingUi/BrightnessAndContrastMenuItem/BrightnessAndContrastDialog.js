@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -27,7 +26,6 @@ const styles = {
  * Dialog to prompt the user for the new brightness and contrast for the new
  * image on the adjust brightness and contrast operation
  */
-@withSnackbar
 @inject("appStore")
 @observer
 class BrightnessAndContrastDialog extends React.Component {
@@ -102,24 +100,18 @@ class BrightnessAndContrastDialog extends React.Component {
 
   onSubmit = () => {
     const { brightness, contrast } = this.state;
-    const { appStore, enqueueSnackbar } = this.props;
-    const { type, index } = appStore.selectedGridItem;
+    const { appStore } = this.props;
+    const { index } = appStore.selectedGridItem;
 
-    if (type !== "image" || index < 0) {
-      enqueueSnackbar("You first need to select an image", {
-        variant: "warning"
-      });
-    } else {
-      appStore.addImage(
-        brightnessAndContrastAdjustment(
-          appStore.imagesInfos[index].imageBuffer,
-          appStore.histogramInfos[index].histogram.histogramInfo.mean,
-          appStore.histogramInfos[index].histogram.histogramInfo.stdDev,
-          brightness,
-          contrast
-        )
-      );
-    }
+    appStore.addImage(
+      brightnessAndContrastAdjustment(
+        appStore.imagesInfos[index].imageBuffer,
+        appStore.histogramInfos[index].histogram.histogramInfo.mean,
+        appStore.histogramInfos[index].histogram.histogramInfo.stdDev,
+        brightness,
+        contrast
+      )
+    );
 
     this.onClose();
   };
