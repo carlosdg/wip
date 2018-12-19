@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import InteractiveGrid from "../InteractiveGrid";
 import ImageComponent from "../ImageComponent";
 import HistogramAndInfoComponent from "../HistogramAndInfoComponent";
-import ProfileComponent from "../ProfileComponent";
 import AppToolbar from "../Toolbar";
 import "./App.css";
 import { withSnackbar } from "notistack";
@@ -10,6 +9,7 @@ import { observer, inject } from "mobx-react";
 import SelectionOverlay from "../Overlays/SelectionOverlay";
 import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
+import ProfilesComponent from "../ProfilesComponent";
 
 @withSnackbar
 @inject("appStore")
@@ -143,18 +143,18 @@ class App extends Component {
     );
   }
 
-  getProfileGridItem({profileValues, key}, index) {
+  getProfileGridItem(profileInfo, index) {
     return (
       <InteractiveGrid.Item
-        key={key}
+        key={profileInfo.key}
         id={index}
-        name={key}
+        name={profileInfo.key}
         onDelete={this.props.appStore.removeProfile}
         onSelect={() => this.props.appStore.updateSelectedProfileItem(index)}
         isSelected={this.props.appStore.isGridItemSelected("profile", index)}
       >
-        <ProfileComponent
-          profileValues={profileValues}
+        <ProfilesComponent
+          info={profileInfo}
         />
       </InteractiveGrid.Item>
     );

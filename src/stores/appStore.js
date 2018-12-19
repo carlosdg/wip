@@ -58,18 +58,15 @@ class AppStoreSingleton {
     profileValues,
     firstDerivativeProfileValues
   ) => {
-    this._profilesCount = this._profilesCount + 1;
     const profileKey = `Profile ${this._profilesCount}`;
+    this._profilesCount = this._profilesCount + 1;
 
     const firstDerivativeKey = "First derivative of " + profileKey;
 
     this.profilesInfos.push({
       key: profileKey, 
-      profileValues
-    });
-    this.profilesInfos.push({
-      key: firstDerivativeKey,
-      profileValues: firstDerivativeProfileValues
+      profileValues,
+      firstDerivativeProfileValues
     });
 
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
