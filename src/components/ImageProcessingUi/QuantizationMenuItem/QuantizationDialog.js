@@ -11,7 +11,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { isInRange } from "../../../lib/Checks";
-import { imageResampling } from "../../../lib/ImageProcessing/imageResampling";
+import { quantization } from "../../../lib/ImageProcessing/quantization";
 
 const styles = {
   inputsContainer: {
@@ -24,26 +24,24 @@ const styles = {
 };
 
 /**
- * Dialog to prompt the user for the pixel block width and height
- * on the resample operation
+ * Dialog to prompt the user for the amount of levels for the
+ * quantization operation.
  */
 @withSnackbar
 @inject("appStore")
 @observer
-class ImageResampleDialog extends React.Component {
+class QuantizationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired
   };
 
   state = {
-    blockWidth: 1,
-    blockWidthErrorMessage: "",
-    blockHeight: 1,
-    blockHeightErrorMessage: ""
+    levels: 8,
+    errorMessage: ""
   };
 
-  /** General listener for a change on the block width or height inputs */
+  /** General listener for a change on the level input */
   onChange = (
     e,
     valueStateName,
@@ -66,30 +64,19 @@ class ImageResampleDialog extends React.Component {
     }
   };
 
-  /** Listener for when the user changes the block width input value */
-  onBlockWidthChange = e => {
-    const { index } = this.props.appStore.selectedGridItem;
-    const { imageBuffer } = this.props.appStore.imagesInfos[index];
-    this.onChange(e, "blockWidth", "blockWidthErrorMessage", 1, imageBuffer.width);
-  }
-
-  /** Listener for when the user changes the block height input value */
-  onBlockHeightChange = e => {
-    const { index } = this.props.appStore.selectedGridItem;
-    const { imageBuffer } = this.props.appStore.imagesInfos[index];
-    this.onChange(e, "blockHeight", "blockHeightErrorMessage", 1, imageBuffer.height);
-  }
+  /** Listener for when the user changes the levels input value */
+  onLevelsChange = e =>
+    this.onChange(e, "levels", "errorMessage", 0, 8)
 
   onSubmit = () => {
-    const { blockWidth, blockHeight } = this.state;
+    const { levels } = this.state;
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
 
     appStore.addImage(
-      imageResampling(
+      quantization(
         appStore.imagesInfos[index].imageBuffer,
-        blockWidth,
-        blockHeight
+        levels
       )
     );
     this.props.onClose();
@@ -108,36 +95,21 @@ class ImageResampleDialog extends React.Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please, enter the pixels block width and height
+            Please, enter the amount of levels for the quantization
           </DialogContentText>
           <div className="center" style={styles.inputsContainer}>
             <TextField
-              error={!!this.state.blockWidthErrorMessage}
-              label={this.state.blockWidthErrorMessage}
+              error={!!this.state.errorMessage}
+              label={this.state.errorMessage}
               type="number"
-              placeholder={String(this.state.blockWidth)}
-              value={this.state.blockWidth}
-              onChange={this.onBlockWidthChange}
+              placeholder={String(this.state.levels)}
+              value={this.state.levels}
+              onChange={this.onLevelsChange}
               margin="dense"
               style={styles.input}
               InputProps={{
                 startAdornment: (
-                  <InputAdornment position="start">Width: </InputAdornment>
-                )
-              }}
-            />
-            <TextField
-              error={!!this.state.blockHeightErrorMessage}
-              label={this.state.blockHeightErrorMessage}
-              type="number"
-              placeholder={String(this.state.blockHeight)}
-              value={this.state.blockHeight}
-              onChange={this.onBlockHeightChange}
-              margin="dense"
-              style={styles.input}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">Height: </InputAdornment>
+                  <InputAdornment position="start">Levels: </InputAdornment>
                 )
               }}
             />
@@ -156,4 +128,4 @@ class ImageResampleDialog extends React.Component {
   }
 }
 
-export default ImageResampleDialog;
+export default QuantizationDialog;

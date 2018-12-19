@@ -12,6 +12,7 @@ import ChangesDetectionMenuItem from "../../ImageProcessingUi/ChangesDetectionMe
 import HistogramSpecificationMenuItem from "../../ImageProcessingUi/HistogramSpecificationMenuItem";
 import GrayscaleMenuItem from "../../ImageProcessingUi/GrayscaleMenuItem";
 import HistogramEqualizationMenuItem from "../../ImageProcessingUi/HistogramEqualizationMenuItem";
+import QuantizationMenuItem from "../../ImageProcessingUi/QuantizationMenuItem";
 
 /**
  * "Point Operations" Appbar Dropdown menu. Contains all the point operations
@@ -66,6 +67,7 @@ export default class PointOperationsSubmenu extends React.Component {
                 <ChangesDetectionMenuItem />
                 <HistogramSpecificationMenuItem />
                 <HistogramEqualizationMenuItem />
+                <QuantizationMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>
