@@ -9,6 +9,7 @@ import ImageResizeMenuItem from "../../ImageProcessingUi/ImageResizeMenuItem";
 import VerticalMirrorMenuItem from "../../ImageProcessingUi/VerticalMirrorMenuItem";
 import HorizontalMirrorMenuItem from "../../ImageProcessingUi/HorizontalMirrorMenuItem";
 import ImageTransposeMenuItem from "../../ImageProcessingUi/ImageTransposeMenuItem";
+import ImageResampleMenuItem from "../../ImageProcessingUi/ImageResampleMenuItem";
 
 /**
  * "Geometric Operations" Appbar Dropdown menu. Contains all the geometric operations
@@ -59,6 +60,7 @@ export default class GeometricOperationsSubmenu extends React.Component {
                 <VerticalMirrorMenuItem />
                 <HorizontalMirrorMenuItem />
                 <ImageTransposeMenuItem />
+                <ImageResampleMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>
