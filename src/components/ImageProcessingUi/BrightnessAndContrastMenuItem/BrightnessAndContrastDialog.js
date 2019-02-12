@@ -26,8 +26,6 @@ const styles = {
  * Dialog to prompt the user for the new brightness and contrast for the new
  * image on the adjust brightness and contrast operation
  */
-@inject("appStore")
-@observer
 class BrightnessAndContrastDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -184,4 +182,4 @@ class BrightnessAndContrastDialog extends React.Component {
   }
 }
 
-export default BrightnessAndContrastDialog;
+export default inject("appStore")(observer(BrightnessAndContrastDialog));

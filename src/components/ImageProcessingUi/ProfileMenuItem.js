@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { bresenham } from "../../lib/Bresenham";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ProfileMenuItem extends React.Component {
   getProfile = () => {
     const { enqueueSnackbar, appStore } = this.props;
@@ -25,11 +22,14 @@ class ProfileMenuItem extends React.Component {
         }
       );
     } else {
-      const {left, top, width, height } = appStore.imagesInfos[index].region;
-      const points = bresenham({x: left, y: top}, {x: left + width, y: top + height});
+      const { left, top, width, height } = appStore.imagesInfos[index].region;
+      const points = bresenham(
+        { x: left, y: top },
+        { x: left + width, y: top + height }
+      );
       const associatedImage = appStore.imagesInfos[index].imageBuffer;
-      const profileValues = points.map(point =>
-        associatedImage.getPixel({x: point.x, y: point.y})[0]   // R channel value (grayscale images)
+      const profileValues = points.map(
+        point => associatedImage.getPixel({ x: point.x, y: point.y })[0] // R channel value (grayscale images)
       );
       const firstDerivativeProfileValues = [];
       for (let i = 1; i < profileValues.length - 1; ++i)
@@ -49,4 +49,4 @@ class ProfileMenuItem extends React.Component {
   }
 }
 
-export default ProfileMenuItem;
+export default withSnackbar(inject("appStore")(observer(ProfileMenuItem)));

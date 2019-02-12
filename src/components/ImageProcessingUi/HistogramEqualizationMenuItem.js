@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class HistogramEqualizationMenuItem extends React.Component {
   currentImageHistogramEqualization = () => {
     const { enqueueSnackbar, appStore } = this.props;
@@ -37,4 +34,6 @@ class HistogramEqualizationMenuItem extends React.Component {
   }
 }
 
-export default HistogramEqualizationMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(HistogramEqualizationMenuItem))
+);

@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class GrayscaleMenuItem extends React.Component {
   currentImageToGrayscale = () => {
     const { enqueueSnackbar, appStore } = this.props;
@@ -32,4 +29,4 @@ class GrayscaleMenuItem extends React.Component {
   }
 }
 
-export default GrayscaleMenuItem;
+export default withSnackbar(inject("appStore")(observer(GrayscaleMenuItem)));

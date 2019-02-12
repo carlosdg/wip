@@ -6,9 +6,6 @@ import InterpolationMethods from "../../../lib/ImageProcessing/interpolationMeth
 import { imageResizing } from "../../../lib/ImageProcessing/imageResizing";
 import ImageResizingDialog from "./ImageResizingDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageResizeMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -81,4 +78,4 @@ class ImageResizeMenuItem extends React.Component {
   }
 }
 
-export default ImageResizeMenuItem;
+export default withSnackbar(inject("appStore")(observer(ImageResizeMenuItem)));

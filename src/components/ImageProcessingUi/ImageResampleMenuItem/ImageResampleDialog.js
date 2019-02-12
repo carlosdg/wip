@@ -27,9 +27,6 @@ const styles = {
  * Dialog to prompt the user for the pixel block width and height
  * on the resample operation
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageResampleDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -70,15 +67,27 @@ class ImageResampleDialog extends React.Component {
   onBlockWidthChange = e => {
     const { index } = this.props.appStore.selectedGridItem;
     const { imageBuffer } = this.props.appStore.imagesInfos[index];
-    this.onChange(e, "blockWidth", "blockWidthErrorMessage", 1, imageBuffer.width);
-  }
+    this.onChange(
+      e,
+      "blockWidth",
+      "blockWidthErrorMessage",
+      1,
+      imageBuffer.width
+    );
+  };
 
   /** Listener for when the user changes the block height input value */
   onBlockHeightChange = e => {
     const { index } = this.props.appStore.selectedGridItem;
     const { imageBuffer } = this.props.appStore.imagesInfos[index];
-    this.onChange(e, "blockHeight", "blockHeightErrorMessage", 1, imageBuffer.height);
-  }
+    this.onChange(
+      e,
+      "blockHeight",
+      "blockHeightErrorMessage",
+      1,
+      imageBuffer.height
+    );
+  };
 
   onSubmit = () => {
     const { blockWidth, blockHeight } = this.state;
@@ -103,9 +112,7 @@ class ImageResampleDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Image Resample
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">Image Resample</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please, enter the pixels block width and height
@@ -156,4 +163,4 @@ class ImageResampleDialog extends React.Component {
   }
 }
 
-export default ImageResampleDialog;
+export default withSnackbar(inject("appStore")(observer(ImageResampleDialog)));

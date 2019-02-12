@@ -5,9 +5,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
 import * as ImageHelper from "../../lib/imageHelper";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class LoadImageMenuItem extends React.Component {
   /** Listener for a file input event to load the input image to the application */
   onImageFileInputted = event => {
@@ -63,4 +60,4 @@ class LoadImageMenuItem extends React.Component {
   }
 }
 
-export default LoadImageMenuItem;
+export default withSnackbar(inject("appStore")(observer(LoadImageMenuItem)));

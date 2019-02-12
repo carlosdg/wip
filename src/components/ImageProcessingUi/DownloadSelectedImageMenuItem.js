@@ -3,9 +3,6 @@ import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class DownloadSelectedImageMenuItem extends React.Component {
   /** Downloads the selected region of the current selected image if any */
   downloadCurrentImage = () => {
@@ -60,4 +57,6 @@ class DownloadSelectedImageMenuItem extends React.Component {
   }
 }
 
-export default DownloadSelectedImageMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(DownloadSelectedImageMenuItem))
+);

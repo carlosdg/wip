@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import ChangesDetectionDialog from "./ChangesDetectionDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ChangesDetectionMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -24,7 +21,7 @@ class ChangesDetectionMenuItem extends React.Component {
     }
 
     this.setState({ isDialogOpen: true });
-  }
+  };
   closeDialog = () => this.setState({ isDialogOpen: false });
 
   render() {
@@ -40,4 +37,6 @@ class ChangesDetectionMenuItem extends React.Component {
   }
 }
 
-export default ChangesDetectionMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(ChangesDetectionMenuItem))
+);

@@ -15,9 +15,6 @@ import { histogramSpecification } from "../../../lib/ImageProcessing/histogramSp
  * Dialog to prompt the user for the image name of the image to do the
  * histogram specification
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class HistogramSpecificationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -41,10 +38,7 @@ class HistogramSpecificationDialog extends React.Component {
       ({ key }) => key === otherImgName
     );
 
-    if (
-      otherImgIndex < 0 ||
-      otherImgIndex > appStore.imagesInfos.length
-    ) {
+    if (otherImgIndex < 0 || otherImgIndex > appStore.imagesInfos.length) {
       enqueueSnackbar(
         `Couldn't find an image with the selected name (${otherImgName})`,
         {
@@ -105,4 +99,6 @@ class HistogramSpecificationDialog extends React.Component {
   }
 }
 
-export default HistogramSpecificationDialog;
+export default withSnackbar(
+  inject("appStore")(observer(HistogramSpecificationDialog))
+);

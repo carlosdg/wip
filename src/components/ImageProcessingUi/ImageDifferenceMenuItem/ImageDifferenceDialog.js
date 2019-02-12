@@ -15,9 +15,6 @@ import { imagesDifference } from "../../../lib/ImageProcessing/imagesDifference"
  * Dialog to prompt the user for the image name of the image to do the
  * difference operation
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageDifferenceDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -97,4 +94,6 @@ class ImageDifferenceDialog extends React.Component {
   }
 }
 
-export default ImageDifferenceDialog;
+export default withSnackbar(
+  inject("appStore")(observer(ImageDifferenceDialog))
+);

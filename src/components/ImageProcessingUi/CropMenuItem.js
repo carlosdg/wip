@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { crop } from "../../lib/ImageProcessing/crop";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class CropMenuItem extends React.Component {
   cropCurrentImage = () => {
     const { enqueueSnackbar, appStore } = this.props;
@@ -39,4 +36,4 @@ class CropMenuItem extends React.Component {
   }
 }
 
-export default CropMenuItem;
+export default withSnackbar(inject("appStore")(observer(CropMenuItem)));

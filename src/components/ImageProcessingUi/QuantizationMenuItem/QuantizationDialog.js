@@ -27,9 +27,6 @@ const styles = {
  * Dialog to prompt the user for the amount of levels for the
  * quantization operation.
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class QuantizationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -65,8 +62,7 @@ class QuantizationDialog extends React.Component {
   };
 
   /** Listener for when the user changes the levels input value */
-  onLevelsChange = e =>
-    this.onChange(e, "levels", "errorMessage", 0, 8)
+  onLevelsChange = e => this.onChange(e, "levels", "errorMessage", 0, 8);
 
   onSubmit = () => {
     const { levels } = this.state;
@@ -74,10 +70,7 @@ class QuantizationDialog extends React.Component {
     const { index } = appStore.selectedGridItem;
 
     appStore.addImage(
-      quantization(
-        appStore.imagesInfos[index].imageBuffer,
-        levels
-      )
+      quantization(appStore.imagesInfos[index].imageBuffer, levels)
     );
     this.props.onClose();
   };
@@ -90,9 +83,7 @@ class QuantizationDialog extends React.Component {
         scroll="body"
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Image Resample
-        </DialogTitle>
+        <DialogTitle id="form-dialog-title">Image Resample</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please, enter the amount of levels for the quantization
@@ -128,4 +119,4 @@ class QuantizationDialog extends React.Component {
   }
 }
 
-export default QuantizationDialog;
+export default withSnackbar(inject("appStore")(observer(QuantizationDialog)));

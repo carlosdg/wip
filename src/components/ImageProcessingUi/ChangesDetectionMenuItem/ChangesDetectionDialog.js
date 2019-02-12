@@ -18,9 +18,6 @@ import { changesDetection } from "../../../lib/ImageProcessing/changesDetection"
  * Dialog to prompt the user for the image name of the image to do the
  * changes detection, color and threshold
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class ChangesDetectionDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -144,4 +141,6 @@ class ChangesDetectionDialog extends React.Component {
   }
 }
 
-export default ChangesDetectionDialog;
+export default withSnackbar(
+  inject("appStore")(observer(ChangesDetectionDialog))
+);

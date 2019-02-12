@@ -31,9 +31,6 @@ const styles = {
 /**
  * Dialog to ask the user for the linear sections for a linear transformation
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class LinearTransformationDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -145,4 +142,7 @@ class LinearTransformationDialog extends React.Component {
     );
   }
 }
-export default LinearTransformationDialog;
+
+export default withSnackbar(
+  inject("appStore")(observer(LinearTransformationDialog))
+);

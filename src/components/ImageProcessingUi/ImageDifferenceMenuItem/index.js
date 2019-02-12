@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import ImageDifferenceDialog from "./ImageDifferenceDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageDifferenceMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -23,7 +20,7 @@ class ImageDifferenceMenuItem extends React.Component {
     } else {
       this.setState({ isDialogOpen: true });
     }
-  }
+  };
 
   closeDialog = () => this.setState({ isDialogOpen: false });
 
@@ -40,4 +37,6 @@ class ImageDifferenceMenuItem extends React.Component {
   }
 }
 
-export default ImageDifferenceMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(ImageDifferenceMenuItem))
+);

@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import LinearTransformationDialog from "./LinearTransformationDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class LinearTransformationMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -22,9 +19,9 @@ class LinearTransformationMenuItem extends React.Component {
       });
       return;
     }
-    
+
     this.setState({ isDialogOpen: true });
-  }
+  };
   closeDialog = () => this.setState({ isDialogOpen: false });
 
   render() {
@@ -40,4 +37,6 @@ class LinearTransformationMenuItem extends React.Component {
   }
 }
 
-export default LinearTransformationMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(LinearTransformationMenuItem))
+);

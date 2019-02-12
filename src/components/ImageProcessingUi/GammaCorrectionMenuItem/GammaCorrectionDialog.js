@@ -27,9 +27,6 @@ const styles = {
  * Dialog to prompt the user for the gamma value for the new
  * image on the gamma correction operation
  */
-@withSnackbar
-@inject("appStore")
-@observer
 class GammaCorrectionDialog extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -72,10 +69,7 @@ class GammaCorrectionDialog extends React.Component {
     const { index } = appStore.selectedGridItem;
 
     appStore.addImage(
-      gammaCorrection(
-        appStore.imagesInfos[index].imageBuffer,
-        this.state.gamma
-      )
+      gammaCorrection(appStore.imagesInfos[index].imageBuffer, this.state.gamma)
     );
 
     this.props.onClose();
@@ -125,4 +119,6 @@ class GammaCorrectionDialog extends React.Component {
   }
 }
 
-export default GammaCorrectionDialog;
+export default withSnackbar(
+  inject("appStore")(observer(GammaCorrectionDialog))
+);

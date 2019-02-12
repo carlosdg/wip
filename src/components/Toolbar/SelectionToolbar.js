@@ -5,8 +5,6 @@ import Button from "@material-ui/core/Button";
 import CropSquareIcon from "@material-ui/icons/CropSquare";
 import EditIcon from "@material-ui/icons/Edit";
 
-@inject("appStore")
-@observer
 class SelectionToolbar extends React.Component {
   render() {
     const {
@@ -58,4 +56,4 @@ class SelectionToolbar extends React.Component {
   }
 }
 
-export default SelectionToolbar;
+export default inject("appStore")(observer(SelectionToolbar));

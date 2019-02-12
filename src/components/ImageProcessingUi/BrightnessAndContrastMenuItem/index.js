@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import BrightnessAndContrastDialog from "./BrightnessAndContrastDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class BrightnessAndContrastMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -24,8 +21,8 @@ class BrightnessAndContrastMenuItem extends React.Component {
     }
 
     this.setState({ isDialogOpen: true });
-  }
-  
+  };
+
   closeDialog = () => this.setState({ isDialogOpen: false });
 
   render() {
@@ -41,4 +38,6 @@ class BrightnessAndContrastMenuItem extends React.Component {
   }
 }
 
-export default BrightnessAndContrastMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(BrightnessAndContrastMenuItem))
+);

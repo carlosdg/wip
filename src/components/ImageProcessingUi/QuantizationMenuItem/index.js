@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import QuantizationDialog from "./QuantizationDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class QuantizationMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -22,7 +19,7 @@ class QuantizationMenuItem extends React.Component {
     } else {
       this.setState({ isDialogOpen: true });
     }
-  }
+  };
 
   closeDialog = () => this.setState({ isDialogOpen: false });
 
@@ -39,4 +36,4 @@ class QuantizationMenuItem extends React.Component {
   }
 }
 
-export default QuantizationMenuItem;
+export default withSnackbar(inject("appStore")(observer(QuantizationMenuItem)));

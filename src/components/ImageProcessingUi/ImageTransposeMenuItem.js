@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageTransposeMenuItem extends React.Component {
   transposeImage = () => {
     const { appStore, enqueueSnackbar } = this.props;
@@ -32,4 +29,6 @@ class ImageTransposeMenuItem extends React.Component {
   }
 }
 
-export default ImageTransposeMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(ImageTransposeMenuItem))
+);

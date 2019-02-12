@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import HistogramSpecificationDialog from "./HistogramSpecificationDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class HistogramSpecificationMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -24,7 +21,7 @@ class HistogramSpecificationMenuItem extends React.Component {
     }
 
     this.setState({ isDialogOpen: true });
-  }
+  };
 
   closeDialog = () => this.setState({ isDialogOpen: false });
 
@@ -41,4 +38,6 @@ class HistogramSpecificationMenuItem extends React.Component {
   }
 }
 
-export default HistogramSpecificationMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(HistogramSpecificationMenuItem))
+);

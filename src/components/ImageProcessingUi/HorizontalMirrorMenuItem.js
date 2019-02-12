@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { horizontalMirror } from "../../lib/ImageProcessing/mirrorOperations";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class HorizontalMirrorMenuItem extends React.Component {
   currentImageHorizontalMirror = () => {
     const { appStore, enqueueSnackbar } = this.props;
@@ -34,4 +31,6 @@ class HorizontalMirrorMenuItem extends React.Component {
   }
 }
 
-export default HorizontalMirrorMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(HorizontalMirrorMenuItem))
+);

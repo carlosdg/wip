@@ -11,9 +11,6 @@ import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 import ProfilesComponent from "../ProfilesComponent";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
    * user's mouse */
@@ -91,11 +88,9 @@ class App extends Component {
               ? this.getHistogramGridItem(histogramInfo, index)
               : null
           )
-          .filter(element => element !== null
-        )}
-        {this.props.appStore.profilesInfos
-          .map((profile, index) =>
-            this.getProfileGridItem(profile, index)
+          .filter(element => element !== null)}
+        {this.props.appStore.profilesInfos.map((profile, index) =>
+          this.getProfileGridItem(profile, index)
         )}
       </InteractiveGrid.Grid>
     );
@@ -154,9 +149,7 @@ class App extends Component {
         onSelect={() => this.props.appStore.updateSelectedProfileItem(index)}
         isSelected={this.props.appStore.isGridItemSelected("line", index)}
       >
-        <ProfilesComponent
-          info={profileInfo}
-        />
+        <ProfilesComponent info={profileInfo} />
       </InteractiveGrid.Item>
     );
   }
@@ -170,15 +163,19 @@ class App extends Component {
     } = this.props.appStore;
     const { type, index } = selectedGridItem;
 
-    if (type !== "image" || !imagesInfos[index])
-      return;
+    if (type !== "image" || !imagesInfos[index]) return;
 
     const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
-    const sizeText = (imageSelectionMehod === "selection") ?
-      "width: " + imagesInfos[index].region.width +
-      ", height: " + imagesInfos[index].region.height :
-      "width: " + imagesInfos[index].imageBuffer.width +
-      ", height: " + imagesInfos[index].imageBuffer.height;
+    const sizeText =
+      imageSelectionMehod === "selection"
+        ? "width: " +
+          imagesInfos[index].region.width +
+          ", height: " +
+          imagesInfos[index].region.height
+        : "width: " +
+          imagesInfos[index].imageBuffer.width +
+          ", height: " +
+          imagesInfos[index].imageBuffer.height;
 
     return (
       <div
@@ -197,10 +194,7 @@ class App extends Component {
   }
 
   getDisplayForPixelUnderMouse() {
-    const {
-      pixelValue,
-      pixelCoords,
-    } = this.props.appStore;
+    const { pixelValue, pixelCoords } = this.props.appStore;
 
     const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
     return (
@@ -232,4 +226,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withSnackbar(inject("appStore")(observer(App)));

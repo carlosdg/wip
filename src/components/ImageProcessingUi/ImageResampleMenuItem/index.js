@@ -4,9 +4,6 @@ import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import ImageResampleDialog from "./ImageResampleDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageResampleMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -22,8 +19,7 @@ class ImageResampleMenuItem extends React.Component {
     } else {
       this.setState({ isDialogOpen: true });
     }
-    
-  }
+  };
 
   closeDialog = () => this.setState({ isDialogOpen: false });
 
@@ -40,4 +36,6 @@ class ImageResampleMenuItem extends React.Component {
   }
 }
 
-export default ImageResampleMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(ImageResampleMenuItem))
+);

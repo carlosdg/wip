@@ -6,9 +6,6 @@ import { imageRotation } from "../../../lib/ImageProcessing/imageRotation";
 import InterpolationMethods from "../../../lib/ImageProcessing/interpolationMethods";
 import ImageRotationDialog from "./ImageRotationDialog";
 
-@withSnackbar
-@inject("appStore")
-@observer
 class ImageRotationMenuItem extends React.Component {
   state = {
     isDialogOpen: false
@@ -26,7 +23,7 @@ class ImageRotationMenuItem extends React.Component {
     }
 
     this.setState({ isDialogOpen: true });
-  }
+  };
 
   closeDialog = () => this.setState({ isDialogOpen: false });
 
@@ -62,4 +59,6 @@ class ImageRotationMenuItem extends React.Component {
   }
 }
 
-export default ImageRotationMenuItem;
+export default withSnackbar(
+  inject("appStore")(observer(ImageRotationMenuItem))
+);
