@@ -1,8 +1,8 @@
 {
-  "name": "image_processor",
+  "name": "wip",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://carlosdg.github.io/ImageProcessor",
+  "homepage": "https://carlosdg.github.io/wip",
   "dependencies": {
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",

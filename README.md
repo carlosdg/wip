@@ -1,9 +1,9 @@
-# Image Processor
+# Web Image Processing
 
 The goal of this project is to have an application where we can load & download
 images, apply operations and **visualize the changes** between the images.
 
-[Link to application (hosted in Github Pages)](https://carlosdg.github.io/ImageProcessor/)
+[Link to application (hosted in Github Pages)](https://carlosdg.github.io/wip/)
 
 ## How is this different from other applications?
 
