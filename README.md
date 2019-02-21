@@ -1,47 +1,41 @@
-# Web Image Processing
+<p align="center">
+  <img src="doc/resources/images/wide_logo.png">
+</p>
 
-The goal of this project is to have an application where we can load & download
-images, apply operations and **visualize the changes** between the images.
+<h1 align="center">Web Image Processing</h1>
+<p align="center"> Simple image processing in the browser </p>
 
-[Link to application (hosted in Github Pages)](https://carlosdg.github.io/wip/)
+---
 
-## How is this different from other applications?
+## Introduction
 
-This application was not created with the intention to be better than other
-applications. Our main goal was to **learn how Image Processing is done** at low
-level while, at the same time, creating a helpful web application that can be
-used to **apply basic operations without having to install any program** (other
-than, of course, a browser).
+WIP is an open source web application that allows the users to apply different image processing operations. 🌆 → 🏙
 
-## Operations
+You can load & download images, apply different operations and it is meant so users can easily **visualize the changes** between images. 🌆🏙 🤔
 
-Right now all the images are converted implicitly to grayscale so operations are
-done using the gray values. In the future we plan to use the the HSI color space
-for operations to process color images.
+Everything is done in the front-end so your images never leave your device 🖥🔐
 
-- Show histogram
-- Crop
-- Profile
-- Point operations
-  - Convert to grayscale
-  - Linear transformation specified via segments
-  - Brightness & Contrast adjustment
-  - Gamma Correction
-  - Image Difference
-  - Changes Detection
-  - Histogram Specification
-  - Histogram Equalization
-  - Quantization
-- Geometric operations
-  - Rotation
-  - Resize
-  - Vertical and horizontal mirror
-  - Transpose
-  - Resample
+## How to use
 
-And there are some more comming. An explanation of each operation is also comming
+You can access the application at the following link: [https://carlosdg.github.io/wip/](https://carlosdg.github.io/wip/).
+
+You can find the tool bar at the top of the app. To open an image from your device head to `File -> Open` and the browser will prompt you to select the image to open.
+
+To apply some operation to an image you have to first select the image to apply the operation. For that you only need to click (or tap) on the image you wish to work with. You know which image is currently selected by the color of the image toolbar (the blue one is the selected).
+
+You can drag the image items by dragging the top of the image. You can also resize the image item by dragging the little handle at the bottom right and if the image is still bigger than the item you can scroll the view to see portions of the image.
+
+<figure align="center">
+  <img src="doc/resources/images/demo.gif" alt="Demo gif showing how to open a file, select and apply an operation to an image and how to drag and resize an image item">
+  <p><caption>Gif showing a demo on how to open a file, select and apply an operation to an image and how to drag and resize an image item</caption></p>
+</figure>
 
 ## Authors
 
+- Alberto Jesús González Álvarez &lt;[AlberTJ97](https://github.com/AlberTJ97)&gt;
 - Daute Rodríguez Rodríguez &lt;[DauteRR](https://github.com/DauteRR)&gt;
 - Carlos Domínguez García &lt;[carlosdg](https://github.com/carlosdg)&gt;
+
+## License
+
+MIT
