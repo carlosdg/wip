@@ -4,6 +4,15 @@
 
 <h1 align="center">Web Image Processing</h1>
 <p align="center"> Simple image processing in the browser </p>
+<p align="center"> <a href="https://carlosdg.github.io/wip/">App</a> | <a href="https://wipblog463382623.wordpress.com/">Blog</a> </p>
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [How to use](#how-to-use)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [License](#license)
 
 ## Introduction
 
@@ -26,6 +35,18 @@ You can drag the image items by dragging the top of the image. You can also resi
 <p align="center">
   <img src="doc/resources/images/demo.gif" alt="Demo gif showing how to open a file, select and apply an operation to an image and how to drag and resize an image item">
 </p>
+
+## Contributing
+
+You can contribute with anything, from letting us know of some broken English with an issue to adding new features with pull requests (or even fixing some broken English with a pull request 🤯). Any help will be warmly welcome 😊.
+
+Before submitting a pull request please file an issue, we may be working on the same topic and with an issue we can let you know so you don't waste your time 😄
+
+- [Report a bug 🐞 at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=bug&template=bug-report---.md&title=%5BBUG%5D+Issue+Title)
+- [Request a feature 💡at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=enhancement&template=feature-request---.md&title=%5BFeat%5D+Issue+Title)
+- For any other topic or to ask a question you can [file a regular issue at this link](https://github.com/carlosdg/wip/issues/new)
+
+Before any pull request, please check the [Contributing guidelines](./CONTRIBUTING.md) to know how to setup the project (install dependencies, run tests, etc)
 
 ## Authors
 

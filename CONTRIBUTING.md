@@ -1,4 +1,4 @@
-# Contributing guide
+# Contributing guidelines
 
 First of all we want to give you a BIG thank you for being willing to help this project 😊
 
