@@ -5,8 +5,6 @@
 <h1 align="center">Web Image Processing</h1>
 <p align="center"> Simple image processing in the browser </p>
 
----
-
 ## Introduction
 
 WIP is an open source web application that allows the users to apply different image processing operations. 🌆 → 🏙
@@ -25,10 +23,9 @@ To apply some operation to an image you have to first select the image to apply 
 
 You can drag the image items by dragging the top of the image. You can also resize the image item by dragging the little handle at the bottom right and if the image is still bigger than the item you can scroll the view to see portions of the image.
 
-<figure align="center">
+<p align="center">
   <img src="doc/resources/images/demo.gif" alt="Demo gif showing how to open a file, select and apply an operation to an image and how to drag and resize an image item">
-  <p><caption>Gif showing a demo on how to open a file, select and apply an operation to an image and how to drag and resize an image item</caption></p>
-</figure>
+</p>
 
 ## Authors
 
