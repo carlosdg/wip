@@ -4,7 +4,7 @@
 
 <h1 align="center">Web Image Processing</h1>
 <p align="center"> Simple image processing in the browser </p>
-<p align="center"> <a href="https://carlosdg.github.io/wip/">App</a> | <a href="https://wipblog463382623.wordpress.com/">Blog</a> </p>
+<p align="center"> <a href="https://carlosdg.github.io/wip/">App</a> | <a href="https://wipblog463382623.wordpress.com/">Blog</a> | <a href="https://twitter.com/wip17569795">Twitter</a> </p>
 
 ## Table of Contents
 
