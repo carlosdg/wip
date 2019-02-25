@@ -1,39 +1,26 @@
 {
   "name": "wip",
-  "version": "0.1.0",
   "private": true,
-  "homepage": "https://carlosdg.github.io/wip",
-  "dependencies": {
-    "@material-ui/core": "^3.4.0",
-    "@material-ui/icons": "^3.0.1",
-    "mobx": "^5.8.0",
-    "mobx-react": "^5.4.3",
-    "notistack": "^0.3.9",
-    "react": "^16.5.2",
-    "react-color": "^2.14.1",
-    "react-dom": "^16.5.2",
-    "react-grid-layout": "^0.16.6",
-    "react-scripts": "^2.1.5",
-    "react-vis": "*"
-  },
+  "description": "Open source image processing in the browser",
+  "version": "1.0.0",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "postinstall": "lerna bootstrap"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosdg/wip.git"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+  "keywords": [
+    "image_processing",
+    "open_source",
+    "web"
   ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlosdg/wip/issues"
+  },
+  "homepage": "https://github.com/carlosdg/wip#readme",
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "lerna": "^3.13.0"
   }
 }
