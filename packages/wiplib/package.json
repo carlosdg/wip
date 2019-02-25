@@ -1,0 +1,19 @@
+{
+  "name": "wiplib",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "babel src --out-dir build",
+    "build:watch": "babel src --out-dir build --watch",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "jest": "^24.1.0"
+  }
+}
