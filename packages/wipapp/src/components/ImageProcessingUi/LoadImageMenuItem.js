@@ -2,7 +2,7 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
+import { RgbaImageBuffer } from "wiplib";
 import * as ImageHelper from "../../lib/imageHelper";
 
 class LoadImageMenuItem extends React.Component {

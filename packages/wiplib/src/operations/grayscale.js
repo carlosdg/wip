@@ -30,8 +30,10 @@ export const imageToGrayscale = (
   return result;
 };
 
+/** Returns the given pixel to grayscale according to Phase Alternating Line */
+const pixelToGrayscalePal = (rComponent, gComponent, bComponent) =>
+  Math.round(rComponent * 0.222 + gComponent * 0.707 + bComponent * 0.071);
+
 export const grayscaleStrategies = {
-  /** Returns the given pixel to grayscale according to Phase Alternating Line */
-  pixelToGrayscalePal: (rComponent, gComponent, bComponent) =>
-    Math.round(rComponent * 0.222 + gComponent * 0.707 + bComponent * 0.071)
+  pixelToGrayscalePal
 };

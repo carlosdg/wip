@@ -2,9 +2,10 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { imageRotation } from "../../../lib/ImageProcessing/imageRotation";
-import InterpolationMethods from "../../../lib/ImageProcessing/interpolationMethods";
 import ImageRotationDialog from "./ImageRotationDialog";
+import { operations } from "wiplib";
+
+const { interpolationMethods, imageRotation } = operations;
 
 class ImageRotationMenuItem extends React.Component {
   state = {
@@ -35,7 +36,7 @@ class ImageRotationMenuItem extends React.Component {
       imageRotation(
         appStore.imagesInfos[index].imageBuffer,
         degrees,
-        InterpolationMethods[interpolationMethod],
+        interpolationMethods[interpolationMethod],
         rotateAndPaint
       )
     );
@@ -52,7 +53,7 @@ class ImageRotationMenuItem extends React.Component {
             this.closeDialog();
             this.rotateCurrentImage(rotationInfo);
           }}
-          interpolationMethods={Object.keys(InterpolationMethods)}
+          interpolationMethods={Object.keys(interpolationMethods)}
         />
       </React.Fragment>
     );

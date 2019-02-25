@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import RgbaImageBuffer from "../../lib/RgbaImageBuffer";
+import { RgbaImageBuffer } from "wiplib";
 import * as Coordinates from "../../lib/coordinates";
 
 // FIXME: the selection functionality doesn't work well when:

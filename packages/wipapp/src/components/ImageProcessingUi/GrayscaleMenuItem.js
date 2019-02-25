@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { imageToGrayscale } from "../../lib/ImageProcessing/grayscale";
+import { operations } from "wiplib";
+
+const { imageToGrayscale } = operations;
 
 class GrayscaleMenuItem extends React.Component {
   currentImageToGrayscale = () => {

@@ -2,9 +2,10 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import InterpolationMethods from "../../../lib/ImageProcessing/interpolationMethods";
-import { imageResizing } from "../../../lib/ImageProcessing/imageResizing";
 import ImageResizingDialog from "./ImageResizingDialog";
+import { operations } from "wiplib";
+
+const { interpolationMethods, imageResizing } = operations;
 
 class ImageResizeMenuItem extends React.Component {
   state = {
@@ -40,7 +41,7 @@ class ImageResizeMenuItem extends React.Component {
         appStore.imagesInfos[index].imageBuffer,
         widthPercentage,
         heightPercentage,
-        InterpolationMethods[interpolationMethod]
+        interpolationMethods[interpolationMethod]
       )
     );
   };
@@ -71,7 +72,7 @@ class ImageResizeMenuItem extends React.Component {
             this.closeDialog();
             this.resizeCurrentImage(resizeInfo);
           }}
-          interpolationMethods={Object.keys(InterpolationMethods)}
+          interpolationMethods={Object.keys(interpolationMethods)}
         />
       </React.Fragment>
     );

@@ -1,5 +1,5 @@
 {
-  "name": "wip",
+  "name": "wipapp",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://carlosdg.github.io/wip",
@@ -14,7 +14,8 @@
     "react-dom": "^16.5.2",
     "react-grid-layout": "^0.16.6",
     "react-scripts": "^2.1.5",
-    "react-vis": "*"
+    "react-vis": "*",
+    "wiplib": "^1.0.0"
   },
   "scripts": {
     "predeploy": "npm run build",

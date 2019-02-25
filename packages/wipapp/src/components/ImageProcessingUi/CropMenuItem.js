@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { crop } from "../../lib/ImageProcessing/crop";
+import { operations } from "wiplib";
+
+const { crop } = operations;
 
 class CropMenuItem extends React.Component {
   cropCurrentImage = () => {

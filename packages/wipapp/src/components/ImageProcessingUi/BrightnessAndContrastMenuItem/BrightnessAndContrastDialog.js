@@ -10,7 +10,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { isInRange } from "../../../lib/Checks";
-import { brightnessAndContrastAdjustment } from "../../../lib/ImageProcessing/brightnessAndContrastAdjustment";
+import { operations } from "wiplib";
+
+const { brightnessAndContrastAdjustment } = operations;
 
 const styles = {
   inputsContainer: {

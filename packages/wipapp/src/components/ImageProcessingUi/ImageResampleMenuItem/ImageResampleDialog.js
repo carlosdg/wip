@@ -11,7 +11,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { isInRange } from "../../../lib/Checks";
-import { imageResampling } from "../../../lib/ImageProcessing/imageResampling";
+import { operations } from "wiplib";
+
+const { imageResampling } = operations;
 
 const styles = {
   inputsContainer: {

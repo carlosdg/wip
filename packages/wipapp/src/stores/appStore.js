@@ -1,6 +1,6 @@
 import { observable, action, decorate } from "mobx";
-import Histogram from "../lib/Histogram";
-import CumulativeHistogram from "../lib/CumulativeHistogram";
+import { Histogram } from "wiplib";
+import { CumulativeHistogram } from "wiplib";
 import * as GridLayoutHelper from "../lib/grid/calculateLayout";
 
 class AppStoreSingleton {

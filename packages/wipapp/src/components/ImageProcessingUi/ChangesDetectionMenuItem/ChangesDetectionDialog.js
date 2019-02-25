@@ -12,7 +12,9 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ChromePicker } from "react-color";
 import FilesListMenu from "../../Toolbar/FilesListMenu";
-import { changesDetection } from "../../../lib/ImageProcessing/changesDetection";
+import { operations } from "wiplib";
+
+const { changesDetection } = operations;
 
 /**
  * Dialog to prompt the user for the image name of the image to do the

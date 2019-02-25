@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { verticalMirror } from "../../lib/ImageProcessing/mirrorOperations";
+import { operations } from "wiplib";
+
+const { mirror } = operations;
 
 class VerticalMirrorMenuItem extends React.Component {
   currentImageVerticalMirror = () => {
@@ -15,7 +17,7 @@ class VerticalMirrorMenuItem extends React.Component {
       });
     } else {
       appStore.addImage(
-        verticalMirror(appStore.imagesInfos[index].imageBuffer)
+        mirror.vertical(appStore.imagesInfos[index].imageBuffer)
       );
     }
   };

@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { histogramEqualization } from "../../lib/ImageProcessing/histogramEqualization";
+import { operations } from "wiplib";
+
+const { histogramEqualization } = operations;
 
 class HistogramEqualizationMenuItem extends React.Component {
   currentImageHistogramEqualization = () => {

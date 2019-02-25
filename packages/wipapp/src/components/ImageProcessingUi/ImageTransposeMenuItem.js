@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { imageTranspose } from "../../lib/ImageProcessing/imageTranspose";
+import { operations } from "wiplib";
+
+const { imageTranspose } = operations;
 
 class ImageTransposeMenuItem extends React.Component {
   transposeImage = () => {

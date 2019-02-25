@@ -2,7 +2,9 @@ import React from "react";
 import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
-import { horizontalMirror } from "../../lib/ImageProcessing/mirrorOperations";
+import { operations } from "wiplib";
+
+const { mirror } = operations;
 
 class HorizontalMirrorMenuItem extends React.Component {
   currentImageHorizontalMirror = () => {
@@ -15,7 +17,7 @@ class HorizontalMirrorMenuItem extends React.Component {
       });
     } else {
       appStore.addImage(
-        horizontalMirror(appStore.imagesInfos[index].imageBuffer)
+        mirror.horizontal(appStore.imagesInfos[index].imageBuffer)
       );
     }
   };
