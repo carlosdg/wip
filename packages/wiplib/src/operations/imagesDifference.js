@@ -21,10 +21,9 @@ export const imagesDifference = (firstImgBuffer, secondImgBuffer) => {
   const result = firstImgBuffer.copy();
 
   for (let i = 0; i < result.pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
-    let newValue = Math.abs(result.pixels[i] - secondImgBuffer.pixels[i]);
-    result.pixels[i] = newValue;
-    result.pixels[i + 1] = newValue;
-    result.pixels[i + 2] = newValue;
+    result.pixels[i] = Math.abs(result.pixels[i] - secondImgBuffer.pixels[i]);
+    result.pixels[i + 1] = Math.abs(result.pixels[i + 1] - secondImgBuffer.pixels[i + 1]);
+    result.pixels[i + 2] = Math.abs(result.pixels[i + 2] - secondImgBuffer.pixels[i + 2]);
   }
 
   return result;

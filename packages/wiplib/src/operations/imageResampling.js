@@ -97,26 +97,27 @@ const resampleBlock = (
   xLimit,
   yLimit
 ) => {
-  let sum = 0;
+  let sum = [0, 0, 0, 0];
   let count = 0;
-  let newValue;
   let index;
   // New value calc
   for (let y = initialY; y < yLimit; ++y) {
     for (let x = initialX; x < xLimit; ++x) {
-      sum = sum + imgBuffer.getPixel({ x, y })[0]; // R channel
-      count = count + 1;
+      for (let i = 0; i < RgbaImageBuffer.NUM_CHANNELS; ++i) {
+        sum[i] = sum[i] + imgBuffer.getPixel({ x, y })[i];
+      }
+      count = count + 1;  
     }
   }
-  newValue = sum / count;
+  let newValues = sum.map( value => value / count);
   // Block resampling
   for (let y = initialY; y < yLimit; ++y) {
     for (let x = initialX; x < xLimit; ++x) {
       index = (y * imgBuffer.width + x) * RgbaImageBuffer.NUM_CHANNELS;
-      pixels[index] = newValue; // R channel
-      pixels[index + 1] = newValue; // G channel
-      pixels[index + 2] = newValue; // B channel
-      pixels[index + 3] = 255; // A channel
+      pixels[index] = newValues[0];
+      pixels[index + 1] = newValues[1];
+      pixels[index + 2] = newValues[2];
+      pixels[index + 3] = newValues[3];
     }
   }
 };

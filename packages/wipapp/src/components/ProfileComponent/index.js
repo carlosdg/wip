@@ -13,8 +13,22 @@ import {
 class ProfileComponent extends Component {
   state = {
     emphasizedValue: null,
-    profileVisualizationData: []
+    profileVisualizationData: [],
+    channel: this.props.channel
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.channel && props.channel !== state.channel) {
+      return {
+        emphasizedValue: null,
+        profileVisualizationData: props.profileValues.map(
+          (value, index) => ({x: index, y: value })
+        ),
+        channel: props.channel
+      }
+    }
+    return null;
+  }
 
   componentDidMount() {
     this.setState({
@@ -40,6 +54,7 @@ class ProfileComponent extends Component {
         <LineSeries
           onNearestX={value => this.setState({ emphasizedValue: value })}
           data={this.state.profileVisualizationData}
+          color={this.state.channel}
         />
         {this.state.emphasizedValue ? (
           <Hint

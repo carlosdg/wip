@@ -11,14 +11,14 @@ export const histogramEqualization = (
   imgBuffer,
   imageCHistogram
 ) => {
-
+  
   let equalizationLevel = imageCHistogram.count / 256;
   let lookupTable = [];
   for (let i = 0; i < 256; ++i) {
     lookupTable.push(
       Math.max(
         0, 
-        Math.round(imageCHistogram.counts[i] / equalizationLevel) - 1
+        Math.round(imageCHistogram.counts["Gray"][i] / equalizationLevel) - 1
       )
     );
   }

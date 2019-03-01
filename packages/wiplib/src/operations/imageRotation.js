@@ -50,7 +50,6 @@ export const imageRotation = (
     newImageInfo.width * newImageInfo.height * RgbaImageBuffer.NUM_CHANNELS
   );
   let transformedCoords;
-  let newValue;
   let currentIndex = 0;
   for (let j = 0; j < newImageInfo.height; ++j) {
     for (let i = 0; i < newImageInfo.width; ++i) {
@@ -62,19 +61,15 @@ export const imageRotation = (
         isInRange(Math.round(transformedCoords.x), 0, width + 1) &&
         isInRange(Math.round(transformedCoords.y), 0, height + 1)
       ) {
-        newValue = Math.round(
-          interpolationMethod(
-            transformedCoords.x,
-            transformedCoords.y,
-            imgBuffer
-          )
+        let newValues = interpolationMethod(
+          transformedCoords.x,
+          transformedCoords.y,
+          imgBuffer
         );
-        // TODO: colored images
-        // For now we assume we are operating with grayscale images
-        resultPixels[currentIndex] = newValue; // R channel
-        resultPixels[currentIndex + 1] = newValue; // G channel
-        resultPixels[currentIndex + 2] = newValue; // B channel
-        resultPixels[currentIndex + 3] = 255; // A channel
+        resultPixels[currentIndex] = Math.round(newValues[0]);
+        resultPixels[currentIndex + 1] = Math.round(newValues[1]);
+        resultPixels[currentIndex + 2] = Math.round(newValues[2]);
+        resultPixels[currentIndex + 3] = Math.round(newValues[3]);
       } else {
         // Background pixel
         resultPixels[currentIndex] = 0; // R channel

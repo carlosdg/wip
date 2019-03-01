@@ -13,8 +13,22 @@ import {
 class HistogramComponent extends Component {
   state = {
     emphasizedValue: null,
-    histogramVisualizationData: []
+    histogramVisualizationData: [],
+    channel: this.props.channel
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.channel && props.channel !== state.channel) {
+      return {
+        emphasizedValue: null,
+        histogramVisualizationData: props.histogram.map(
+          (value, index) => ({ x0: index, x: index + 1, y: value })
+        ),
+        channel: props.channel
+      }
+    }
+    return null;
+  }
 
   componentDidMount() {
     this.setState({
@@ -28,7 +42,6 @@ class HistogramComponent extends Component {
     return (
       <FlexibleXYPlot
         margin={{
-          top: 50,
           left: 70
         }}
         onMouseLeave={() => this.setState({ emphasizedValue: null })}
@@ -40,6 +53,7 @@ class HistogramComponent extends Component {
         <VerticalRectSeries
           onNearestX={value => this.setState({ emphasizedValue: value })}
           data={this.state.histogramVisualizationData}
+          color={this.state.channel}
         />
         {this.state.emphasizedValue ? (
           <Hint

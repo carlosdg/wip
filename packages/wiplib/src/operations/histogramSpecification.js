@@ -17,12 +17,12 @@ export const histogramSpecification = (
 ) => {
 
   let normalizedOriginImageCHistogram =
-    originImageCHistogram.counts.map( value =>
+    originImageCHistogram.counts["Gray"].map( value =>
       value / originImageCHistogram.count
     );
   
   let normalizedTargetImageCHistogram =
-    targetImageCHistogram.counts.map( value =>
+    targetImageCHistogram.counts["Gray"].map( value =>
       value / targetImageCHistogram.count
     );
 

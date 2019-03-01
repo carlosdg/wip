@@ -47,18 +47,15 @@ export const imageResizing = (
     newWidth * newHeight * RgbaImageBuffer.NUM_CHANNELS
   );
   let transformedCoords;
-  let newValue;
   let currentIndex = 0;
   for (let j = 0; j < newHeight; ++j) {
     for (let i = 0; i < newWidth; ++i) {
       transformedCoords = inverseTransformation(i, j);
-      newValue = Math.round(
-        interpolationMethod(transformedCoords.x, transformedCoords.y, imgBuffer)
-      );
-      resultPixels[currentIndex] = newValue;
-      resultPixels[currentIndex + 1] = newValue;
-      resultPixels[currentIndex + 2] = newValue;
-      resultPixels[currentIndex + 3] = 255;
+      let newValues = interpolationMethod(transformedCoords.x, transformedCoords.y, imgBuffer);
+      resultPixels[currentIndex] = Math.round(newValues[0]);
+      resultPixels[currentIndex + 1] = Math.round(newValues[1]);
+      resultPixels[currentIndex + 2] = Math.round(newValues[2]);
+      resultPixels[currentIndex + 3] = Math.round(newValues[3]);
       currentIndex += RgbaImageBuffer.NUM_CHANNELS;
     }
   }

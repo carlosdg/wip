@@ -5,13 +5,15 @@ import ProfileComponent from "../ProfileComponent";
 
 export default class ProfilesComponent extends React.Component {
   state = {
-    currentTab: 0
+    currentTab: 0,
+    currentChannel: Object.keys(this.props.info.profileValues)[0]
   };
 
   updateCurrentTab = (_, newTab) => this.setState({ currentTab: newTab });
+  updateCurrentChannel = (_, newChannel) => this.setState({ currentChannel: newChannel });
 
   render() {
-    const { currentTab } = this.state;
+    const { currentTab, currentChannel } = this.state;
     const { profileValues, firstDerivativeProfileValues } = this.props.info;
 
     return (
@@ -49,6 +51,33 @@ export default class ProfilesComponent extends React.Component {
         </div>
         <div
           style={{
+            padding: "10px 0px 0px 0px",
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          {
+            Object.keys(profileValues).map( key => {
+              return (
+                <Button
+                  style={
+                    currentChannel === key
+                      ? {
+                          boxShadow: `0px 4px 6px -5px ${key}`
+                        }
+                      : {}
+                  }
+                  onClick={e => this.updateCurrentChannel(e, key)}
+                  key={key}
+                >
+                  {key}
+                </Button>
+              );
+            })
+          }
+        </div>
+        <div
+          style={{
             width: "100%",
             height: "100%",
             maxHeight: "80%",
@@ -59,12 +88,14 @@ export default class ProfilesComponent extends React.Component {
         >
           {currentTab === 0 && (
             <ProfileComponent
-                profileValues={profileValues}
+                profileValues={profileValues[currentChannel]}
+                channel={currentChannel}
             />
           )}
           {currentTab === 1 && (
             <ProfileComponent
-                profileValues={firstDerivativeProfileValues}
+                profileValues={firstDerivativeProfileValues[currentChannel]}
+                channel={currentChannel}
             />
           )}
         </div>

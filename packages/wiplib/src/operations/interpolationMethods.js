@@ -1,40 +1,55 @@
+import RgbaImageBuffer from "../RgbaImageBuffer";
+
 /**
  * Returns the light value of the closest pixel of the given coordinates.
- * It retrieves the third element of the pixel assuming that no matters what
- * RGB channel you choose for grayscale images and in case of operate with
- * colored images (HSL), the third channel corresponds with the Lightness.
  */
 const closestNeighbourInterpolation = (xCoord, yCoord, imgBuffer) =>
-  imgBuffer.getPixel({ x: Math.round(xCoord), y: Math.round(yCoord) })[2];
+  [
+    imgBuffer.getPixel({ x: Math.round(xCoord), y: Math.round(yCoord) })[0],
+    imgBuffer.getPixel({ x: Math.round(xCoord), y: Math.round(yCoord) })[1],
+    imgBuffer.getPixel({ x: Math.round(xCoord), y: Math.round(yCoord) })[2],
+    imgBuffer.getPixel({ x: Math.round(xCoord), y: Math.round(yCoord) })[3]
+  ];
+  
 
 /**
  * Returns the light value of the given coordinates assuming that the light
  * values of the closest pixels vary linearly.
- * It retrieves the third elements of the pixels assuming that no matters what
- * RGB channel you choose for grayscale images and in case of operate with
- * colored images (HSL), the third channel corresponds with the Lightness.
  */
 const bilinearInterpolation = (xCoord, yCoord, imgBuffer) => {
-  const A = imgBuffer.getPixel({
-    x: Math.floor(xCoord),
-    y: Math.ceil(yCoord)
-  })[2];
-  const B = imgBuffer.getPixel({
-    x: Math.ceil(xCoord),
-    y: Math.ceil(yCoord)
-  })[2];
-  const C = imgBuffer.getPixel({
-    x: Math.floor(xCoord),
-    y: Math.floor(yCoord)
-  })[2];
-  const D = imgBuffer.getPixel({
-    x: Math.ceil(xCoord),
-    y: Math.floor(yCoord)
-  })[2];
+  const A = [
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.ceil(yCoord) })[0],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.ceil(yCoord) })[1],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.ceil(yCoord) })[2],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.ceil(yCoord) })[3]
+  ];
+  const B = [
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.ceil(yCoord) })[0],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.ceil(yCoord) })[1],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.ceil(yCoord) })[2],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.ceil(yCoord) })[3]
+  ];
+  const C = [
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.floor(yCoord) })[0],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.floor(yCoord) })[1],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.floor(yCoord) })[2],
+    imgBuffer.getPixel({ x: Math.floor(xCoord), y: Math.floor(yCoord) })[3]
+  ];
+  const D = [
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.floor(yCoord) })[0],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.floor(yCoord) })[1],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.floor(yCoord) })[2],
+    imgBuffer.getPixel({ x: Math.ceil(xCoord), y: Math.floor(yCoord) })[3]
+  ];
   const p = xCoord - Math.floor(xCoord);
   const q = yCoord - Math.floor(yCoord);
 
-  return C + (D - C) * p + (A - C) * q + (B + C - A - D) * p * q;
+  let transform = [];
+  for (let i = 0; i < RgbaImageBuffer.NUM_CHANNELS; ++i)
+    transform[i] = C[i] + (D[i] - C[i]) * p + 
+      (A[i] - C[i]) * q + (B[i] + C[i] - A[i] - D[i]) * p * q;
+
+  return transform;
 };
 
 export const interpolationMethods = {

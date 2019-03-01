@@ -12,13 +12,15 @@ import TableRow from "@material-ui/core/TableRow";
  */
 export default class HistogramAndInfoComponent extends React.Component {
   state = {
-    currentTab: 0
+    currentTab: 0,
+    currentChannel: Object.keys(this.props.histogram.histogramValues)[0]
   };
 
   updateCurrentTab = (_, newTab) => this.setState({ currentTab: newTab });
+  updateCurrentChannel = (_, newChannel) => this.setState({ currentChannel: newChannel});
 
   render() {
-    const { currentTab } = this.state;
+    const { currentTab, currentChannel } = this.state;
     const { histogramValues, histogramInfo } = this.props.histogram;
     const { counts } = this.props.cHistogram;
 
@@ -40,7 +42,7 @@ export default class HistogramAndInfoComponent extends React.Component {
             }
             onClick={e => this.updateCurrentTab(e, 0)}
           >
-            Hist.
+            Histogram
           </Button>
           <Button
             style={
@@ -52,7 +54,7 @@ export default class HistogramAndInfoComponent extends React.Component {
             }
             onClick={e => this.updateCurrentTab(e, 1)}
           >
-            Cumul.
+            Cumulative
           </Button>
           <Button
             style={
@@ -64,8 +66,35 @@ export default class HistogramAndInfoComponent extends React.Component {
             }
             onClick={e => this.updateCurrentTab(e, 2)}
           >
-            Info.
+            Information
           </Button>
+        </div>
+        <div
+          style={{
+            padding: "10px 0px 0px 0px",
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          {
+            Object.keys(histogramValues).map( key => {
+              return (
+                <Button
+                  style={
+                    currentChannel === key
+                      ? {
+                          boxShadow: `0px 4px 6px -5px ${key}`
+                        }
+                      : {}
+                  }
+                  onClick={e => this.updateCurrentChannel(e, key)}
+                  key={key}
+                >
+                  {key}
+                </Button>
+              );
+            })
+          }
         </div>
         <div
           style={{
@@ -78,10 +107,16 @@ export default class HistogramAndInfoComponent extends React.Component {
           }}
         >
           {currentTab === 0 && (
-            <HistogramComponent histogram={histogramValues} />
+            <HistogramComponent 
+              histogram={histogramValues[currentChannel]} 
+              channel={currentChannel}
+            />
           )}
           {currentTab === 1 && (
-            <HistogramComponent histogram={counts} />
+            <HistogramComponent 
+              histogram={counts[currentChannel]}
+              channel={currentChannel}
+            />
           )}
           {currentTab === 2 && (
             <div
@@ -94,41 +129,41 @@ export default class HistogramAndInfoComponent extends React.Component {
                 <TableHead>
                   <TableRow>
                     <TableCell>Variable</TableCell>
-                    <TableCell numeric>Value</TableCell>
+                    <TableCell align="right">Value</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
                     <TableCell>Count</TableCell>
-                    <TableCell numeric>{histogramInfo.count}</TableCell>
+                    <TableCell align="right">{histogramInfo[currentChannel].count}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Brightness</TableCell>
-                    <TableCell numeric>
-                      {histogramInfo.mean.toFixed(3)}
+                    <TableCell align="right">
+                      {histogramInfo.brightness.toFixed(3)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Contrast</TableCell>
-                    <TableCell numeric>
-                      {histogramInfo.stdDev.toFixed(3)}
+                    <TableCell align="right">
+                      {histogramInfo.contrast.toFixed(3)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Minimum value</TableCell>
-                    <TableCell numeric>{histogramInfo.minValue}</TableCell>
+                    <TableCell align="right">{histogramInfo[currentChannel].minValue}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Maximum value</TableCell>
-                    <TableCell numeric>{histogramInfo.maxValue}</TableCell>
+                    <TableCell align="right">{histogramInfo[currentChannel].maxValue}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Mode</TableCell>
-                    <TableCell numeric>{histogramInfo.mode.value}</TableCell>
+                    <TableCell align="right">{histogramInfo[currentChannel].mode.value}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Entropy</TableCell>
-                    <TableCell numeric>{histogramInfo.entropy}</TableCell>
+                    <TableCell align="right">{histogramInfo[currentChannel].entropy}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

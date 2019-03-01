@@ -52,8 +52,8 @@ class BrightnessAndContrastDialog extends React.Component {
         selectedGridItem.index
       ].histogram;
 
-      oldBrightness = histogramInfo.mean;
-      oldContrast = histogramInfo.stdDev;
+      oldBrightness = histogramInfo.brightness;
+      oldContrast = histogramInfo.contrast;
     }
 
     if (!state.formChanged) {
@@ -106,8 +106,8 @@ class BrightnessAndContrastDialog extends React.Component {
     appStore.addImage(
       brightnessAndContrastAdjustment(
         appStore.imagesInfos[index].imageBuffer,
-        appStore.histogramInfos[index].histogram.histogramInfo.mean,
-        appStore.histogramInfos[index].histogram.histogramInfo.stdDev,
+        appStore.histogramInfos[index].histogram.histogramInfo.brightness,
+        appStore.histogramInfos[index].histogram.histogramInfo.contrast,
         brightness,
         contrast
       )
@@ -132,7 +132,7 @@ class BrightnessAndContrastDialog extends React.Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          Brightness and Contrast Ajustment
+          Brightness and Contrast Adjustment
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

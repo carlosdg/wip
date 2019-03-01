@@ -9,12 +9,17 @@ export default class CumulativeHistogram {
    * cumulative from
    */
   constructor(histogram) {
-    let count = 0;
-
-    this.counts = histogram.map(value => {
-      count += value;
-      return count;
+    let count;
+    this.counts = {};
+    Object.keys(histogram).forEach( key => {
+      count = 0;
+      this.counts[key] = {};
+      this.counts[key] = histogram[key].map(value => {
+        count += value;
+        return count;
+      });
     });
+    
     this.count = count;
   }
 }

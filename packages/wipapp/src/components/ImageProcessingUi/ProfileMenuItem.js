@@ -28,14 +28,39 @@ class ProfileMenuItem extends React.Component {
         { x: left + width, y: top + height }
       );
       const associatedImage = appStore.imagesInfos[index].imageBuffer;
-      const profileValues = points.map(
-        point => associatedImage.getPixel({ x: point.x, y: point.y })[0] // R channel value (grayscale images)
-      );
-      const firstDerivativeProfileValues = [];
-      for (let i = 1; i < profileValues.length - 1; ++i)
-        firstDerivativeProfileValues.push(
-          (profileValues[i + 1] - profileValues[i - 1]) / 2
-        );
+      const profileValues = {
+        "Red": [],
+        "Green": [],
+        "Blue": [],
+        "Gray": []
+      };
+
+      points.forEach(point => {
+        let pixel = associatedImage.getPixel({ x: point.x, y: point.y });
+        profileValues["Red"].push(pixel[0]);
+        profileValues["Green"].push(pixel[1]);
+        profileValues["Blue"].push(pixel[2]);
+        profileValues["Gray"].push(Math.round(
+          pixel[0] * 0.222 + 
+          pixel[1] * 0.707 + 
+          pixel[2] * 0.071
+        ));
+      }); 
+      
+      const firstDerivativeProfileValues = {
+        "Red": [],
+        "Green": [],
+        "Blue": [],
+        "Gray": []
+      };
+
+      for (let i = 1; i < profileValues["Red"].length - 1; ++i)
+        Object.keys(profileValues).forEach( key => {
+          firstDerivativeProfileValues[key].push(
+            (profileValues[key][i + 1] - profileValues[key][i - 1]) / 2
+          );
+        });
+
       appStore.addProfile(profileValues, firstDerivativeProfileValues);
     }
   };
