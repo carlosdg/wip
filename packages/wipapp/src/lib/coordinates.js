@@ -55,3 +55,24 @@ export function calculateRect(coords1, coords2) {
 
   return { left, right, top, bottom };
 }
+
+/** Returns true if point is inside rect, false in another case */
+export function pointInsideRect(rect, point) {
+  return  point.y <= rect.bottom && point.y >= rect.top &&
+          point.x <= rect.right && point.x >= rect.left;
+}
+
+/** Check if a innerRect is truly inside the outerRect */
+export function rectInsideRect(innerRect, outerRect) {
+  const { left, right, top, bottom } = innerRect;
+
+  if(left < outerRect.left || right > outerRect.right - 1) {
+    return false;
+  }
+  
+  if(top < outerRect.top || bottom > outerRect.bottom - 1){
+    return false;
+  }
+
+  return true;
+}

@@ -37,14 +37,9 @@ class ImageComponent extends Component {
     mouseDownOriginCoordinates: { x: -1, y: -1 },
     /** Current mouse coordinates relative to the image viewport */
     currentMouseCoordinates: { x: -1, y: -1 },
-    /** Origin coordinates of selection when user drag the selection rectangle */
-    selectionOriginCoords: { x: -1, y: -1 },
-    /** End coordinates of selection when user drag the selection rectangle */
-    selectionEndCoords: { x: -1, y: -1 },
-    /** Coordinates of the selection when user pressed down */
-    initialOriginCoords: { x: -1, y: -1 },
-    /** Coordinates of the selection when user release the mouse button */
-    initialEndCoords: { x: -1, y: -1 },
+
+    selectionRectCoords: undefined,
+
   };
 
   componentDidMount() {
@@ -64,11 +59,7 @@ class ImageComponent extends Component {
 
   /** Mouse move event handler, gets the coordinates relative to the image where
    * the user mouse is pointing to and the pixel RGBA value there and calls
-   * props.onMouseMove 
-   * 
-   * If user is dragging an existing rect, the coordinates of previous selection rect
-   * will be updated, taking in account image dimensions.
-   */
+   * props.onMouseMove */
   onMouseMove = mouseEvent => {
     if (!this.props.onMouseMove || this.state.isImageLoading) {
       return;
@@ -80,65 +71,57 @@ class ImageComponent extends Component {
     );
     const pixel = this.props.rgbaImage.getPixel(coordinates);
 
-    if (this.state.isMouseDown && !this.state.isDragging) {
+    if (this.state.isMouseDown) {
       this.setState({
         currentMouseCoordinates: coordinates
       });
-    } else if(this.state.isMouseDown && this.state.isDragging) {
-      const { 
-        initialOriginCoords,
-        initialEndCoords, 
-        mouseDownOriginCoordinates 
-      } = this.state;
-
-      const { width, height } = this.props.rgbaImage;
-
-      const Xdiff =  coordinates.x - mouseDownOriginCoordinates.x;
-      const Ydiff = coordinates.y - mouseDownOriginCoordinates.y;
-
-      const newOriginCoords = { 
-        x: initialOriginCoords.x + Xdiff, 
-        y: initialOriginCoords.y + Ydiff 
-      };
-      const newEndCoords = { 
-        x: initialEndCoords.x + Xdiff, 
-        y: initialEndCoords.y + Ydiff 
-      };
-
-      const selectionRect = Coordinates.calculateRect(newOriginCoords, newEndCoords);
-      const imageRect = Coordinates.calculateRect({ x: 0, y: 0 }, { x : width, y: height});
-
-      if(Coordinates.rectInsideRect(selectionRect, imageRect)) {
-        this.setState({
-          currentMouseCoordinates: coordinates,
-          selectionOriginCoords: newOriginCoords,
-          selectionEndCoords: newEndCoords,
-        });
-      }
     }
 
+    if(this.state.isDragging) {
+      const { selectionRectCoords, mouseDownOriginCoordinates, currentMouseCoordinates } = this.state;
+      console.log("Coordenadas del rect: ", this.state.selectionRectCoords)
+      console.log("Coordenadas actuales: ", this.state.mouseDownOriginCoordinates, coordinates)
+      
+      let deltaCoords = { 
+        x: Math.abs(mouseDownOriginCoordinates.x - coordinates.x), 
+        y: Math.abs(mouseDownOriginCoordinates.y - coordinates.y) 
+      };
+
+      let XOriginSelectionRectCoords = selectionRectCoords.origin.x + deltaCoords.x;
+      let YOriginSelectionRectCoords = selectionRectCoords.origin.y + deltaCoords.y;
+
+      let XEndSelectionRectCoords = selectionRectCoords.end.x + deltaCoords.x;
+      let YEndSelectionRectCoords = selectionRectCoords.end.y + deltaCoords.y;
+
+      this.setState({
+        selectionRectCoords: { 
+          origin: { x: XOriginSelectionRectCoords, y : YOriginSelectionRectCoords}, 
+          end: { x: XEndSelectionRectCoords, y: YEndSelectionRectCoords} }
+      });
+
+      this.props.onSelection({
+        mouseDownCoords: selectionRectCoords.origin,
+        mouseUpCoords: selectionRectCoords.end
+      });
+    }
+ 
     this.props.onMouseMove(coordinates, pixel);
   };
 
   /**
    * Event listener for the mouse down event. Updates the state to know that the
    * user wants to select a part of the image and sets the origin mouse
-   * coordinate. If user clicks on a previous selection region, the selection
-   * original coords will be saved.
+   * coordinate
    */
   onMouseDown = mouseEvent => {
+    const { mouseDownOriginCoordinates, currentMouseCoordinates } = this.state;
     const coordinates = Coordinates.mapToCoordinatesRelativeToElement(
       mouseEvent,
       this.refs.canvas
     );
-
-    const {
-      selectionOriginCoords,
-      selectionEndCoords,
-    } = this.state;
-
-    const prevRect = Coordinates.calculateRect(selectionOriginCoords, selectionEndCoords);
     
+    let prevRect = Coordinates.calculateRect(mouseDownOriginCoordinates, currentMouseCoordinates);
+
     if (!Coordinates.pointInsideRect(prevRect, coordinates)) {
       this.setState({
         mouseDownOriginCoordinates: coordinates,
@@ -147,34 +130,43 @@ class ImageComponent extends Component {
       });
     } else {
       this.setState({
-        mouseDownOriginCoordinates: coordinates,
-        isMouseDown: true,
-        isDragging: true,
+        selectionRectCoords: { origin: mouseDownOriginCoordinates, end: currentMouseCoordinates },
         currentMouseCoordinates: coordinates,
-        initialOriginCoords: { x: selectionOriginCoords.x, y: selectionOriginCoords.y },
-        initialEndCoords: { x: selectionEndCoords.x, y: selectionEndCoords.y }
+        mouseDownOriginCoordinates: coordinates,
+        isDragging: true,
       });
+      console.log('Coordenadas iniciales: ', coordinates);
     }
   };
 
   /**
    * Event listener for the mouse up event. Updates the state to know that the
    * user stopped the selection of the part of the image. Then, if the resulting
-   * rectangle has 0 width or height it is discarted. If user has moved the
-   * selection region, the new coords will be updated.
+   * rectangle has 0 width or height it is discarted.
    *
    * MAYBE TODO: set the current mouse coordinate to the ones on mouse up TODO:
    * notify the parent component of the selection
    */
-  onMouseUp = () => {
+  onMouseUp = (mouseEvent) => {
+    console.log('Mousup')
+    const coordinates = Coordinates.mapToCoordinatesRelativeToElement(
+      mouseEvent,
+      this.refs.canvas
+    );
     const {
-      isMouseDown,
       isDragging,
-      selectionOriginCoords,
-      selectionEndCoords,
+      isMouseDown,
       mouseDownOriginCoordinates,
-      currentMouseCoordinates,
+      currentMouseCoordinates
     } = this.state;
+
+    if(isDragging) {
+      console.log('Coordenadas finales: ', coordinates)
+      this.setState({
+        currentMouseCoordinates: currentMouseCoordinates,
+        isDragging: false,
+      });
+    }
 
     if (!isMouseDown) {
       return;
@@ -182,44 +174,30 @@ class ImageComponent extends Component {
 
     if (
       mouseDownOriginCoordinates.x === currentMouseCoordinates.x &&
-      mouseDownOriginCoordinates.y === currentMouseCoordinates.y && !isDragging
+      mouseDownOriginCoordinates.y === currentMouseCoordinates.y
     ) {
       this.setState({
         isMouseDown: false,
-        selectionOriginCoords: { x: -1, y: -1 },
-        selectionEndCoords: { x: -1, y: -1 }
+        mouseDownOriginCoordinates: { x: -1, y: -1 },
+        currentMouseCoordinates: { x: -1, y: -1 }
       });
       const { width, height } = this.props.rgbaImage;
       this.props.onSelection({
-        originCoords: { x: 0, y: 0 },
-        endCoords: { x: width, y: height }
-      });
-    } else if(!isDragging) {
-      this.setState({
-        isMouseDown: false,
-        selectionOriginCoords: { x: mouseDownOriginCoordinates.x, y: mouseDownOriginCoordinates.y },
-        selectionEndCoords: { x: currentMouseCoordinates.x, y: currentMouseCoordinates.y }
-      });
-      this.props.onSelection({
-        originCoords: mouseDownOriginCoordinates,
-        endCoords: currentMouseCoordinates
+        mouseDownCoords: { x: 0, y: 0 },
+        mouseUpCoords: { x: width, y: height }
       });
     } else {
-      this.setState({
-        isDragging: false,
-        isMouseDown: false,
-      });
-
+      this.setState({ isMouseDown: false });
       this.props.onSelection({
-        originCoords: selectionOriginCoords,
-        endCoords: selectionEndCoords,
+        mouseDownCoords: mouseDownOriginCoordinates,
+        mouseUpCoords: currentMouseCoordinates
       });
     }
   };
 
   render() {
-    const { isDragging, isMouseDown, selectionOriginCoords, selectionEndCoords, 
-      currentMouseCoordinates, mouseDownOriginCoordinates } = this.state;
+    const { mouseDownOriginCoordinates, currentMouseCoordinates } = this.state;
+
     return (
       <div
         style={{
@@ -238,8 +216,8 @@ class ImageComponent extends Component {
           }}
         />
         {this.props.children({
-          originCoords: isMouseDown === true && !isDragging ? mouseDownOriginCoordinates : selectionOriginCoords,
-          endCoords: isMouseDown === true && !isDragging ? currentMouseCoordinates : selectionEndCoords
+          originCoords: mouseDownOriginCoordinates,
+          endCoords: currentMouseCoordinates
         })}
       </div>
     );
