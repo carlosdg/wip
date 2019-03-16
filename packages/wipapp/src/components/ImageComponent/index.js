@@ -91,32 +91,46 @@ class ImageComponent extends Component {
         mouseDownOriginCoordinates 
       } = this.state;
 
-      const { width, height } = this.props.rgbaImage;
-
+      let { width, height } = this.props.rgbaImage;
+      width = width - 1;
+      height = height - 1;
+      
       const Xdiff =  coordinates.x - mouseDownOriginCoordinates.x;
       const Ydiff = coordinates.y - mouseDownOriginCoordinates.y;
 
-      const newOriginCoords = { 
-        x: initialOriginCoords.x + Xdiff, 
-        y: initialOriginCoords.y + Ydiff 
-      };
-      const newEndCoords = { 
-        x: initialEndCoords.x + Xdiff, 
-        y: initialEndCoords.y + Ydiff 
-      };
+      let selectionRect = Coordinates.calculateRect(initialOriginCoords, initialEndCoords, (selectionRect) => {
+        let { top, left, right, bottom } = selectionRect;
+        let originCoords = { x: left + Xdiff, y: top + Ydiff };
+        let endCoords = { x: right + Xdiff, y: bottom + Ydiff };
+        
+        let selectionWidth = Math.abs(endCoords.x - originCoords.x);
+        let selectionHeight = Math.abs(endCoords.y - originCoords.y);
 
-      const selectionRect = Coordinates.calculateRect(newOriginCoords, newEndCoords);
-      const imageRect = Coordinates.calculateRect({ x: 0, y: 0 }, { x : width, y: height});
+        if(endCoords.x > width) {
+          originCoords.x = width - selectionWidth;
+          endCoords.x = width;
+        } else if(originCoords.x < 0) {
+          originCoords.x = 0;
+          endCoords.x = selectionWidth;
+        }
+        
+        if(endCoords.y > height) {
+          originCoords.y = height - selectionHeight;
+          endCoords.y = height;
+        } else if(originCoords.y < 0) {
+          originCoords.y = 0;
+          endCoords.y = selectionHeight;
+        }
 
-      if(Coordinates.rectInsideRect(selectionRect, imageRect)) {
-        this.setState({
+        return { originCoords, endCoords };
+      });
+     
+      this.setState({
           currentMouseCoordinates: coordinates,
-          selectionOriginCoords: newOriginCoords,
-          selectionEndCoords: newEndCoords,
-        });
-      }
+          selectionOriginCoords: selectionRect.originCoords,
+          selectionEndCoords: selectionRect.endCoords,
+      });
     }
-
     this.props.onMouseMove(coordinates, pixel);
   };
 
