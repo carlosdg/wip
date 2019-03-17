@@ -30,6 +30,15 @@ export default class Pixel {
   }
 
   /**
+   * Returns a copy of this pixel
+   *
+   * @returns {Pixel} A copy of this pixel
+   */
+  clone() {
+    return new Pixel(this.values, this.transparency, this.maybeExtraInfo);
+  }
+
+  /**
    * Returns the array of values to use in image processing operations
    *
    * @returns {number[]} The values
@@ -63,8 +72,12 @@ export default class Pixel {
    * @returns {Pixel} This pixel. This is to provide a fluid interface
    */
   setValues(newValues) {
-    this._values = newValues;
-    return this;
+    if (newValues && newValues.length > 0) {
+      this._values = newValues;
+      return this;
+    }
+
+    throw new Error(`Invalid empty value: ${newValues}`);
   }
 
   /**
@@ -74,8 +87,14 @@ export default class Pixel {
    * @returns {Pixel} This pixel. This is to provide a fluid interface
    */
   setTransparency(newTransparency) {
-    this._transparency = newTransparency;
-    return this;
+    if (newTransparency >= 0 && newTransparency <= 1) {
+      this._transparency = newTransparency;
+      return this;
+    }
+
+    throw new Error(
+      `Invalid transparency: "${newTransparency}". Must be between 0 and 1`
+    );
   }
 
   /**
@@ -130,7 +149,7 @@ export default class Pixel {
   combineEachDim(otherPixel, callback) {
     const combinedValues = this.values.map((value, i) => [
       value,
-      otherPixel.editableValues[i]
+      otherPixel.values[i]
     ]);
     const newValues = combinedValues.map(callback);
     return this.setValues(newValues);
@@ -147,7 +166,7 @@ export default class Pixel {
   combineAllDims(otherPixel, callback) {
     const combinedValues = this.values.map((value, i) => [
       value,
-      otherPixel.editableValues[i]
+      otherPixel.values[i]
     ]);
     const newValues = callback(combinedValues);
     return this.setValues(newValues);
