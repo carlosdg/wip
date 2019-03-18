@@ -45,8 +45,7 @@ export default class ImageBuffer {
    *
    * @param  {...any} args List of arguments, depending on the number of
    * arguments provided the new instance will be constructed one way or another:
-   * 1. Copy constructor. The expected argument is the RgbImageBuffer to copy
-   *    from
+   * 1. Copy constructor. The expected argument is the ImageBuffer to copy from
    * 2. Constructor for a blank image buffer. The expected arguments are the
    *    width and height of the new image buffer to create and it will be
    *    populated with transparent pixels
@@ -92,6 +91,26 @@ export default class ImageBuffer {
   }
 
   /**
+   * Iterates over all pixels calling `callback` for each one passing the pixel
+   * object and position as argument
+   *
+   * @param {function(Pixel, number, number)} callback Function run for each
+   * pixel
+   * @returns {ImageBuffer} This image buffer. This is to provide a fluid
+   * interface
+   */
+  forEachPixel(callback) {
+    for (let i = 0; i < this.width; ++i) {
+      for (let j = 0; j < this.height; ++j) {
+        const pixel = this.getPixel(i, j);
+        callback(pixel, i, j);
+      }
+    }
+
+    return this;
+  }
+
+  /**
    * Returns the pixel at the given row and column position
    */
   getPixel(row, col) {
@@ -102,7 +121,7 @@ export default class ImageBuffer {
   /**
    * Sets the given pixel to the position specified by the given row and column
    *
-   * @returns {RgbImageBuffer} This image buffer. This is to provide a fluid
+   * @returns {ImageBuffer} This image buffer. This is to provide a fluid
    * interface
    */
   setPixel(row, col, pixel) {

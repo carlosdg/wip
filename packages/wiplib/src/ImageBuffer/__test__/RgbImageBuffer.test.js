@@ -31,7 +31,7 @@ describe("RgbImageBuffer", () => {
     });
   });
 
-  describe("From raw RGBA constructor", () => {
+  describe("Raw RGBA constructor", () => {
     let width;
     let height;
     let rgbaPixels;
@@ -116,6 +116,37 @@ describe("RgbImageBuffer", () => {
       const cloneFirstPixel = uut.getPixel(0, 0);
       expect(cloneFirstPixel.values).not.toEqual(newOriginalFirstPixel.values);
       expect(cloneFirstPixel.values).toEqual(rgbaPixels[0].slice(0, -1));
+    });
+  });
+
+  describe("Iteration", () => {
+    let width;
+    let height;
+    let rgbaPixels;
+    let uut;
+
+    beforeEach(() => {
+      width = 2;
+      height = 2;
+      rgbaPixels = [
+        [0, 0, 0, 1],
+        [255, 255, 255, 1],
+        [100, 100, 100, 0],
+        [123, 5, 200, 1]
+      ];
+      const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
+      uut = RgbImageBuffer.from(width, height, rawRgbaPixels);
+    });
+
+    test("`forEachPixel` should iterate over all pixels", () => {
+      const callback = (pixel, row, col) => {
+        const arrayPos = col * 2 + row;
+        const expectedPixelRgbaValue = rgbaPixels[arrayPos];
+        expect(pixel.values).toEqual(expectedPixelRgbaValue.slice(0, -1));
+        expect(pixel.transparency).toEqual(...expectedPixelRgbaValue.slice(-1));
+      };
+
+      uut.forEachPixel(callback);
     });
   });
 });
