@@ -15,10 +15,17 @@ class SelectionToolbar extends React.Component {
     return (
       <Toolbar
         style={{
+          position: "fixed",
           backgroundColor: "white",
           color: "#3f51b5",
           display: "flex",
-          zIndex: "-1"
+          flexDirection: "column",
+          zIndex: "1",
+          width: "3%",
+          padding: "40px",
+          boxShadow: "0px 1px 10px 0px rgba(0,0,0,0.7)",
+          top: "8%",
+          borderRadius: "0px 10px 10px 0px"
         }}
       >
         <Button

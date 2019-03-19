@@ -10,6 +10,7 @@ import SelectionOverlay from "../Overlays/SelectionOverlay";
 import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 import ProfilesComponent from "../ProfilesComponent";
+import SelectionToolbar from "../Toolbar/SelectionToolbar";
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -59,6 +60,7 @@ class App extends Component {
       <div>
         <div className="app-container">
           <AppToolbar />
+          <SelectionToolbar />
           <main className="main">
             <div className="main__wrapper">{this.getGridComponent()}</div>
           </main>
