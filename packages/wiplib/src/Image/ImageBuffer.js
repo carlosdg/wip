@@ -138,6 +138,10 @@ export default class ImageBuffer {
     return this._height;
   }
 
+  get pixelDimensions() {
+    throw new Error("UNIMPLEMENTED");
+  }
+
   get maxPixelValues() {
     throw new Error("UNIMPLEMENTED");
   }

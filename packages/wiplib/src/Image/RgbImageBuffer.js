@@ -54,6 +54,10 @@ export default class RgbImageBuffer extends ImageBuffer {
     return RgbImageBuffer.copyFrom(this);
   }
 
+  get pixelDimensions() {
+    return 3;
+  }
+
   /**
    * @see {@link ImageBuffer#maxPixelValues}
    */
