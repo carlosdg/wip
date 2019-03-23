@@ -4,7 +4,9 @@ import "./RightSideMenu.css";
 
 class RighSideMenu extends React.Component {
   state = {
-    open: true
+    open: true,
+    menuTitle: "",
+    menuContent: []
   };
 
   onToggleClick = () => this.setState({ open: !this.state.open });
@@ -18,7 +20,7 @@ class RighSideMenu extends React.Component {
         }}
       >
         <div className="right-side-menu-title">
-          <p>IMAGE INFORMATION</p>
+          <p>{this.state.menuTitle.toUpperCase()}</p>
           <div
             id="right-side-menu-toggle"
             className={this.state.open ? "on" : "off"}
@@ -29,7 +31,9 @@ class RighSideMenu extends React.Component {
             <div className="three" />
           </div>
         </div>
-        <div className="right-side-menu-feed" />
+        <div className="right-side-menu-feed">
+          {this.state.menuContent.map(menuItem => menuItem)}
+        </div>
       </div>
     );
   }
