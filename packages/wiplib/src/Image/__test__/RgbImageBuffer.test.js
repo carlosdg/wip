@@ -149,4 +149,96 @@ describe("RgbImageBuffer", () => {
       uut.forEachPixel(callback);
     });
   });
+
+  describe("ImageData", () => {
+    beforeEach(() => {
+      global.ImageData = function(array, width, height) {
+        this.data = array;
+        this.width = width;
+        this.height = height;
+      };
+    });
+
+    afterEach(() => {
+      global.ImageData = undefined;
+    });
+
+    describe("Right after construction", () => {
+      let width;
+      let height;
+      let rgbaPixels;
+      let rawRgbaPixels;
+      let uut;
+
+      beforeEach(() => {
+        width = 2;
+        height = 2;
+        rgbaPixels = [
+          [0, 0, 0, 1],
+          [255, 255, 255, 1],
+          [100, 100, 100, 0],
+          [123, 5, 200, 1]
+        ];
+        rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
+        const imageBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
+        uut = imageBuffer.toImageData();
+      });
+
+      test("Should have the same width", () => {
+        expect(uut.width).toEqual(width);
+      });
+
+      test("Should have the same pixel values", () => {
+        expect(uut.height).toEqual(height);
+      });
+
+      test("Should have the same pixel values", () => {
+        expect(uut.data).toEqual(rawRgbaPixels);
+      });
+    });
+
+    describe("After modifying pixels (inverse the pixel values)", () => {
+      let width;
+      let height;
+      let rgbaPixels;
+      let rawRgbaPixels;
+      let uut;
+
+      beforeEach(() => {
+        width = 2;
+        height = 2;
+        rgbaPixels = [
+          [0, 0, 0, 1],
+          [255, 255, 255, 1],
+          [100, 100, 100, 0],
+          [123, 5, 200, 1]
+        ];
+        rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
+        const imageBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
+        imageBuffer.forEachPixel(pixel => pixel.eachDim(value => 255 - value));
+        uut = imageBuffer.toImageData();
+      });
+
+      test("Should have the same width", () => {
+        expect(uut.width).toEqual(width);
+      });
+
+      test("Should have the same pixel values", () => {
+        expect(uut.height).toEqual(height);
+      });
+
+      test("Should have the inverse of the original pixel values", () => {
+        const expectedRawRgbaPixels = rgbaPixels.flatMap(([r, g, b, a]) => [
+          255 - r,
+          255 - g,
+          255 - b,
+          a
+        ]);
+        const expectedImageDataPixels = new Uint8ClampedArray(
+          expectedRawRgbaPixels
+        );
+        expect(uut.data).toEqual(expectedImageDataPixels);
+      });
+    });
+  });
 });

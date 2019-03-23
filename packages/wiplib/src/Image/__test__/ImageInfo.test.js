@@ -1,6 +1,12 @@
 import RgbImageBuffer from "../RgbImageBuffer";
 import ImageInfo from "../ImageInfo";
 
+const rgbDimensionsInfo = [
+  { name: "Red", index: 0 },
+  { name: "Blue", index: 1 },
+  { name: "Green", index: 2 }
+];
+
 describe("ImageInfo", () => {
   describe("For RgbImageBuffer with transparent pixels", () => {
     let width;
@@ -27,11 +33,7 @@ describe("ImageInfo", () => {
       expect(uut.pixelCount).toEqual(width * height);
     });
 
-    [
-      { name: "Red", index: 0 },
-      { name: "Blue", index: 1 },
-      { name: "Green", index: 2 }
-    ].forEach(({ name, index }) => {
+    rgbDimensionsInfo.forEach(({ name, index }) => {
       test(`Should have valid ${name} histogram `, () => {
         const expectedHistogram = new Array(256).fill(0);
         rgbaPixels
@@ -41,11 +43,7 @@ describe("ImageInfo", () => {
       });
     });
 
-    [
-      { name: "Red", index: 0 },
-      { name: "Blue", index: 1 },
-      { name: "Green", index: 2 }
-    ].forEach(({ name, index }) => {
+    rgbDimensionsInfo.forEach(({ name, index }) => {
       test(`Should have valid ${name} cumulative histogram`, () => {
         const colorValues = rgbaPixels.map(pixel => pixel[index]);
         let accumulatedCount = 0;
@@ -61,11 +59,7 @@ describe("ImageInfo", () => {
       });
     });
 
-    [
-      { name: "Red", index: 0 },
-      { name: "Blue", index: 1 },
-      { name: "Green", index: 2 }
-    ].forEach(({ name, index }) => {
+    rgbDimensionsInfo.forEach(({ name, index }) => {
       test(`Should have valid ${name} brightness`, () => {
         const colorValueSum = rgbaPixels
           .map(pixel => pixel[index])
@@ -76,11 +70,7 @@ describe("ImageInfo", () => {
       });
     });
 
-    [
-      { name: "Red", index: 0 },
-      { name: "Blue", index: 1 },
-      { name: "Green", index: 2 }
-    ].forEach(({ name, index }) => {
+    rgbDimensionsInfo.forEach(({ name, index }) => {
       test(`Should have valid ${name} contrast`, () => {
         const colorValues = rgbaPixels.map(pixel => pixel[index]);
         const sum = colorValues.reduce((sum, currValue) => sum + currValue, 0);
