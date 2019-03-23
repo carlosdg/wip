@@ -48,7 +48,7 @@ export default class ImageInfo {
 
     for (let dim = 0; dim < pixelDimensions; ++dim) {
       const dimensionRange = maxPixelValues[dim] - minPixelValues[dim] + 1;
-      const histogram = new Array(dimensionRange).fill(0);
+      const histogram = Array(dimensionRange).fill(0);
       this.histograms.push(histogram);
     }
 

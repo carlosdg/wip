@@ -35,7 +35,7 @@ describe("ImageInfo", () => {
 
     rgbDimensionsInfo.forEach(({ name, index }) => {
       test(`Should have valid ${name} histogram `, () => {
-        const expectedHistogram = new Array(256).fill(0);
+        const expectedHistogram = Array(256).fill(0);
         rgbaPixels
           .map(pixel => pixel[index])
           .forEach(colorValue => (expectedHistogram[colorValue] += 1));
@@ -47,7 +47,7 @@ describe("ImageInfo", () => {
       test(`Should have valid ${name} cumulative histogram`, () => {
         const colorValues = rgbaPixels.map(pixel => pixel[index]);
         let accumulatedCount = 0;
-        const expectedHistogram = new Array(256)
+        const expectedHistogram = Array(256)
           .fill(0)
           .map((count, currValue) => {
             if (colorValues.includes(currValue)) {
