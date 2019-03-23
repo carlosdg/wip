@@ -1,20 +1,20 @@
-@media (max-width: 699px) {
+@media (max-width: 799px) {
   .right-side-menu-container {
     width: 100%;
   }
 
   .main__wrapper {
-    width: 100%;
+    width: 0%;
   }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 800px) {
   .right-side-menu-container {
-    width: 40%;
+    width: 45%;
   }
 
   .main__wrapper {
-    width: 100%;
+    width: 55%;
   }
 }
 
@@ -24,7 +24,7 @@
   }
 
   .main__wrapper {
-    width: 100%;
+    width: 65%;
   }
 }
 
@@ -58,11 +58,6 @@
 
 .main__wrapper {
   overflow-y: auto;
-}
-
-.footer {
-  box-shadow: 0px 1px 15px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
 }
 
 .region-select {

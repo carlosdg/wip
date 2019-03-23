@@ -19,7 +19,7 @@ class HistogramEqualizationMenuItem extends React.Component {
       appStore.addImage(
         histogramEqualization(
           appStore.imagesInfos[index].imageBuffer,
-          appStore.histogramInfos[index].cHistogram
+          appStore.imagesInfos[index].histogramInfo.cHistogram
         )
       );
     }

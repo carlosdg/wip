@@ -15,7 +15,7 @@ class ShowHistogramMenuItem extends React.Component {
       return;
     }
 
-    this.props.appStore.showHistogramOfCurrentImage();
+    this.props.appStore.openRightSideMenu();
   };
 
   render() {

@@ -1,15 +1,14 @@
+import React from "react";
 import { observable, action, decorate } from "mobx";
 import { Histogram } from "wiplib";
 import { CumulativeHistogram } from "wiplib";
 import * as GridLayoutHelper from "../lib/grid/calculateLayout";
+import HistogramAndInfoComponent from "../components/HistogramAndInfoComponent";
+import ProfilesComponent from "../components/ProfilesComponent";
 
 class AppStoreSingleton {
   /** All the information relative to the images loaded */
   imagesInfos = [];
-  /** All the information relative to the histograms of each image */
-  histogramInfos = [];
-  /** All the information relative to the profiles  */
-  profilesInfos = [];
   /** Grid layouts for the elements on screen */
   gridLayouts = GridLayoutHelper.createNewSetOfLayouts();
   /** Indicates the current method for selecting a part of the image */
@@ -22,8 +21,17 @@ class AppStoreSingleton {
   pixelValue = [0, 0, 0, 255];
   /** Amount of removed images, needed for proper indexing images on the grid */
   _removedImagesCount = 0;
-  /** Amount of added profiles, needed for proper indexing profiles on the grid */
-  _profilesCount = 0;
+  /** Right side menu state */
+  rightSideMenu = {
+    open: false,
+    selectedImageInfo: {
+      name: "",
+      width: "",
+      height: ""
+    },
+    menuTitle: "",
+    menuContent: []
+  };
 
   addImage = imageBuffer => {
     const imageSection = {
@@ -36,16 +44,16 @@ class AppStoreSingleton {
     const cHistogram = new CumulativeHistogram(histogram.histogramValues);
     const imageKey = `Image ${this.imagesInfos.length +
       this._removedImagesCount}`;
-    const histogramKey = `Histogram ${this.histogramInfos.length +
-      this._removedImagesCount}`;
 
-    this.imagesInfos.push({ key: imageKey, imageBuffer, region: imageSection });
-
-    this.histogramInfos.push({
-      key: histogramKey,
-      histogram,
-      cHistogram,
-      visible: false
+    this.imagesInfos.push({
+      key: imageKey,
+      imageBuffer,
+      region: imageSection,
+      histogramInfo: {
+        histogram,
+        cHistogram
+      },
+      profilesInfos: []
     });
 
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
@@ -55,27 +63,17 @@ class AppStoreSingleton {
   };
 
   addProfile = (profileValues, firstDerivativeProfileValues) => {
-    const profileKey = `Profile ${this._profilesCount}`;
-    this._profilesCount = this._profilesCount + 1;
-
-    const firstDerivativeKey = "First derivative of " + profileKey;
-
-    this.profilesInfos.push({
-      key: profileKey,
+    this.imagesInfos[this.selectedGridItem.index].profilesInfos.push({
       profileValues,
       firstDerivativeProfileValues
     });
-
-    this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
-      this.gridLayouts,
-      [profileKey, firstDerivativeKey]
-    );
+    this.updateRightSideMenuImageInfo();
   };
 
   removeImageInfo = index => {
     const newLayouts = GridLayoutHelper.removeElementsFromLayout(
       this.gridLayouts,
-      [this.histogramInfos[index].key, this.imagesInfos[index].key]
+      [this.imagesInfos[index].key]
     );
     let newSelectedItem = { ...this.selectedGridItem };
 
@@ -88,73 +86,28 @@ class AppStoreSingleton {
       }
     }
 
-    this.histogramInfos = this.histogramInfos.filter((_, i) => i !== index);
     this.imagesInfos = this.imagesInfos.filter((_, i) => i !== index);
     this.gridLayouts = newLayouts;
     this.selectedGridItem = newSelectedItem;
     this._removedImagesCount = this._removedImagesCount + 1;
+
+    this.updateRightSideMenuImageInfo();
+    if (this.imagesInfos.length < 1) {
+      this.pixelCoords = { x: 0, y: 0 };
+      this.pixelValue = [0, 0, 0, 255];
+    }
   };
 
   updateImageRegion = (index, newRegion) =>
     (this.imagesInfos[index].region = newRegion);
 
-  /** Hides the given histogram from the view */
-  hideHistogram = index => {
-    // Set the visibility to false, remove its layout information and resets the
-    // current selected item if it was the histogram to hide
-    this.histogramInfos[index].visible = false;
-    this.gridLayouts = GridLayoutHelper.removeElementsFromLayout(
-      this.gridLayouts,
-      [this.histogramInfos[index].key]
-    );
-    if (this.isGridItemSelected("histogram", index)) {
-      this.selectedGridItem = { type: "", index: -1 };
-    }
-  };
-
-  removeProfile = index => {
-    const newLayouts = GridLayoutHelper.removeElementsFromLayout(
-      this.gridLayouts,
-      [this.profilesInfos[index].key]
-    );
-    let newSelectedItem = { ...this.selectedGridItem };
-
-    if (index <= newSelectedItem.index) {
-      newSelectedItem.index -= 1;
-      if (newSelectedItem.index < 0) {
-        newSelectedItem.type = "";
-      }
-    }
-
-    this.profilesInfos = this.profilesInfos.filter((_, i) => i !== index);
-    this.gridLayouts = newLayouts;
-    this.selectedGridItem = newSelectedItem;
-  };
-
-  showHistogramOfCurrentImage = () => {
-    const { type, index } = this.selectedGridItem;
-
-    if (type === "image") {
-      this.histogramInfos[index].visible = true;
-
-      this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
-        this.gridLayouts,
-        [this.histogramInfos[index].key]
-      );
-    }
-  };
-
   updateLayout = (_, newLayouts) =>
     requestAnimationFrame(() => (this.gridLayouts = newLayouts));
 
-  updateSelectedImageItem = index =>
-    (this.selectedGridItem = { type: "image", index });
-
-  updateSelectedHistogramItem = index =>
-    (this.selectedGridItem = { type: "histogram", index });
-
-  updateSelectedProfileItem = index =>
-    (this.selectedGridItem = { type: "line", index });
+  updateSelectedImageItem = index => {
+    this.selectedGridItem = { type: "image", index };
+    this.updateRightSideMenuImageInfo();
+  };
 
   setCurrentPixel = (coords, value) => {
     this.pixelCoords = coords;
@@ -168,30 +121,63 @@ class AppStoreSingleton {
   isGridItemSelected = (type, index) =>
     this.selectedGridItem.index === index &&
     this.selectedGridItem.type === type;
+
+  toggleRightSideMenu = () =>
+    (this.rightSideMenu.open = !this.rightSideMenu.open);
+
+  openRightSideMenu = () => (this.rightSideMenu.open = true);
+
+  updateRightSideMenuImageInfo = () => {
+    if (this.selectedGridItem.index === -1) {
+      this.rightSideMenu.selectedImageInfo = {
+        name: "",
+        width: "",
+        height: ""
+      };
+      this.rightSideMenu.menuTitle = "";
+      this.rightSideMenu.menuContent = [];
+    } else {
+      const selectedImageInfo = this.imagesInfos[this.selectedGridItem.index];
+      const { histogram, cHistogram } = selectedImageInfo.histogramInfo;
+      this.rightSideMenu.menuTitle = "Image information";
+      this.rightSideMenu.selectedImageInfo = {
+        name: selectedImageInfo.key,
+        width: selectedImageInfo.imageBuffer.width,
+        height: selectedImageInfo.imageBuffer.height
+      };
+      this.rightSideMenu.menuContent = [
+        <HistogramAndInfoComponent
+          histogram={histogram}
+          cHistogram={cHistogram}
+        />
+      ];
+      selectedImageInfo.profilesInfos.forEach(profileInfo => {
+        this.rightSideMenu.menuContent.push(
+          <ProfilesComponent info={profileInfo} />
+        );
+      });
+    }
+  };
 }
 
 decorate(AppStoreSingleton, {
   imagesInfos: observable,
-  histogramInfos: observable,
-  profilesInfos: observable,
   gridLayouts: observable,
   imageSelectionMehod: observable,
   selectedGridItem: observable,
   pixelCoords: observable,
   pixelValue: observable,
+  rightSideMenu: observable,
   addImage: action,
   addProfile: action,
-  removeImageInfo: action,
   updateImageRegion: action,
-  hideHistogram: action,
   removeProfile: action,
-  showHistogramOfCurrentImage: action,
   updateLayout: action,
   updateSelectedImageItem: action,
-  updateSelectedHistogramItem: action,
-  updateSelectedProfileItem: action,
   setCurrentPixel: action,
-  updateImageSelectionMehod: action
+  updateImageSelectionMehod: action,
+  openRightSideMenu: action,
+  toggleRightSideMenu: action
 });
 
 export default new AppStoreSingleton();

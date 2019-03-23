@@ -18,14 +18,18 @@ class ProfileComponent extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    if (state.channel && props.channel !== state.channel) {
+    if (
+      (state.channel && props.channel !== state.channel) ||
+      state.profileVisualizationData !== props.profileVisualizationData
+    ) {
       return {
-        emphasizedValue: null,
-        profileVisualizationData: props.profileValues.map(
-          (value, index) => ({x: index, y: value })
-        ),
+        emphasizedValue: state.emphasizedValue,
+        profileVisualizationData: props.profileValues.map((value, index) => ({
+          x: index,
+          y: value
+        })),
         channel: props.channel
-      }
+      };
     }
     return null;
   }
@@ -33,7 +37,7 @@ class ProfileComponent extends Component {
   componentDidMount() {
     this.setState({
       profileVisualizationData: this.props.profileValues.map(
-        (value, index) => ({x: index, y: value })
+        (value, index) => ({ x: index, y: value })
       )
     });
   }

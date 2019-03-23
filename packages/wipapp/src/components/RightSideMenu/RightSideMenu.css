@@ -1,9 +1,3 @@
-.right-side-menu-feed {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-}
-
 .right-side-menu-container {
   display: flex;
   flex-direction: column;
@@ -59,4 +53,20 @@
 
 #right-side-menu-toggle.on .three {
   transform: rotate(-45deg) translate(7px, -8px);
+}
+
+.right-side-menu-feed {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.image-info {
+  font-family: Roboto;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
