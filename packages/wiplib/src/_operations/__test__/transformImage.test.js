@@ -4,7 +4,7 @@ import Pixel from "../../Image/Pixel";
 
 describe("transformImage", () => {
   describe("createLookupTable", () => {
-    const identityCallback = value => value;
+    const identityCallback = () => value => value;
     const lookupTableInvalidSizes = [
       ["1x3", [1], [2, 3, 4]],
       ["3x1", [1, 2, 3], [4]],
@@ -67,7 +67,7 @@ describe("transformImage", () => {
     });
 
     test("Should return a new ImageBuffer", () => {
-      const identityPixelOperation = value => value;
+      const identityPixelOperation = () => value => value;
       const lookupTable = createLookupTable(
         inputImageBuffer.minPixelValues,
         inputImageBuffer.maxPixelValues,
@@ -84,7 +84,7 @@ describe("transformImage", () => {
     });
 
     test("Should return an ImageBuffer with the mapped pixels", () => {
-      const inversePixelOperation = value => 255 - value;
+      const inversePixelOperation = () => value => 255 - value;
       const lookupTable = createLookupTable(
         inputImageBuffer.minPixelValues,
         inputImageBuffer.maxPixelValues,

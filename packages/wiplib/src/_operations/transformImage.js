@@ -34,16 +34,16 @@ export function applyLookupTable(imgBuffer, lookupTables) {
  * each dimension
  * @param {number[]} maxValues An array with the max possible color value of
  * each dimension
- * @param {function(number, number, number, number): number} callback A function
- * that is called for each color value between `minValues` and `maxValues` for
- * each dimension (both ends included). It receives the current color value, the
- * minimum and maximum possible values for that color dimension and the index of
- * the current dimension
+ * @param {function(number, number, number): (function(number): number)} dimMapper
+ * A function that is called for each color dimension with the current dimension
+ * index, minimum possible value and maximum possible value. It is expected that it
+ * returns the function that will be called for each color value of the respective
+ * dimension to construct the lookup table
  * @returns {number[][]} The lookup table: for each dimension an array going
  * from the minimum value of that dimension to the maximum that represents the
  * mapping of the point operation
  */
-export function createLookupTable(minValues, maxValues, callback) {
+export function createLookupTable(minValues, maxValues, dimMapper) {
   if (minValues.length !== maxValues.length) {
     throw new Error(
       `Invalid color dimension. Minimum values size "${
@@ -56,14 +56,10 @@ export function createLookupTable(minValues, maxValues, callback) {
     const minValue = minValues[currentDim];
     const maxValue = maxValues[currentDim];
     const currentLookupTable = [];
+    const pixelMapper = dimMapper(currentDim, minValue, maxValue);
 
     for (let value = minValue; value <= maxValue; ++value) {
-      currentLookupTable[value] = callback(
-        value,
-        minValue,
-        maxValue,
-        currentDim
-      );
+      currentLookupTable[value] = pixelMapper(value);
     }
 
     return currentLookupTable;
