@@ -206,10 +206,10 @@ export default class ImageBuffer {
     this._width = width;
     this._height = height;
     this._pixels = [];
-    const transparentPixelValue = [...this.minPixelValues, 0];
+    const transparentRawRgbaPixelValue = [0, 0, 0, 0];
 
     for (let i = 0; i < this._width * this._height; ++i) {
-      const pixel = this._encodePixel(transparentPixelValue);
+      const pixel = this._encodePixel(transparentRawRgbaPixelValue);
       this._pixels.push(pixel);
     }
   }
