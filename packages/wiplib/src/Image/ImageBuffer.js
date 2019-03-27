@@ -8,64 +8,61 @@ import Pixel from "./Pixel";
  */
 export default class ImageBuffer {
   /**
-   * A convenient method to create an instance of ImageBuffer from an
-   * ImageData object
-   */
-  static fromImageData({ width, height, data }) {
-    throw new Error("UNIMPLEMENTED");
-  }
-
-  /**
-   * A semantic alternative to using the constructor with three values: the
-   * width, height of the ImageBuffer to create. And the raw RGBA array of
-   * values to create the object from
-   */
-  static from(width, height, rawRgbaArray) {
-    throw new Error("UNIMPLEMENTED");
-  }
-
-  /**
-   * A semantic alternative to using the constructor with just two values: the
-   * width and height of the blank ImageBuffer to create
-   */
-  static ofSize(width, height) {
-    throw new Error("UNIMPLEMENTED");
-  }
-
-  /**
-   * A semantic alternative to using the constructor with just one value:
-   * a ImageBuffer instance to copy
-   */
-  static copyFrom(imageBufferToCopy) {
-    throw new Error("UNIMPLEMENTED");
-  }
-
-  /**
    * Creates a instance of this class
    *
-   * @param  {...any} args List of arguments, depending on the number of
-   * arguments provided the new instance will be constructed one way or another:
+   * @param {object} args List of arguments, depending on the arguments provided
+   * the new instance will be constructed one way or another:
    * 1. Copy constructor. The expected argument is the ImageBuffer to copy from
    * 2. Constructor for a blank image buffer. The expected arguments are the
    *    width and height of the new image buffer to create and it will be
    *    populated with transparent pixels
    * 3. Constructor from a raw RGBA array of values. The expected arguments are
    *    the width, height and the RGBA array
+   * @param {number} args.width This buffer's width
+   * @param {number} args.height This buffer's height
+   * @param {Uint8ClampedArray} args.data The raw RGBA array
+   * @param {ImageBuffer} args.cloneSource The image buffer to create this one
+   * from
+   * @throws {Error} If the list of arguments is invalid (ex: provided width but
+   * no height). Or if there is an error (ex: invalid width and height with
+   * respect to the raw RGBA array size)
    */
-  constructor(...args) {
-    switch (args.length) {
-      case 1:
-        this._constructorForCopy(...args);
-        break;
-      case 2:
-        this._constructorForBlank(...args);
-        break;
-      case 3:
-        this._constructorForNewFromRawValues(...args);
-        break;
-      default:
-        throw new Error("Invalid number of arguments");
+  constructor({
+    width = null,
+    height = null,
+    data = null,
+    cloneSource = null
+  } = {}) {
+    if (cloneSource !== null) {
+      this._constructorForCopy(cloneSource);
+    } else if (data !== null && width !== null && height !== null) {
+      this._constructorForNewFromRawValues(width, height, data);
+    } else if (width !== null && height !== null) {
+      this._constructorForBlank(width, height);
+    } else {
+      throw new Error(`Invalid list of arguments:
+      width = ${width}
+      height = ${height}
+      data = ${data}
+      cloneSource = ${cloneSource}`);
     }
+  }
+
+  /**
+   * Creates a new instance of this image buffer.
+   *
+   * @see {@link ImageBuffer#constructor}
+   */
+  new(...args) {
+    return new this.constructor(...args);
+  }
+
+  /**
+   * Returns a copy of this image buffer. Alternative to using
+   * `buffer.new(cloneSource: buffer)`
+   */
+  clone() {
+    return this.new({ cloneSource: this });
   }
 
   /**
@@ -81,13 +78,6 @@ export default class ImageBuffer {
 
     const rgbaRawValues = new Uint8ClampedArray(rgbaArray);
     return new ImageData(rgbaRawValues, this.width, this.height);
-  }
-
-  /**
-   * Returns a copy of this image buffer
-   */
-  clone() {
-    throw new Error("UNIMPLEMENTED");
   }
 
   /**
@@ -111,21 +101,21 @@ export default class ImageBuffer {
   }
 
   /**
-   * Returns the pixel at the given row and column position
+   * Returns the pixel at the given column and row position
    */
-  getPixel(row, col) {
-    const arrayPos = this._mapMatrixPositionToArray(row, col);
+  getPixel(i, j) {
+    const arrayPos = this._mapMatrixPositionToArray(i, j);
     return this._pixels[arrayPos];
   }
 
   /**
-   * Sets the given pixel to the position specified by the given row and column
+   * Sets the given pixel to the position specified by the given column and row
    *
    * @returns {ImageBuffer} This image buffer. This is to provide a fluid
    * interface
    */
-  setPixel(row, col, pixel) {
-    const arrayPos = this._mapMatrixPositionToArray(row, col);
+  setPixel(i, j, pixel) {
+    const arrayPos = this._mapMatrixPositionToArray(i, j);
     this._pixels[arrayPos] = pixel;
     return this;
   }

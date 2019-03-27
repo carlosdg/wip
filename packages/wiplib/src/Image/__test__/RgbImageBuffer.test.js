@@ -10,7 +10,7 @@ describe("RgbImageBuffer", () => {
     beforeEach(() => {
       width = 2;
       height = 1;
-      uut = RgbImageBuffer.ofSize(width, height);
+      uut = new RgbImageBuffer({ width, height });
     });
 
     test("Should have requested width", () => {
@@ -47,7 +47,7 @@ describe("RgbImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      uut = RgbImageBuffer.from(width, height, rawRgbaPixels);
+      uut = new RgbImageBuffer({ width, height, data: rawRgbaPixels });
     });
 
     test("Should have requested width", () => {
@@ -74,7 +74,7 @@ describe("RgbImageBuffer", () => {
     let width;
     let height;
     let rgbaPixels;
-    let originalBuffer;
+    let cloneSource;
     let uut;
 
     beforeEach(() => {
@@ -87,23 +87,23 @@ describe("RgbImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      originalBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
-      uut = RgbImageBuffer.copyFrom(originalBuffer);
+      cloneSource = new RgbImageBuffer({ width, height, data: rawRgbaPixels });
+      uut = new RgbImageBuffer({ cloneSource });
     });
 
     test("Should have same width", () => {
-      expect(uut.width).toEqual(originalBuffer.width);
+      expect(uut.width).toEqual(cloneSource.width);
     });
 
     test("Should have same height", () => {
-      expect(uut.height).toEqual(originalBuffer.height);
+      expect(uut.height).toEqual(cloneSource.height);
     });
 
     test("Should have all same pixel values", () => {
       for (let i = 0; i < uut.width; ++i) {
         for (let j = 0; j < uut.height; ++j) {
           const pixel = uut.getPixel(i, j);
-          const originalPixel = originalBuffer.getPixel(i, j);
+          const originalPixel = cloneSource.getPixel(i, j);
           expect(pixel.values).toEqual(originalPixel.values);
           expect(pixel.transparency).toEqual(originalPixel.transparency);
         }
@@ -112,7 +112,7 @@ describe("RgbImageBuffer", () => {
 
     test("Should not be affected by original buffer setting a pixel", () => {
       const newOriginalFirstPixel = new Pixel([8, 9, 10], 0.5);
-      originalBuffer.setPixel(0, 0, newOriginalFirstPixel);
+      cloneSource.setPixel(0, 0, newOriginalFirstPixel);
       const cloneFirstPixel = uut.getPixel(0, 0);
       expect(cloneFirstPixel.values).not.toEqual(newOriginalFirstPixel.values);
       expect(cloneFirstPixel.values).toEqual(rgbaPixels[0].slice(0, -1));
@@ -135,7 +135,7 @@ describe("RgbImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      uut = RgbImageBuffer.from(width, height, rawRgbaPixels);
+      uut = new RgbImageBuffer({ width, height, data: rawRgbaPixels });
     });
 
     test("`forEachPixel` should iterate over all pixels", () => {
@@ -180,7 +180,11 @@ describe("RgbImageBuffer", () => {
           [123, 5, 200, 1]
         ];
         rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-        const imageBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
+        const imageBuffer = new RgbImageBuffer({
+          width,
+          height,
+          data: rawRgbaPixels
+        });
         uut = imageBuffer.toImageData();
       });
 
@@ -214,7 +218,11 @@ describe("RgbImageBuffer", () => {
           [123, 5, 200, 1]
         ];
         rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-        const imageBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
+        const imageBuffer = new RgbImageBuffer({
+          width,
+          height,
+          data: rawRgbaPixels
+        });
         imageBuffer.forEachPixel(pixel => pixel.eachDim(value => 255 - value));
         uut = imageBuffer.toImageData();
       });

@@ -6,34 +6,6 @@ import ImageBuffer from "./ImageBuffer";
  */
 export default class GrayscaleImageBuffer extends ImageBuffer {
   /**
-   * @see {@link ImageBuffer#fromImageData}
-   */
-  static fromImageData({ width, height, data }) {
-    return new GrayscaleImageBuffer(width, height, data);
-  }
-
-  /**
-   * @see {@link ImageBuffer#from}
-   */
-  static from(width, height, rawRgbaArray) {
-    return new GrayscaleImageBuffer(width, height, rawRgbaArray);
-  }
-
-  /**
-   * @see {@link ImageBuffer#ofSize}
-   */
-  static ofSize(width, height) {
-    return new GrayscaleImageBuffer(width, height);
-  }
-
-  /**
-   * @see {@link ImageBuffer#copyFrom}
-   */
-  static copyFrom(imageBufferToCopy) {
-    return new GrayscaleImageBuffer(imageBufferToCopy);
-  }
-
-  /**
    * @see {@link ImageBuffer#_encodePixel}
    */
   _encodePixel([r, g, b, transparency]) {
@@ -47,13 +19,6 @@ export default class GrayscaleImageBuffer extends ImageBuffer {
   _decodePixel(pixel) {
     const grayValue = pixel.values[0];
     return [grayValue, grayValue, grayValue, pixel.transparency];
-  }
-
-  /**
-   * @see {@link ImageBuffer#clone}
-   */
-  clone() {
-    return GrayscaleImageBuffer.copyFrom(this);
   }
 
   get pixelDimensions() {

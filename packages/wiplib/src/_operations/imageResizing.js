@@ -4,8 +4,7 @@ export function imageResizing(
   imgBuffer,
   widthFactor,
   heightFactor,
-  interpolationMethod,
-  imgBufferFactory
+  interpolationMethod
 ) {
   const oldWidth = imgBuffer.width;
   const oldHeight = imgBuffer.height;
@@ -31,9 +30,11 @@ export function imageResizing(
     y: yCoord / heightFactor
   });
 
-  return imgBufferFactory(newWidth, newHeight).forEachPixel((pixel, j, i) => {
-    const { x, y } = inverseTransformation(i, j);
-    const newValues = interpolationMethod(x, y, imgBuffer).map(Math.round);
-    pixel.setValues(newValues);
-  });
+  return imgBuffer
+    .new({ width: newWidth, height: newHeight })
+    .forEachPixel((pixel, j, i) => {
+      const { x, y } = inverseTransformation(i, j);
+      const newValues = interpolationMethod(x, y, imgBuffer).map(Math.round);
+      pixel.setValues(newValues);
+    });
 }

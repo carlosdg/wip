@@ -63,7 +63,7 @@ describe("transformImage", () => {
         [0, 0, 0, 1]
       ];
       rawPixels = new Uint8ClampedArray(pixels.flatMap(pixel => pixel));
-      inputImageBuffer = RgbImageBuffer.from(width, height, rawPixels);
+      inputImageBuffer = new RgbImageBuffer({ width, height, data: rawPixels });
     });
 
     test("Should return a new ImageBuffer", () => {

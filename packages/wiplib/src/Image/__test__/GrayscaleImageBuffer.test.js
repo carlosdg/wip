@@ -14,7 +14,7 @@ describe("GrayscaleImageBuffer", () => {
     beforeEach(() => {
       width = 2;
       height = 1;
-      uut = GrayscaleImageBuffer.ofSize(width, height);
+      uut = new GrayscaleImageBuffer({ width, height });
     });
 
     test("Should have requested width", () => {
@@ -51,7 +51,7 @@ describe("GrayscaleImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      uut = GrayscaleImageBuffer.from(width, height, rawRgbaPixels);
+      uut = new GrayscaleImageBuffer({ width, height, data: rawRgbaPixels });
     });
 
     test("Should have requested width", () => {
@@ -93,8 +93,12 @@ describe("GrayscaleImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      srcBuffer = GrayscaleImageBuffer.from(width, height, rawRgbaPixels);
-      uut = GrayscaleImageBuffer.copyFrom(srcBuffer);
+      srcBuffer = new GrayscaleImageBuffer({
+        width,
+        height,
+        data: rawRgbaPixels
+      });
+      uut = srcBuffer.clone();
     });
 
     test("Should have same width", () => {
@@ -143,7 +147,7 @@ describe("GrayscaleImageBuffer", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      uut = GrayscaleImageBuffer.from(width, height, rawRgbaPixels);
+      uut = new GrayscaleImageBuffer({ width, height, data: rawRgbaPixels });
     });
 
     test("`forEachPixel` should iterate over all pixels", () => {
@@ -191,11 +195,11 @@ describe("GrayscaleImageBuffer", () => {
           [123, 5, 200, 1]
         ];
         rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-        const imageBuffer = GrayscaleImageBuffer.from(
+        const imageBuffer = new GrayscaleImageBuffer({
           width,
           height,
-          rawRgbaPixels
-        );
+          data: rawRgbaPixels
+        });
         uut = imageBuffer.toImageData();
       });
 
@@ -236,11 +240,11 @@ describe("GrayscaleImageBuffer", () => {
           [123, 5, 200, 1]
         ];
         rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-        const imageBuffer = GrayscaleImageBuffer.from(
+        const imageBuffer = new GrayscaleImageBuffer({
           width,
           height,
-          rawRgbaPixels
-        );
+          data: rawRgbaPixels
+        });
         imageBuffer.forEachPixel(pixel => pixel.eachDim(value => 255 - value));
         uut = imageBuffer.toImageData();
       });

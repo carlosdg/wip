@@ -25,7 +25,7 @@ describe("ImageInfo", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      imageBuffer = RgbImageBuffer.from(width, height, rawRgbaPixels);
+      imageBuffer = new RgbImageBuffer({ width, height, data: rawRgbaPixels });
       uut = new ImageInfo(imageBuffer);
     });
 

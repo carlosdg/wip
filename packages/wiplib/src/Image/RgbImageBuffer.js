@@ -6,34 +6,6 @@ import ImageBuffer from "./ImageBuffer";
  */
 export default class RgbImageBuffer extends ImageBuffer {
   /**
-   * @see {@link ImageBuffer#fromImageData}
-   */
-  static fromImageData({ width, height, data }) {
-    return new RgbImageBuffer(width, height, data);
-  }
-
-  /**
-   * @see {@link ImageBuffer#from}
-   */
-  static from(width, height, rawRgbaArray) {
-    return new RgbImageBuffer(width, height, rawRgbaArray);
-  }
-
-  /**
-   * @see {@link ImageBuffer#ofSize}
-   */
-  static ofSize(width, height) {
-    return new RgbImageBuffer(width, height);
-  }
-
-  /**
-   * @see {@link ImageBuffer#copyFrom}
-   */
-  static copyFrom(rgbImageBufferToCopy) {
-    return new RgbImageBuffer(rgbImageBufferToCopy);
-  }
-
-  /**
    * @see {@link ImageBuffer#_encodePixel}
    */
   _encodePixel([r, g, b, transparency]) {
@@ -45,13 +17,6 @@ export default class RgbImageBuffer extends ImageBuffer {
    */
   _decodePixel(pixel) {
     return [...pixel.values, pixel.transparency];
-  }
-
-  /**
-   * @see {@link ImageBuffer#clone}
-   */
-  clone() {
-    return RgbImageBuffer.copyFrom(this);
   }
 
   get pixelDimensions() {
