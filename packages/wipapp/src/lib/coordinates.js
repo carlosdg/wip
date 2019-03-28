@@ -47,11 +47,20 @@ export function mapToRelativeCoordinates(coords, parentElementBoundingBox) {
 
 /** Returns an object describing the rectangle enclosed by the 2 given
  * coordinates */
-export function calculateRect(coords1, coords2) {
+export function calculateRect(coords1, coords2, callback) {
   const left = Math.min(coords1.x, coords2.x);
   const right = Math.max(coords1.x, coords2.x);
   const top = Math.min(coords1.y, coords2.y);
   const bottom = Math.max(coords1.y, coords2.y);
 
+  if(callback && typeof callback === 'function')
+    return callback({ left, right, top, bottom });
+  
   return { left, right, top, bottom };
+}
+
+/** Returns true if point is inside rect, false in another case */
+export function pointInsideRect(rect, point) {
+  return  point.y <= rect.bottom && point.y >= rect.top &&
+          point.x <= rect.right && point.x >= rect.left;
 }

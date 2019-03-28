@@ -8,10 +8,11 @@ export function brightnessAndContrastAdjustment(
   newContrasts
 ) {
   const adjustDim = (dim, min, max) => {
-    const A = newContrasts[dim] / oldContrasts[dim];
-    const B = newBrightnesses[dim] - A * oldBrightnesses[dim];
+    const slope = newContrasts[dim] / oldContrasts[dim];
+    const yIntercept = newBrightnesses[dim] - slope * oldBrightnesses[dim];
+
     return value => {
-      const newValue = Math.round(A * value + B);
+      const newValue = Math.round(slope * value + yIntercept);
       const clippedValue = Math.min(Math.max(newValue, min), max);
       return clippedValue;
     };

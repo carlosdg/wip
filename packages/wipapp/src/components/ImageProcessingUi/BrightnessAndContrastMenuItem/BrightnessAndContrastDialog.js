@@ -43,14 +43,14 @@ class BrightnessAndContrastDialog extends React.Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { histogramInfos, selectedGridItem } = props.appStore;
+    const { imagesInfos, selectedGridItem } = props.appStore;
     let oldBrightness = state.brightness;
     let oldContrast = state.contrast;
 
     if (selectedGridItem.index >= 0) {
-      const { histogramInfo } = histogramInfos[
+      const { histogramInfo } = imagesInfos[
         selectedGridItem.index
-      ].histogram;
+      ].histogramInfo.histogram;
 
       oldBrightness = histogramInfo.brightness;
       oldContrast = histogramInfo.contrast;
@@ -106,8 +106,10 @@ class BrightnessAndContrastDialog extends React.Component {
     appStore.addImage(
       brightnessAndContrastAdjustment(
         appStore.imagesInfos[index].imageBuffer,
-        appStore.histogramInfos[index].histogram.histogramInfo.brightness,
-        appStore.histogramInfos[index].histogram.histogramInfo.contrast,
+        appStore.imagesInfos[index].histogramInfo.histogram.histogramInfo
+          .brightness,
+        appStore.imagesInfos[index].histogramInfo.histogram.histogramInfo
+          .contrast,
         brightness,
         contrast
       )

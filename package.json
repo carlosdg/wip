@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/carlosdg/wip#readme",
   "devDependencies": {
-    "lerna": "^3.13.0"
+    "lerna": "^3.13.1"
   }
 }

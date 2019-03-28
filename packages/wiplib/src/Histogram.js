@@ -24,12 +24,11 @@ export default class Histogram {
    */
   setImagePixels(imagePixels) {
     // Boolean to check if the image is in grayscale
-    let grayscaleImage = true;
     this.histogramValues = {
-      "Red": new Array(256).fill(0),
-      "Green": new Array(256).fill(0),
-      "Blue": new Array(256).fill(0),
-      "Gray": new Array(256).fill(0)
+      Red: new Array(256).fill(0),
+      Green: new Array(256).fill(0),
+      Blue: new Array(256).fill(0),
+      Gray: new Array(256).fill(0)
     };
 
     // Histogram values update
@@ -39,23 +38,16 @@ export default class Histogram {
         continue;
       }
 
-
       this.histogramValues["Red"][imagePixels[i]]++;
       this.histogramValues["Green"][imagePixels[i + 1]]++;
       this.histogramValues["Blue"][imagePixels[i + 2]]++;
-      this.histogramValues["Gray"][Math.round(
-        imagePixels[i] * 0.222 + 
-        imagePixels[i + 1] * 0.707 + 
-        imagePixels[i + 2] * 0.071
-      )]++;
-
-      // Grayscale image comprobation
-      if (
-        grayscaleImage && 
-        (imagePixels[i] !== imagePixels[i + 1] || imagePixels[i] !== imagePixels[i + 2])
-      ) {
-        grayscaleImage = false;
-      }
+      this.histogramValues["Gray"][
+        Math.round(
+          imagePixels[i] * 0.222 +
+            imagePixels[i + 1] * 0.707 +
+            imagePixels[i + 2] * 0.071
+        )
+      ]++;
     }
 
     let count = this.histogramValues["Red"].reduce(
@@ -63,22 +55,16 @@ export default class Histogram {
       0
     );
 
-    // If the image is in grayscale histogramValues object is updated
-    if (grayscaleImage) {
-      delete this.histogramValues["Red"];
-      delete this.histogramValues["Blue"];
-      delete this.histogramValues["Green"];
-    }
-
     // Object which contains histogram and image information
     this.histogramInfo = {};
 
     // Image brightness
-    this.histogramInfo.brightness = this.histogramValues["Gray"].reduce(
-      (previousValue, currentElement, index) =>
-        previousValue + currentElement * index,
-      0
-    ) / count;
+    this.histogramInfo.brightness =
+      this.histogramValues["Gray"].reduce(
+        (previousValue, currentElement, index) =>
+          previousValue + currentElement * index,
+        0
+      ) / count;
 
     this.histogramInfo.contrast = Math.sqrt(
       this.histogramValues["Gray"].reduce(
@@ -90,10 +76,9 @@ export default class Histogram {
     );
 
     // Information for each channel
-    Object.keys(this.histogramValues).forEach( key => {
-
+    Object.keys(this.histogramValues).forEach(key => {
       this.histogramInfo[key] = {};
-      
+
       this.histogramInfo[key].count = count;
 
       /*
@@ -115,7 +100,7 @@ export default class Histogram {
         ) / this.histogramInfo[key].count
       );
       */
-          
+
       // Minimum value
       for (let i = 0; i < this.histogramValues[key].length; ++i) {
         if (this.histogramValues[key][i] !== 0) {
@@ -123,7 +108,7 @@ export default class Histogram {
           break;
         }
       }
-      
+
       // Maximum value
       for (let i = this.histogramValues[key].length - 1; i >= 0; --i) {
         if (this.histogramValues[key][i] !== 0) {
@@ -131,7 +116,7 @@ export default class Histogram {
           break;
         }
       }
-      
+
       // Mode
       let maxIndex = 0;
       let maxCount = 0;
@@ -141,22 +126,22 @@ export default class Histogram {
           maxIndex = value;
         }
       });
-  
+
       this.histogramInfo[key].mode = {};
       this.histogramInfo[key].mode.value = maxIndex;
       this.histogramInfo[key].mode.count = maxCount;
-      
+
       // Entropy
       let entropy = 0;
       let probability;
       for (let i = 0; i < 256; ++i) {
-        probability = this.histogramValues[key][i] / this.histogramInfo[key].count;
+        probability =
+          this.histogramValues[key][i] / this.histogramInfo[key].count;
         if (probability > 0) {
           entropy += probability * Math.log2(probability);
         }
       }
-      if (entropy !== 0)
-        entropy *= -1;
+      if (entropy !== 0) entropy *= -1;
       this.histogramInfo[key].entropy = entropy.toFixed(3);
     });
   }
