@@ -90,7 +90,10 @@ class RighSideMenu extends React.Component {
           {this.props.appStore.rightSideMenu.menuContent.map(
             (menuItem, index) => {
               return (
-                <div key={index} style={{ height: "500px", margin: "10px" }}>
+                <div
+                  key={index + "" + this.props.appStore.rightSideMenu.open}
+                  style={{ height: "500px", margin: "10px" }}
+                >
                   {menuItem}
                 </div>
               );
