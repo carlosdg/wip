@@ -4,6 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import CropSquareIcon from "@material-ui/icons/CropSquare";
 import EditIcon from "@material-ui/icons/Edit";
+import Tooltip from "@material-ui/core/Tooltip";
 import "./SelectionToolbar.css";
 
 class SelectionToolbar extends React.Component {
@@ -27,8 +28,12 @@ class SelectionToolbar extends React.Component {
           }
           onClick={() => updateImageSelectionMehod("selection")}
         >
-          <CropSquareIcon style={{ marginRight: "0.5rem" }} />
-          Select
+          <Tooltip
+            title="Select a portion of an image"
+            aria-label="Select a portion of an image"
+          >
+            <CropSquareIcon />
+          </Tooltip>
         </Button>
         <Button
           style={
@@ -42,8 +47,12 @@ class SelectionToolbar extends React.Component {
           }
           onClick={() => updateImageSelectionMehod("line")}
         >
-          <EditIcon style={{ marginRight: "0.5rem" }} />
-          Line
+          <Tooltip
+            title="Select a line in the image to create a profile"
+            aria-label="Select a line in the image to create a profile"
+          >
+            <EditIcon />
+          </Tooltip>
         </Button>
       </Toolbar>
     );

@@ -1,4 +1,4 @@
-@media (min-width: 800px) {
+/* @media (min-width: 800px) {
   .selection-toolbar {
     position: fixed !important;
     flex-direction: column !important;
@@ -8,7 +8,7 @@
     z-index: 1;
     padding: 10px 30px;
   }
-}
+} */
 
 .selection-toolbar {
   background: white;
