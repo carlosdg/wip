@@ -82,6 +82,7 @@ class App extends Component {
   getGridComponent() {
     return (
       <InteractiveGrid.Grid
+        key={this.props.appStore.rightSideMenu.open}
         layouts={this.props.appStore.gridLayouts}
         onLayoutChange={this.props.appStore.updateLayout}
       >
