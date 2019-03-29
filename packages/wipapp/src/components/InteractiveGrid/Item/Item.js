@@ -3,8 +3,12 @@ import PropTypes from "prop-types";
 import DeleteButton from "../../DeleteButton";
 import "./Item.css";
 
-/** Helper method to prevent the default behaviour and stop the propagation of
- * an event */
+/**
+ * Helper method to prevent the default behaviour and stop the propagation of an
+ * event. This is to avoid the point events propagation down to the rest of the
+ * item and thus just apply the event listener to the element that received the
+ * pointer event
+ */
 const stopEvent = event => {
   event.preventDefault();
   event.stopPropagation();
@@ -51,6 +55,7 @@ export default class Item extends React.Component {
    */
   componentDidMount() {
     document.addEventListener("mouseup", this.onDragHandleMouseUp);
+    document.addEventListener("touchend", this.onDragHandleMouseUp);
   }
 
   /**
@@ -59,6 +64,7 @@ export default class Item extends React.Component {
    */
   componentWillUnmount() {
     document.removeEventListener("mouseup", this.onDragHandleMouseUp);
+    document.removeEventListener("touchend", this.onDragHandleMouseUp);
   }
 
   /** Update the state to allow the item be dragged only when the user is
@@ -80,7 +86,17 @@ export default class Item extends React.Component {
   onDragStart = event => {
     if (this.state.isDraggable) {
       stopEvent(event);
+      // Why onMouseDown? Because it is what the grid module give us...
       this.props.onMouseDown && this.props.onMouseDown(event);
+    }
+  };
+
+  /** Listener for the drag start event, but only allow the drag behaviour if
+   * the state says so */
+  onTouchMove = event => {
+    if (this.state.isDraggable) {
+      stopEvent(event);
+      this.props.onTouchStart && this.props.onTouchStart(event);
     }
   };
 
@@ -89,6 +105,13 @@ export default class Item extends React.Component {
     if (this.state.isDraggable) {
       stopEvent(event);
       this.props.onMouseUp && this.props.onMouseUp(event);
+    }
+  };
+
+  onTouchEnd = event => {
+    if (this.state.isDraggable) {
+      stopEvent(event);
+      this.props.onTouchEnd && this.props.onTouchEnd(event);
     }
   };
 
@@ -117,11 +140,17 @@ export default class Item extends React.Component {
         style={style}
         draggable={this.state.isDraggable}
         onDragStart={this.onDragStart}
-        onMouseUp={this.onDragEnd} // OnMouseUp instead of DragEnd because DragStart prevents default
+        onTouchMove={this.onTouchMove}
+        onMouseUp={this.onDragEnd}
+        onTouchEnd={this.onTouchEnd}
         onFocus={onSelect ? this.onSelect : null}
         tabIndex="0"
       >
-        <div onMouseDown={this.onDragHandleMouseDown} className="Item__toolbar">
+        <div
+          onMouseDown={this.onDragHandleMouseDown}
+          onTouchStart={this.onDragHandleMouseDown}
+          className="Item__toolbar"
+        >
           <DeleteButton
             onMouseDown={stopEvent}
             onDelete={onDelete ? this.onDelete : null}
