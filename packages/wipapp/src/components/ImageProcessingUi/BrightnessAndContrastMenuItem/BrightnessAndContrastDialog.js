@@ -48,12 +48,10 @@ class BrightnessAndContrastDialog extends React.Component {
     let oldContrast = state.contrast;
 
     if (selectedGridItem.index >= 0) {
-      const { histogramInfo } = imagesInfos[
-        selectedGridItem.index
-      ].histogramInfo.histogram;
+      const { extraInfo } = imagesInfos[selectedGridItem.index];
 
-      oldBrightness = histogramInfo.brightness;
-      oldContrast = histogramInfo.contrast;
+      oldBrightness = extraInfo.brightnesses[0];
+      oldContrast = extraInfo.contrasts[0];
     }
 
     if (!state.formChanged) {
@@ -106,12 +104,10 @@ class BrightnessAndContrastDialog extends React.Component {
     appStore.addImage(
       brightnessAndContrastAdjustment(
         appStore.imagesInfos[index].imageBuffer,
-        appStore.imagesInfos[index].histogramInfo.histogram.histogramInfo
-          .brightness,
-        appStore.imagesInfos[index].histogramInfo.histogram.histogramInfo
-          .contrast,
-        brightness,
-        contrast
+        appStore.imagesInfos[index].extraInfo.brightnesses,
+        appStore.imagesInfos[index].extraInfo.contrasts,
+        [brightness, brightness, brightness],
+        [contrast, contrast, contrast]
       )
     );
 

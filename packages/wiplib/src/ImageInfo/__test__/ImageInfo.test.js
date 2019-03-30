@@ -1,5 +1,5 @@
-import RgbImageBuffer from "../RgbImageBuffer";
-import ImageInfo from "../ImageInfo";
+import RgbaImageBuffer from "../../RgbaImageBuffer";
+import ImageInfo from "../index";
 
 const rgbDimensionsInfo = [
   { name: "Red", index: 0 },
@@ -8,7 +8,7 @@ const rgbDimensionsInfo = [
 ];
 
 describe("ImageInfo", () => {
-  describe("For RgbImageBuffer with transparent pixels", () => {
+  describe("For RgbaImageBuffer with transparent pixels", () => {
     let width;
     let height;
     let rgbaPixels;
@@ -25,7 +25,7 @@ describe("ImageInfo", () => {
         [123, 5, 200, 1]
       ];
       const rawRgbaPixels = new Uint8ClampedArray(rgbaPixels.flatMap(a => a));
-      imageBuffer = new RgbImageBuffer({ width, height, data: rawRgbaPixels });
+      imageBuffer = new RgbaImageBuffer(width, height, rawRgbaPixels);
       uut = new ImageInfo(imageBuffer);
     });
 

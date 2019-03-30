@@ -1,4 +1,4 @@
-import { transformImage } from "./transformImage";
+import { createLookupTable, applyLookupTable } from "./transformImage";
 
 /**
  * Applies histogram equalization operation to the given image.
@@ -7,21 +7,15 @@ import { transformImage } from "./transformImage";
  * @param {CumulativeHistogram} imageCHistogram Cumulative histogram of the image
  * @returns {RgbaImageBuffer} Transformed image
  */
-export const histogramEqualization = (
-  imgBuffer,
-  imageCHistogram
-) => {
-  
-  let equalizationLevel = imageCHistogram.count / 256;
-  let lookupTable = [];
-  for (let i = 0; i < 256; ++i) {
-    lookupTable.push(
-      Math.max(
-        0, 
-        Math.round(imageCHistogram.counts["Gray"][i] / equalizationLevel) - 1
-      )
-    );
-  }
+export function histogramEqualization(imgBuffer, imageInfo) {
+  const lookupTable = createLookupTable(dim => {
+    const equalizationLevel = imageInfo.pixelCount / 256;
+    return value => {
+      const accumulatedValue = imageInfo.cumulativeHistograms[dim][value];
+      const equalizedValue = Math.round(accumulatedValue / equalizationLevel);
+      return Math.max(0, equalizedValue - 1);
+    };
+  });
 
-  return transformImage(imgBuffer, lookupTable);
+  return applyLookupTable(imgBuffer, lookupTable);
 }

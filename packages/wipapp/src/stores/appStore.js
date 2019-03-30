@@ -1,7 +1,6 @@
 import React from "react";
 import { observable, action, decorate } from "mobx";
-import { Histogram } from "wiplib";
-import { CumulativeHistogram } from "wiplib";
+import { ImageInfo } from "wiplib";
 import * as GridLayoutHelper from "../lib/grid/calculateLayout";
 import HistogramAndInfoComponent from "../components/HistogramAndInfoComponent";
 import ProfilesComponent from "../components/ProfilesComponent";
@@ -34,31 +33,26 @@ class AppStoreSingleton {
   };
 
   addImage = imageBuffer => {
-    const imageSection = {
+    const region = {
       top: 0,
       left: 0,
       width: imageBuffer.width,
       height: imageBuffer.height
     };
-    const histogram = new Histogram(imageBuffer);
-    const cHistogram = new CumulativeHistogram(histogram.histogramValues);
-    const imageKey = `Image ${this.imagesInfos.length +
-      this._removedImagesCount}`;
+    const extraInfo = new ImageInfo(imageBuffer);
+    const key = `Image ${this.imagesInfos.length + this._removedImagesCount}`;
 
     this.imagesInfos.push({
-      key: imageKey,
+      key,
       imageBuffer,
-      region: imageSection,
-      histogramInfo: {
-        histogram,
-        cHistogram
-      },
+      region,
+      extraInfo,
       profilesInfos: []
     });
 
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
       this.gridLayouts,
-      [imageKey]
+      [key]
     );
   };
 
@@ -138,7 +132,7 @@ class AppStoreSingleton {
       this.rightSideMenu.menuContent = [];
     } else {
       const selectedImageInfo = this.imagesInfos[this.selectedGridItem.index];
-      const { histogram, cHistogram } = selectedImageInfo.histogramInfo;
+      const { extraInfo } = selectedImageInfo;
       this.rightSideMenu.menuTitle = "Image information";
       this.rightSideMenu.selectedImageInfo = {
         name: selectedImageInfo.key,
@@ -146,10 +140,7 @@ class AppStoreSingleton {
         height: selectedImageInfo.imageBuffer.height
       };
       this.rightSideMenu.menuContent = [
-        <HistogramAndInfoComponent
-          histogram={histogram}
-          cHistogram={cHistogram}
-        />
+        <HistogramAndInfoComponent data={extraInfo} />
       ];
       selectedImageInfo.profilesInfos.forEach(profileInfo => {
         this.rightSideMenu.menuContent.push(

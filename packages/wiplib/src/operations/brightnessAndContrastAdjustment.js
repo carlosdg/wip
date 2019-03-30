@@ -1,31 +1,32 @@
-import { transformImage } from "./transformImage";
+import { createLookupTable, applyLookupTable } from "./transformImage";
 
 /**
  * Changes the contrast and the brightness of the given image
  *
  * @param {RgbaImageBuffer} imgBuffer Image to transform
- * @param {Number} oldBrightness Previous brightness of the image
- * @param {Number} oldContrast Previous contrast of the image
- * @param {Number} newBrightness New brightness of the image
- * @param {Number} newContrast New contrast of the image
+ * @param {number[]} oldBrightnesses Previous brightnesses of the image
+ * @param {number[]} oldContrasts Previous contrasts of the image
+ * @param {number[]} newBrightnesses New brightnesses of the image
+ * @param {number[]} newContrasts New contrasts of the image
  * @returns {RgbaImageBuffer} Transformed image
  */
-export const brightnessAndContrastAdjustment = (
+export function brightnessAndContrastAdjustment(
   imgBuffer,
-  oldBrightness,
-  oldContrast,
-  newBrightness,
-  newContrast
-) => {
-  // TODO check parameters
-  const A = newContrast / oldContrast;
-  const B = newBrightness - A * oldBrightness; 
-  let lookupTable = [];
+  oldBrightnesses,
+  oldContrasts,
+  newBrightnesses,
+  newContrasts
+) {
+  const lookupTable = createLookupTable(dim => {
+    const slope = newContrasts[dim] / oldContrasts[dim];
+    const yIntercept = newBrightnesses[dim] - slope * oldBrightnesses[dim];
 
-  for (let i = 0; i < 256; ++i) {
-    let newValue = Math.round(A * i + B);
-    lookupTable.push(Math.min(Math.max(newValue, 0), 255));
-  }
+    return value => {
+      const newValue = Math.round(slope * value + yIntercept);
+      const clippedValue = Math.min(Math.max(newValue, 0), 255);
+      return clippedValue;
+    };
+  });
 
-  return transformImage(imgBuffer, lookupTable);
+  return applyLookupTable(imgBuffer, lookupTable);
 }

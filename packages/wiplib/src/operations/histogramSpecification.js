@@ -1,4 +1,4 @@
-import { transformImage } from "./transformImage";
+import { applyLookupTable, createLookupTable } from "./transformImage";
 
 /**
  * Applies histogram specification operation to the given image.
@@ -10,33 +10,25 @@ import { transformImage } from "./transformImage";
  * @param {CumulativeHistogram} targetImageCHistogram Cumulative histogram of target image
  * @returns {RgbaImageBuffer} Transformed image
  */
-export const histogramSpecification = (
-  imgBuffer,
-  originImageCHistogram,
-  targetImageCHistogram
-) => {
+export function histogramSpecification(imgBuffer, srcImgInfo, targetImgInfo) {
+  // Normalized the cumulative histograms so we can work with images of
+  // different sizes
+  const srcCHistos = srcImgInfo.cumulativeHistograms.map(cHisto =>
+    cHisto.map(count => count / srcImgInfo.pixelCount)
+  );
+  const targetCHistos = targetImgInfo.cumulativeHistograms.map(cHisto =>
+    cHisto.map(count => count / targetImgInfo.pixelCount)
+  );
 
-  let normalizedOriginImageCHistogram =
-    originImageCHistogram.counts["Gray"].map( value =>
-      value / originImageCHistogram.count
-    );
-  
-  let normalizedTargetImageCHistogram =
-    targetImageCHistogram.counts["Gray"].map( value =>
-      value / targetImageCHistogram.count
-    );
-
-  let lookupTable = [];
-  for (let i = 0; i < 256; ++i) {
+  const lookupTable = createLookupTable(dim => value => {
     let j = 255;
-    while(j >= 0 && 
-      normalizedOriginImageCHistogram[i] <=
-      normalizedTargetImageCHistogram[j]) {
 
-      j = j - 1;
+    while (j >= 0 && srcCHistos[dim][value] <= targetCHistos[dim][j]) {
+      j -= 1;
     }
-    lookupTable.push(j);
-  }
 
-  return transformImage(imgBuffer, lookupTable);
+    return j;
+  });
+
+  return applyLookupTable(imgBuffer, lookupTable);
 }

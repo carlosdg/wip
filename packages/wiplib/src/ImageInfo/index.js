@@ -1,3 +1,5 @@
+import RgbaImageBuffer from "../RgbaImageBuffer";
+
 /**
  * Class to contain image information like the image histogram, number of
  * pixels, minimum and maximum color value, mode, entropy, brightness, contrast,
@@ -7,7 +9,7 @@ export default class ImageInfo {
   /**
    * Creates an instance of this class.
    *
-   * @param {ImageBuffer} imagePixels Image Buffer to create the histogram
+   * @param {RgbaImageBuffer} imagePixels Image Buffer to create the histogram
    * for
    */
   constructor(imageBuffer) {
@@ -25,7 +27,8 @@ export default class ImageInfo {
    * Calculates and sets the `pixelCount` property from the given ImageBuffer
    * object
    *
-   * @param {ImageBuffer} imageBuffer The image buffer representing the image
+   * @param {RgbaImageBuffer} imageBuffer The image buffer representing the
+   * image
    * @param {number} imageBuffer.width  The width of the image
    * @param {number} imageBuffer.height The height of the image
    */
@@ -40,23 +43,20 @@ export default class ImageInfo {
    * A histogram is an array that maps each possible color value to the number
    * of its occurrences in the given image
    *
-   * @param {ImageBuffer} imageBuffer The image buffer representing the image
+   * @param {RgbaImageBuffer} imageBuffer The image buffer representing the
+   * image
    */
-  setHistograms(imageBuffer) {
-    const { pixelDimensions, maxPixelValues, minPixelValues } = imageBuffer;
+  setHistograms({ pixels }) {
     this.histograms = [];
+    this.histograms.push(Array(256).fill(0));
+    this.histograms.push(Array(256).fill(0));
+    this.histograms.push(Array(256).fill(0));
 
-    for (let dim = 0; dim < pixelDimensions; ++dim) {
-      const dimensionRange = maxPixelValues[dim] - minPixelValues[dim] + 1;
-      const histogram = Array(dimensionRange).fill(0);
-      this.histograms.push(histogram);
+    for (let i = 0; i < pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
+      this.histograms[0][pixels[i]] += 1;
+      this.histograms[1][pixels[i + 1]] += 1;
+      this.histograms[2][pixels[i + 2]] += 1;
     }
-
-    imageBuffer.forEachPixel(pixel =>
-      pixel.values.forEach((value, dim) => {
-        this.histograms[dim][value] += 1;
-      })
-    );
   }
 
   /**
@@ -67,7 +67,8 @@ export default class ImageInfo {
    * the number of its occurrences + the number of occurrences of lower values
    * in the given image
    *
-   * @param {ImageBuffer} imageBuffer The image buffer representing the image
+   * @param {RgbaImageBuffer} imageBuffer The image buffer representing the
+   * image
    */
   setCumulativeHistograms(histograms) {
     this.cumulativeHistograms = histograms.map(histogram => {
@@ -129,6 +130,7 @@ export default class ImageInfo {
     this.contrasts = histograms.map((histogram, dim) => {
       const sumSquaredErrorReducer = (sum, count, pixelValue) =>
         sum + count * (pixelValue - brightnesses[dim]) ** 2;
+
       const sum = histogram.reduce(sumSquaredErrorReducer, 0);
       const mean = sum / pixelCount;
       const stdDev = Math.sqrt(mean);
@@ -162,11 +164,7 @@ export default class ImageInfo {
         pixelValue += 1;
       }
 
-      if (pixelValue < histogram.length) {
-        return pixelValue;
-      } else {
-        return histogram.length - 1;
-      }
+      return pixelValue - 1;
     });
   }
 

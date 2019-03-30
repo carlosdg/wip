@@ -14,12 +14,12 @@ class HistogramComponent extends Component {
   state = {
     emphasizedValue: null,
     histogramVisualizationData: [],
-    channel: this.props.channel
+    colorName: this.props.colorName
   };
 
   static getDerivedStateFromProps(props, state) {
     if (
-      (state.channel && props.channel !== state.channel) ||
+      (state.colorName && props.colorName !== state.colorName) ||
       state.histogramVisualizationData !== props.histogramVisualizationData
     ) {
       return {
@@ -29,7 +29,7 @@ class HistogramComponent extends Component {
           x: index + 1,
           y: value
         })),
-        channel: props.channel
+        colorName: props.colorName
       };
     }
     return null;
@@ -60,7 +60,7 @@ class HistogramComponent extends Component {
         <VerticalRectSeries
           onNearestX={value => this.setState({ emphasizedValue: value })}
           data={this.state.histogramVisualizationData}
-          color={this.state.channel}
+          color={this.state.colorName}
         />
         {this.state.emphasizedValue ? (
           <Hint

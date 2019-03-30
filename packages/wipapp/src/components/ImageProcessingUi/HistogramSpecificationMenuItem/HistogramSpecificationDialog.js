@@ -51,8 +51,8 @@ class HistogramSpecificationDialog extends React.Component {
       appStore.addImage(
         histogramSpecification(
           appStore.imagesInfos[index].imageBuffer,
-          appStore.imagesInfos[index].histogramInfo.cHistogram,
-          appStore.imagesInfos[otherImgIndex].histogramInfo.cHistogram
+          appStore.imagesInfos[index].extraInfo,
+          appStore.imagesInfos[otherImgIndex].extraInfo
         )
       );
     }

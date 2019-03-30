@@ -1,69 +1,103 @@
-import { transformImage } from "./transformImage";
+import { applyLookupTable, createLookupTable } from "./transformImage";
 import { ImageOperationException } from "../exceptions";
 
-/**
- * Transforms the given image according to the linear sections
- * conformed by the given points
- *
- * @param {RgbaImageBuffer} imgBuffer Image to transform
- * @param {Array} points Contains the points which defines
- * the sections of the linear transformation
- * @returns {RgbaImageBuffer} Transformed image
- */
-export const linearTransformation = (imgBuffer, points) => {
-  if (points.length < 2)
+export function linearTransformation(imgBuffer, points) {
+  console.log({ imgBuffer, points });
+  validatePoints(points, imgBuffer);
+
+  const sections = points.map(extractSections);
+  const lookupTable = createLookupTable(dim => {
+    const currentSections = sections[dim];
+    let currentSectionIndex = 0;
+
+    return value => {
+      const { frontier, slope, yIntercept } = currentSections[
+        currentSectionIndex
+      ];
+
+      if (value > frontier) {
+        currentSectionIndex += 1;
+      }
+
+      const newValue = Math.round(slope * value + yIntercept);
+      const newValueClipped = Math.min(Math.max(newValue, 0), 255);
+      return newValueClipped;
+    };
+  });
+
+  return applyLookupTable(imgBuffer, lookupTable);
+}
+
+function validatePoints(points) {
+  if (points.length !== 3) {
     throw new ImageOperationException(
       "LinearTransformationException",
-      "Linear transformation needs at least 2 points"
+      "Linear transformation needs 3 sets of points, one for each color dimension"
     );
-
-  for (let i = 0; i < points.length - 1; ++i) {
-    if (points[i].x > points[i + 1].x)
-      throw new ImageOperationException(
-        "LinearTransformationException",
-        "Points must be ordered according to the x coordinate value"
-      );
-
-    if (points[i].x === points[i + 1].x)
-      throw new ImageOperationException(
-        "LinearTransformationException",
-        "Different points should not have the same x coordinate value"
-      );
   }
 
-  if (points[0].x > 0)
-    throw new ImageOperationException(
-      "LinearTransformationException",
-      "X coordinate value of the first point should be less or equal to 0"
-    );
+  points.forEach((points, dim) => {
+    if (points.length < 2) {
+      throw new ImageOperationException(
+        "LinearTransformationException",
+        `Linear transformation needs at least 2 points for each dimension. Color dimension number ${dim} has ${
+          points.length
+        }`
+      );
+    }
 
-  if (points[points.length - 1].x < 255)
-    throw new ImageOperationException(
-      "LinearTransformationException",
-      "X coordinate value of the last point should be greater or equal to 255"
-    );
+    for (let i = 0; i < points.length - 1; ++i) {
+      const current = points[i];
+      const next = points[i + 1];
 
-  let sections = [];
+      if (current.x > next.x) {
+        throw new ImageOperationException(
+          "LinearTransformationException",
+          "Points must be ordered according to the x coordinate value"
+        );
+      }
+
+      if (current.x === next.x) {
+        throw new ImageOperationException(
+          "LinearTransformationException",
+          "Different points should not have the same x coordinate value"
+        );
+      }
+    }
+
+    if (points[0].x > 0) {
+      throw new ImageOperationException(
+        "LinearTransformationException",
+        `X coordinate value of the first point should be less or equal to 0 for the color dimension number ${dim}`
+      );
+    }
+
+    if (points[points.length - 1].x < 255) {
+      throw new ImageOperationException(
+        "LinearTransformationException",
+        `X coordinate value of the last point should be greater or equal to 255 for the color dimension number ${dim}`
+      );
+    }
+  });
+}
+
+function extractSections(points) {
+  const sections = [];
+
   for (let i = 1; i < points.length; ++i) {
-    let newSection = {};
-    newSection["slope"] =
-      (points[i].y - points[i - 1].y) / (points[i].x - points[i - 1].x);
-    newSection["yIntercept"] = points[i].y - newSection.slope * points[i].x;
-    newSection["frontier"] = points[i].x;
-    sections.push(newSection);
+    const current = points[i];
+    const prev = points[i - 1];
+
+    const slope = (current.y - prev.y) / (current.x - prev.x);
+    const yIntercept = current.y - slope * current.x;
+    const frontier = current.x;
+
+    sections.push({
+      slope,
+      yIntercept,
+      frontier
+    });
   }
 
-  let lookupTable = [];
-  let currentSectionIndex = 0;
-  for (let i = 0; i < 256; ++i) {
-    if (i > sections[currentSectionIndex].frontier) currentSectionIndex++;
-
-    let newValue = Math.round(
-      sections[currentSectionIndex].slope * i +
-        sections[currentSectionIndex].yIntercept
-    );
-    lookupTable.push(Math.min(Math.max(newValue, 0), 255));
-  }
-
-  return transformImage(imgBuffer, lookupTable);
-};
+  return sections;
+}

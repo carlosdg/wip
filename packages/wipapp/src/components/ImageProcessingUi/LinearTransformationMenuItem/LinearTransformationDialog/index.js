@@ -75,10 +75,11 @@ class LinearTransformationDialog extends React.Component {
     const { index } = appStore.selectedGridItem;
 
     appStore.addImage(
-      linearTransformation(
-        appStore.imagesInfos[index].imageBuffer,
+      linearTransformation(appStore.imagesInfos[index].imageBuffer, [
+        this.state.coords,
+        this.state.coords,
         this.state.coords
-      )
+      ])
     );
 
     onClose();
