@@ -35,6 +35,8 @@ export default class HistogramAndInfoComponent extends React.Component {
           }}
         >
           <Button
+            variant={currentTab === 0 ? "contained" : "outlined"}
+            color={currentTab === 0 ? "primary" : ""}
             style={
               currentTab === 0
                 ? {
@@ -47,6 +49,8 @@ export default class HistogramAndInfoComponent extends React.Component {
             Histogram
           </Button>
           <Button
+            variant={currentTab === 1 ? "contained" : "outlined"}
+            color={currentTab === 1 ? "primary" : ""}
             style={
               currentTab === 1
                 ? {
@@ -59,6 +63,8 @@ export default class HistogramAndInfoComponent extends React.Component {
             Cumulative
           </Button>
           <Button
+            variant={currentTab === 2 ? "contained" : "outlined"}
+            color={currentTab === 2 ? "primary" : ""}
             style={
               currentTab === 2
                 ? {
@@ -81,13 +87,8 @@ export default class HistogramAndInfoComponent extends React.Component {
           {colorNames.map((colorName, i) => {
             return (
               <Button
-                style={
-                  currentChannel === i
-                    ? {
-                        boxShadow: `0px 4px 6px -5px ${colorName}`
-                      }
-                    : {}
-                }
+                variant={currentChannel === i ? "contained" : "outlined"}
+                color={currentChannel === i ? "primary" : ""}
                 onClick={e => this.updateCurrentChannel(e, i)}
                 key={i}
               >
@@ -120,9 +121,9 @@ export default class HistogramAndInfoComponent extends React.Component {
           )}
           {currentTab === 2 && (
             <div
-              className="scrollable"
               style={{
-                maxWidth: "500px"
+                maxWidth: "500px",
+                maxHeight: "100%"
               }}
             >
               <Table>
@@ -134,7 +135,15 @@ export default class HistogramAndInfoComponent extends React.Component {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>Count</TableCell>
+                    <TableCell>Width</TableCell>
+                    <TableCell align="right">{extraInfo.width}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Height</TableCell>
+                    <TableCell align="right">{extraInfo.height}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Number of pixels</TableCell>
                     <TableCell align="right">{extraInfo.pixelCount}</TableCell>
                   </TableRow>
                   <TableRow>

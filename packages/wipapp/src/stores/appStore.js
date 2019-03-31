@@ -116,8 +116,7 @@ class AppStoreSingleton {
     this.selectedGridItem.index === index &&
     this.selectedGridItem.type === type;
 
-  toggleRightSideMenu = () =>
-    (this.rightSideMenu.open = !this.rightSideMenu.open);
+  closeRightSideMenu = () => (this.rightSideMenu.open = false);
 
   openRightSideMenu = () => (this.rightSideMenu.open = true);
 
@@ -133,7 +132,7 @@ class AppStoreSingleton {
     } else {
       const selectedImageInfo = this.imagesInfos[this.selectedGridItem.index];
       const { extraInfo } = selectedImageInfo;
-      this.rightSideMenu.menuTitle = "Image information";
+      this.rightSideMenu.menuTitle = `"${selectedImageInfo.key}" Information`;
       this.rightSideMenu.selectedImageInfo = {
         name: selectedImageInfo.key,
         width: selectedImageInfo.imageBuffer.width,
@@ -168,7 +167,7 @@ decorate(AppStoreSingleton, {
   setCurrentPixel: action,
   updateImageSelectionMehod: action,
   openRightSideMenu: action,
-  toggleRightSideMenu: action
+  closeRightSideMenu: action
 });
 
 export default new AppStoreSingleton();

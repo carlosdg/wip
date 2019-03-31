@@ -3,7 +3,7 @@ import { withSnackbar } from "notistack";
 import { observer, inject } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 
-class ShowHistogramMenuItem extends React.Component {
+class ShowImageInfoMenuItem extends React.Component {
   onClick = () => {
     const { appStore, enqueueSnackbar } = this.props;
     const { type, index } = appStore.selectedGridItem;
@@ -21,12 +21,12 @@ class ShowHistogramMenuItem extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <MenuItem onClick={this.onClick}>Histogram</MenuItem>
+        <MenuItem onClick={this.onClick}>See Image Info</MenuItem>
       </React.Fragment>
     );
   }
 }
 
 export default withSnackbar(
-  inject("appStore")(observer(ShowHistogramMenuItem))
+  inject("appStore")(observer(ShowImageInfoMenuItem))
 );

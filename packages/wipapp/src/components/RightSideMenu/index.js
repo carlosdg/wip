@@ -1,5 +1,6 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
+import DeleteButton from "../DeleteButton";
 import "./RightSideMenu.css";
 
 class RighSideMenu extends React.Component {
@@ -39,22 +40,6 @@ class RighSideMenu extends React.Component {
     );
   }
 
-  getDisplayForImageDimensions() {
-    const selectedImageInfo = this.props.appStore.rightSideMenu
-      .selectedImageInfo;
-    const text =
-      "Width: " +
-      selectedImageInfo.width +
-      " Height: " +
-      selectedImageInfo.height;
-    return <div style={this.getDisplayStyle()}>{text}</div>;
-  }
-
-  getDisplayForImageName() {
-    const name = this.props.appStore.rightSideMenu.selectedImageInfo.name;
-    return <div style={this.getDisplayStyle()}>Name: {name}</div>;
-  }
-
   render() {
     return (
       <div
@@ -64,27 +49,14 @@ class RighSideMenu extends React.Component {
         }}
       >
         <div className="right-side-menu-title">
-          <p>
-            {this.props.appStore.rightSideMenu.open
-              ? this.props.appStore.rightSideMenu.menuTitle.toUpperCase()
-              : ""}
-          </p>
-          <div
-            id="right-side-menu-toggle"
-            className={this.props.appStore.rightSideMenu.open ? "on" : "off"}
-            onClick={this.props.appStore.toggleRightSideMenu}
-          >
-            <div className="one" />
-            <div className="two" />
-            <div className="three" />
-          </div>
+          <p>{this.props.appStore.rightSideMenu.menuTitle}</p>
+          <DeleteButton
+            onDelete={this.props.appStore.closeRightSideMenu}
+            style={{ width: "2rem", height: "2rem", marginRight: "1rem" }}
+          />
         </div>
         <div className="right-side-menu-feed">
           <div className="image-info">
-            <div className="info-container">
-              {this.getDisplayForImageName()}
-              {this.getDisplayForImageDimensions()}
-            </div>
             {this.getDisplayForPixelUnderMouse()}
           </div>
           {this.props.appStore.rightSideMenu.menuContent.map(
