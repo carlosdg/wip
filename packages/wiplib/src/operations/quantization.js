@@ -1,4 +1,4 @@
-import { transformImage } from "./transformImage";
+import { applyLookupTable, createLookupTable } from "./transformImage";
 import { ImageOperationException } from "../exceptions";
 
 /**
@@ -39,20 +39,22 @@ export const quantization = (imgBuffer, amountOfLevels) => {
     newValues.push(255);
   }
 
-  let lookupTable = [];
-  let distance;
-  let minDistance;
-  let index;
-  for (let i = 0; i < 256; ++i) {
-    minDistance = Number.POSITIVE_INFINITY;
-    for (let j = 0; j < newValues.length; ++j) {
-      distance = Math.abs(i - newValues[j]);
-      if (distance < minDistance) {
-        index = j;
-        minDistance = distance;
+  const lookupTable = createLookupTable(() => {
+    let index;
+
+    return value => {
+      let minDistance = Number.POSITIVE_INFINITY;
+      for (let j = 0; j < newValues.length; ++j) {
+        const distance = Math.abs(value - newValues[j]);
+        if (distance < minDistance) {
+          index = j;
+          minDistance = distance;
+        }
       }
-    }
-    lookupTable.push(newValues[index]);
-  }
-  return transformImage(imgBuffer, lookupTable);
+
+      return newValues[index];
+    };
+  });
+
+  return applyLookupTable(imgBuffer, lookupTable);
 };
