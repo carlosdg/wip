@@ -89,7 +89,7 @@ const colorNames = ["Red", "Green", "Blue"];
             justifyContent: "center"
           }}
         >
-          { this.state.currentTab != 2 && colorNames.map((colorName, i) => {
+          { this.state.currentTab !== 2 && colorNames.map((colorName, i) => {
             return (
               <Button
                 variant={currentChannel === i ? "contained" : "outlined"}
