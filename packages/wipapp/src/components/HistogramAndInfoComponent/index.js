@@ -36,7 +36,7 @@ export default class HistogramAndInfoComponent extends React.Component {
         >
           <Button
             variant={currentTab === 0 ? "contained" : "outlined"}
-            color={currentTab === 0 ? "primary" : ""}
+            color={currentTab === 0 ? "primary" : "default"}
             style={
               currentTab === 0
                 ? {
@@ -50,7 +50,7 @@ export default class HistogramAndInfoComponent extends React.Component {
           </Button>
           <Button
             variant={currentTab === 1 ? "contained" : "outlined"}
-            color={currentTab === 1 ? "primary" : ""}
+            color={currentTab === 1 ? "primary" : "default"}
             style={
               currentTab === 1
                 ? {
@@ -64,7 +64,7 @@ export default class HistogramAndInfoComponent extends React.Component {
           </Button>
           <Button
             variant={currentTab === 2 ? "contained" : "outlined"}
-            color={currentTab === 2 ? "primary" : ""}
+            color={currentTab === 2 ? "primary" : "default"}
             style={
               currentTab === 2
                 ? {
@@ -88,7 +88,7 @@ export default class HistogramAndInfoComponent extends React.Component {
             return (
               <Button
                 variant={currentChannel === i ? "contained" : "outlined"}
-                color={currentChannel === i ? "primary" : ""}
+                color={currentChannel === i ? "primary" : "default"}
                 onClick={e => this.updateCurrentChannel(e, i)}
                 key={i}
               >

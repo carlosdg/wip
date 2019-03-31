@@ -14,6 +14,7 @@ const DeleteButton = ({ onDelete, ...props }) => (
   <button
     className="DeleteButton"
     onClick={onDelete}
+    onTouchEnd={onDelete}
     disabled={!onDelete}
     aria-label="delete"
     {...props}
