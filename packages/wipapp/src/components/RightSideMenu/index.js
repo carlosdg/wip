@@ -4,42 +4,6 @@ import DeleteButton from "../DeleteButton";
 import "./RightSideMenu.css";
 
 class RighSideMenu extends React.Component {
-  getDisplayStyle = () => {
-    const { pixelValue } = this.props.appStore;
-    const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
-
-    return {
-      display: "inline-block",
-      margin: "0.2rem",
-      padding: "0.5rem",
-      borderRadius: "5px",
-      border: `1px solid ${currentPixelRgbaValue}`,
-      boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
-    };
-  };
-
-  getDisplayForPixelUnderMouse() {
-    const { pixelValue, pixelCoords } = this.props.appStore;
-    const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
-    return (
-      <div style={this.getDisplayStyle()}>
-        x: {pixelCoords.x}, y: {pixelCoords.y},
-        <span
-          style={{
-            display: "inline-block",
-            width: "0.5rem",
-            height: "0.5rem",
-            margin: "0 0.5rem",
-            backgroundColor: currentPixelRgbaValue,
-            border: "1px solid black",
-            borderRadius: "2px"
-          }}
-        />
-        {currentPixelRgbaValue}
-      </div>
-    );
-  }
-
   render() {
     return (
       <div
@@ -56,9 +20,6 @@ class RighSideMenu extends React.Component {
           />
         </div>
         <div className="right-side-menu-feed">
-          <div className="image-info">
-            {this.getDisplayForPixelUnderMouse()}
-          </div>
           {this.props.appStore.rightSideMenu.menuContent.map(
             (menuItem, index) => {
               return (

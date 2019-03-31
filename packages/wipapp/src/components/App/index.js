@@ -51,6 +51,37 @@ class App extends Component {
     }
   };
 
+  getDisplayForPixelUnderMouse() {
+    const { pixelValue, pixelCoords } = this.props.appStore;
+    const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
+    return (
+      <div
+        style={{
+          display: "inline-block",
+          margin: "0.2rem",
+          padding: "0.5rem",
+          borderRadius: "5px",
+          border: `1px solid ${currentPixelRgbaValue}`,
+          boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
+        }}
+      >
+        x: {pixelCoords.x}, y: {pixelCoords.y},
+        <span
+          style={{
+            display: "inline-block",
+            width: "0.5rem",
+            height: "0.5rem",
+            margin: "0 0.5rem",
+            backgroundColor: currentPixelRgbaValue,
+            border: "1px solid black",
+            borderRadius: "2px"
+          }}
+        />
+        {currentPixelRgbaValue}
+      </div>
+    );
+  }
+
   render() {
     return (
       <div>
@@ -72,6 +103,14 @@ class App extends Component {
             </div>
             <RightSideMenu />
           </main>
+          <footer
+            style={{
+              borderRadius: "5px",
+              boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)"
+            }}
+          >
+            {this.getDisplayForPixelUnderMouse()}
+          </footer>
         </div>
       </div>
     );
