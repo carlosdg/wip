@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import ProfileComponent from "../ProfileComponent";
+import { buttonStyles } from "../../lib/threeButtonStyles";
 
 export default class ProfilesComponent extends React.Component {
   state = {
@@ -30,9 +31,10 @@ export default class ProfilesComponent extends React.Component {
             style={
               currentTab === 0
                 ? {
-                    boxShadow: "0px 4px 6px -5px black"
+                    boxShadow: "0px 4px 6px -5px black",
+                    ...buttonStyles[0]
                   }
-                : {}
+                : buttonStyles[0]
             }
             onClick={e => this.updateCurrentTab(e, 0)}
           >
@@ -44,9 +46,10 @@ export default class ProfilesComponent extends React.Component {
             style={
               currentTab === 1
                 ? {
-                    boxShadow: "0px 4px 6px -5px black"
+                    boxShadow: "0px 4px 6px -5px black",
+                    ...buttonStyles[2]
                   }
-                : {}
+                : buttonStyles[2]
             }
             onClick={e => this.updateCurrentTab(e, 1)}
           >
@@ -60,11 +63,12 @@ export default class ProfilesComponent extends React.Component {
             justifyContent: "center"
           }}
         >
-          {Object.keys(profileValues).map(key => {
+          {Object.keys(profileValues).map((key, i) => {
             return (
               <Button
                 variant={currentChannel === key ? "contained" : "outlined"}
                 color={currentChannel === key ? "primary" : "default"}
+                style={buttonStyles[i]}
                 onClick={e => this.updateCurrentChannel(e, key)}
                 key={key}
               >

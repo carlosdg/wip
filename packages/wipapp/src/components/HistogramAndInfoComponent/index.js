@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { buttonStyles } from "../../lib/threeButtonStyles";
 
 const colorNames = ["Red", "Green", "Blue"];
 
@@ -40,9 +41,10 @@ export default class HistogramAndInfoComponent extends React.Component {
             style={
               currentTab === 0
                 ? {
-                    boxShadow: "0px 4px 6px -5px black"
+                    boxShadow: "0px 4px 6px -5px black",
+                    ...buttonStyles[0]
                   }
-                : {}
+                : buttonStyles[0]
             }
             onClick={e => this.updateCurrentTab(e, 0)}
           >
@@ -54,9 +56,10 @@ export default class HistogramAndInfoComponent extends React.Component {
             style={
               currentTab === 1
                 ? {
-                    boxShadow: "0px 4px 6px -5px black"
+                    boxShadow: "0px 4px 6px -5px black",
+                    ...buttonStyles[1]
                   }
-                : {}
+                : buttonStyles[1]
             }
             onClick={e => this.updateCurrentTab(e, 1)}
           >
@@ -68,9 +71,10 @@ export default class HistogramAndInfoComponent extends React.Component {
             style={
               currentTab === 2
                 ? {
-                    boxShadow: "0px 4px 6px -5px black"
+                    boxShadow: "0px 4px 6px -5px black",
+                    ...buttonStyles[2]
                   }
-                : {}
+                : buttonStyles[2]
             }
             onClick={e => this.updateCurrentTab(e, 2)}
           >
@@ -89,6 +93,7 @@ export default class HistogramAndInfoComponent extends React.Component {
               <Button
                 variant={currentChannel === i ? "contained" : "outlined"}
                 color={currentChannel === i ? "primary" : "default"}
+                style={buttonStyles[i]}
                 onClick={e => this.updateCurrentChannel(e, i)}
                 key={i}
               >

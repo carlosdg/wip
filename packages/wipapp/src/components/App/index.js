@@ -10,7 +10,7 @@ import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 import SelectionToolbar from "../Toolbar/SelectionToolbar";
 import RightSideMenu from "../RightSideMenu";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -58,22 +58,25 @@ class App extends Component {
     return (
       <div
         style={{
-          display: "flex",
-        }}>
+          display: "flex"
+        }}
+      >
         <div
           style={{
             display: "flex",
             margin: "0.4rem",
             borderRadius: "5px",
             width: "250px",
-            border: `2px solid #3f51b5`
+            border: "1px solid #000",
+            boxShadow: `1px 1px 10px -5px ${currentPixelRgbaValue}`,
+            overflow: "hidden"
           }}
         >
           <span
             style={{
               width: "2.5rem",
               height: "2.0rem",
-              backgroundColor: currentPixelRgbaValue,
+              backgroundColor: currentPixelRgbaValue
             }}
           />
           <span
@@ -93,14 +96,17 @@ class App extends Component {
             display: "flex",
             margin: "0.4rem",
             borderRadius: "5px",
-            border: `2px solid #3f51b5`
+            border: "1px solid #000",
+            boxShadow: "1px 1px 10px -5px black"
           }}
         >
-          <span style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "0 10px 0"
-          }}>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "0 10px 0"
+            }}
+          >
             <FontAwesomeIcon style={{ marginRight: "5px" }} icon="arrows-alt" />
             {pixelCoords.x}, {pixelCoords.y}
           </span>
@@ -121,8 +127,8 @@ class App extends Component {
               style={
                 !this.props.appStore.rightSideMenu.open
                   ? {
-                    width: "100%"
-                  }
+                      width: "100%"
+                    }
                   : {}
               }
             >
