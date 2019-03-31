@@ -1,3 +1,7 @@
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
+
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
@@ -47,6 +51,8 @@ const theme = createMuiTheme({
     useNextVariants: true
   }
 });
+
+library.add(faArrowsAlt)
 
 ReactDOM.render(
   <div>

@@ -10,6 +10,7 @@ import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 import SelectionToolbar from "../Toolbar/SelectionToolbar";
 import RightSideMenu from "../RightSideMenu";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -57,27 +58,53 @@ class App extends Component {
     return (
       <div
         style={{
-          display: "inline-block",
-          margin: "0.2rem",
-          padding: "0.5rem",
-          borderRadius: "5px",
-          border: `1px solid ${currentPixelRgbaValue}`,
-          boxShadow: `0 3px 10px -3px ${currentPixelRgbaValue}`
-        }}
-      >
-        x: {pixelCoords.x}, y: {pixelCoords.y},
-        <span
+          display: "flex",
+        }}>
+        <div
           style={{
-            display: "inline-block",
-            width: "0.5rem",
-            height: "0.5rem",
-            margin: "0 0.5rem",
-            backgroundColor: currentPixelRgbaValue,
-            border: "1px solid black",
-            borderRadius: "2px"
+            display: "flex",
+            margin: "0.4rem",
+            borderRadius: "5px",
+            width: "250px",
+            border: `2px solid #3f51b5`
           }}
-        />
-        {currentPixelRgbaValue}
+        >
+          <span
+            style={{
+              width: "2.5rem",
+              height: "2.0rem",
+              backgroundColor: currentPixelRgbaValue,
+            }}
+          />
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: "10px",
+              paddingRight: "10px"
+            }}
+          >
+            {currentPixelRgbaValue}
+          </span>
+        </div>
+        <div
+          style={{
+            width: "130px",
+            display: "flex",
+            margin: "0.4rem",
+            borderRadius: "5px",
+            border: `2px solid #3f51b5`
+          }}
+        >
+          <span style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "0 10px 0"
+          }}>
+            <FontAwesomeIcon style={{ marginRight: "5px" }} icon="arrows-alt" />
+            {pixelCoords.x}, {pixelCoords.y}
+          </span>
+        </div>
       </div>
     );
   }
@@ -94,8 +121,8 @@ class App extends Component {
               style={
                 !this.props.appStore.rightSideMenu.open
                   ? {
-                      width: "100%"
-                    }
+                    width: "100%"
+                  }
                   : {}
               }
             >
@@ -105,7 +132,6 @@ class App extends Component {
           </main>
           <footer
             style={{
-              borderRadius: "5px",
               boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)"
             }}
           >
