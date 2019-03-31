@@ -31,8 +31,7 @@ class ProfileMenuItem extends React.Component {
       const profileValues = {
         Red: [],
         Green: [],
-        Blue: [],
-        Gray: []
+        Blue: []
       };
 
       points.forEach(point => {
@@ -40,16 +39,12 @@ class ProfileMenuItem extends React.Component {
         profileValues["Red"].push(pixel[0]);
         profileValues["Green"].push(pixel[1]);
         profileValues["Blue"].push(pixel[2]);
-        profileValues["Gray"].push(
-          Math.round(pixel[0] * 0.222 + pixel[1] * 0.707 + pixel[2] * 0.071)
-        );
       });
 
       const firstDerivativeProfileValues = {
         Red: [],
         Green: [],
-        Blue: [],
-        Gray: []
+        Blue: []
       };
 
       for (let i = 1; i < profileValues["Red"].length - 1; ++i)

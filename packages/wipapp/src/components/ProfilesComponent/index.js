@@ -25,6 +25,8 @@ export default class ProfilesComponent extends React.Component {
           }}
         >
           <Button
+            variant={currentTab === 0 ? "contained" : "outlined"}
+            color={currentTab === 0 ? "primary" : "default"}
             style={
               currentTab === 0
                 ? {
@@ -37,6 +39,8 @@ export default class ProfilesComponent extends React.Component {
             Profile
           </Button>
           <Button
+            variant={currentTab === 1 ? "contained" : "outlined"}
+            color={currentTab === 1 ? "primary" : "default"}
             style={
               currentTab === 1
                 ? {
@@ -59,13 +63,8 @@ export default class ProfilesComponent extends React.Component {
           {Object.keys(profileValues).map(key => {
             return (
               <Button
-                style={
-                  currentChannel === key
-                    ? {
-                        boxShadow: `0px 4px 6px -5px ${key}`
-                      }
-                    : {}
-                }
+                variant={currentChannel === key ? "contained" : "outlined"}
+                color={currentChannel === key ? "primary" : "default"}
                 onClick={e => this.updateCurrentChannel(e, key)}
                 key={key}
               >

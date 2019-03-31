@@ -25,7 +25,7 @@ class RighSideMenu extends React.Component {
               return (
                 <div
                   key={index + "" + this.props.appStore.rightSideMenu.open}
-                  style={{ height: "500px", margin: "10px" }}
+                  style={{ height: "700px", margin: "10px" }}
                 >
                   {menuItem}
                 </div>
