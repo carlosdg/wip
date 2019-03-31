@@ -13,7 +13,7 @@ export default class ImageInfo {
    * for
    */
   constructor(imageBuffer) {
-    this.setPixelCount(imageBuffer);
+    this.setDimensionsInfo(imageBuffer);
     this.setHistograms(imageBuffer);
     this.setCumulativeHistograms(this.histograms);
     this.setLimits(this.histograms);
@@ -24,15 +24,17 @@ export default class ImageInfo {
   }
 
   /**
-   * Calculates and sets the `pixelCount` property from the given ImageBuffer
-   * object
+   * Calculates and sets the `pixelCount`, `width` and `height` properties from
+   * the given ImageBuffer object
    *
    * @param {RgbaImageBuffer} imageBuffer The image buffer representing the
    * image
    * @param {number} imageBuffer.width  The width of the image
    * @param {number} imageBuffer.height The height of the image
    */
-  setPixelCount({ width, height }) {
+  setDimensionsInfo({ width, height }) {
+    this.width = width;
+    this.height = height;
     this.pixelCount = width * height;
   }
 
