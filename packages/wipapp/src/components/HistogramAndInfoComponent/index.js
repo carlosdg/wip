@@ -123,7 +123,8 @@ export default class HistogramAndInfoComponent extends React.Component {
             <div
               style={{
                 maxWidth: "500px",
-                maxHeight: "100%"
+                maxHeight: "100%",
+                overflow: "auto"
               }}
             >
               <Table>
