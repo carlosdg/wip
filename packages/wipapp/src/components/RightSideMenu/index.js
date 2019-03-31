@@ -3,7 +3,7 @@ import { observer, inject } from "mobx-react";
 import DeleteButton from "../DeleteButton";
 import "./RightSideMenu.css";
 
-class RighSideMenu extends React.Component {
+class RightSideMenu extends React.Component {
   render() {
     return (
       <div
@@ -13,22 +13,24 @@ class RighSideMenu extends React.Component {
         }}
       >
         <div className="right-side-menu-title">
-          <p>{this.props.appStore.rightSideMenu.menuTitle}</p>
+          <DeleteButton
+            onDelete={this.props.appStore.closeRightSideMenu}
+            style={{ visibility: "hidden", width: "2rem", height: "2rem", marginLeft: "1rem" }}
+          />
+          <span>{this.props.appStore.rightSideMenu.menuTitle}</span>
           <DeleteButton
             onDelete={this.props.appStore.closeRightSideMenu}
             style={{ width: "2rem", height: "2rem", marginRight: "1rem" }}
           />
+
         </div>
         <div className="right-side-menu-feed">
           {this.props.appStore.rightSideMenu.menuContent.map(
             (menuItem, index) => {
               return (
-                <div
-                  key={index + "" + this.props.appStore.rightSideMenu.open}
-                  style={{ height: "500px", margin: "10px" }}
-                >
-                  {menuItem}
-                </div>
+                  <React.Fragment key={index}>
+                    {menuItem}
+                  </React.Fragment>
               );
             }
           )}
@@ -38,4 +40,4 @@ class RighSideMenu extends React.Component {
   }
 }
 
-export default inject("appStore")(observer(RighSideMenu));
+export default inject("appStore")(observer(RightSideMenu));

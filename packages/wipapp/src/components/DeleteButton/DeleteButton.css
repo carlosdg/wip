@@ -20,4 +20,5 @@
   color: #fff;
   background-color: #f50057;
   transform: rotate(360deg);
+  outline: 0;
 }

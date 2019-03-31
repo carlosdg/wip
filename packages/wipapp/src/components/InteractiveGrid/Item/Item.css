@@ -21,12 +21,13 @@
 }
 
 .Item__name {
-  display: inline-block;
+  display: flex;
   margin-left: 10px;
   overflow: hidden;
   width: 75%;
   vertical-align: text-bottom;
   text-overflow: ellipsis;
+  align-items: center;
 }
 
 .Item.is-selected .Item__toolbar {

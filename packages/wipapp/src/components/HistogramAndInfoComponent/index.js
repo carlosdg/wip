@@ -7,13 +7,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { buttonStyles } from "../../lib/threeButtonStyles";
+import sizeMe from 'react-sizeme';
 
 const colorNames = ["Red", "Green", "Blue"];
 
 /**
  * Renders the given histogram and its information
  */
-export default class HistogramAndInfoComponent extends React.Component {
+ class HistogramAndInfoComponent extends React.Component {
   state = {
     currentTab: 0,
     currentChannel: 0
@@ -88,7 +89,7 @@ export default class HistogramAndInfoComponent extends React.Component {
             justifyContent: "center"
           }}
         >
-          {colorNames.map((colorName, i) => {
+          { this.state.currentTab != 2 && colorNames.map((colorName, i) => {
             return (
               <Button
                 variant={currentChannel === i ? "contained" : "outlined"}
@@ -127,9 +128,10 @@ export default class HistogramAndInfoComponent extends React.Component {
           {currentTab === 2 && (
             <div
               style={{
-                maxWidth: "500px",
-                maxHeight: "100%",
-                overflow: "auto"
+                display: "flex",
+                flexGrow: "1",
+                margin: "2rem",
+                alignSelf: "flex-start"
               }}
             >
               <Table>
@@ -197,3 +199,5 @@ export default class HistogramAndInfoComponent extends React.Component {
     );
   }
 }
+
+export default sizeMe()(HistogramAndInfoComponent)

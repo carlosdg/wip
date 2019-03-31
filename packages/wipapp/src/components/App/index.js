@@ -75,7 +75,7 @@ class App extends Component {
           <span
             style={{
               width: "2.5rem",
-              height: "2.0rem",
+              height: "1.9rem",
               backgroundColor: currentPixelRgbaValue
             }}
           />

@@ -116,9 +116,22 @@ class AppStoreSingleton {
     this.selectedGridItem.index === index &&
     this.selectedGridItem.type === type;
 
-  closeRightSideMenu = () => (this.rightSideMenu.open = false);
+  closeRightSideMenu = () => (
+    this.rightSideMenu.open = false,
+    this.rightSideMenu.menuContent = []
+  );
 
-  openRightSideMenu = () => (this.rightSideMenu.open = true);
+  openRightSideMenu = () => (
+    this.rightSideMenu.open = true,
+    this.rightSideMenu.menuContent = [
+      <HistogramAndInfoComponent data={this.imagesInfos[this.selectedGridItem.index].extraInfo} />
+    ],
+    this.imagesInfos[this.selectedGridItem.index].profilesInfos.forEach(profileInfo => {
+      this.rightSideMenu.menuContent.push(
+        <ProfilesComponent info={profileInfo} />
+      );
+    })
+  );
 
   updateRightSideMenuImageInfo = () => {
     if (this.selectedGridItem.index === -1) {
@@ -132,7 +145,7 @@ class AppStoreSingleton {
     } else {
       const selectedImageInfo = this.imagesInfos[this.selectedGridItem.index];
       const { extraInfo } = selectedImageInfo;
-      this.rightSideMenu.menuTitle = `"${selectedImageInfo.key}" Information`;
+      this.rightSideMenu.menuTitle = `${selectedImageInfo.key} - Information`;
       this.rightSideMenu.selectedImageInfo = {
         name: selectedImageInfo.key,
         width: selectedImageInfo.imageBuffer.width,
