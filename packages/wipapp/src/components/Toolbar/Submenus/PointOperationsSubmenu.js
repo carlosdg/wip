@@ -14,6 +14,7 @@ import GrayscaleMenuItem from "../../ImageProcessingUi/GrayscaleMenuItem";
 import SepiaMenuItem from "../../ImageProcessingUi/SepiaMenuItem";
 import HistogramEqualizationMenuItem from "../../ImageProcessingUi/HistogramEqualizationMenuItem";
 import QuantizationMenuItem from "../../ImageProcessingUi/QuantizationMenuItem";
+import HueRotationMenuItem from "../../ImageProcessingUi/HueRotationMenuItem";
 
 /**
  * "Point Operations" Appbar Dropdown menu. Contains all the point operations
@@ -70,6 +71,7 @@ export default class PointOperationsSubmenu extends React.Component {
                 <HistogramSpecificationMenuItem />
                 <HistogramEqualizationMenuItem />
                 <QuantizationMenuItem />
+                <HueRotationMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>

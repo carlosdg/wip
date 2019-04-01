@@ -16,3 +16,4 @@ export * from "./mirrorOperations";
 export * from "./quantization";
 export * from "./transformImage";
 export * from "./sepia";
+export * from "./hueRotation";
