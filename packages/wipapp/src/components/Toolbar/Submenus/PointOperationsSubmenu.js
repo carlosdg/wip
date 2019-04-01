@@ -11,6 +11,7 @@ import ImageDifferenceMenuItem from "../../ImageProcessingUi/ImageDifferenceMenu
 import ChangesDetectionMenuItem from "../../ImageProcessingUi/ChangesDetectionMenuItem";
 import HistogramSpecificationMenuItem from "../../ImageProcessingUi/HistogramSpecificationMenuItem";
 import GrayscaleMenuItem from "../../ImageProcessingUi/GrayscaleMenuItem";
+import SepiaMenuItem from "../../ImageProcessingUi/SepiaMenuItem";
 import HistogramEqualizationMenuItem from "../../ImageProcessingUi/HistogramEqualizationMenuItem";
 import QuantizationMenuItem from "../../ImageProcessingUi/QuantizationMenuItem";
 
@@ -60,6 +61,7 @@ export default class PointOperationsSubmenu extends React.Component {
             <ClickAwayListener onClickAway={this.handleClose}>
               <MenuList>
                 <GrayscaleMenuItem />
+                <SepiaMenuItem />
                 <LinearTransformationMenuItem />
                 <BrightnessAndContrastMenuItem />
                 <GammaCorrectionMenuItem />

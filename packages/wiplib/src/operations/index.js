@@ -15,3 +15,4 @@ export * from "./linearTransformation";
 export * from "./mirrorOperations";
 export * from "./quantization";
 export * from "./transformImage";
+export * from "./sepia";
