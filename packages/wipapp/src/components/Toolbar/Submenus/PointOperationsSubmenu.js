@@ -15,6 +15,7 @@ import SepiaMenuItem from "../../ImageProcessingUi/SepiaMenuItem";
 import HistogramEqualizationMenuItem from "../../ImageProcessingUi/HistogramEqualizationMenuItem";
 import QuantizationMenuItem from "../../ImageProcessingUi/QuantizationMenuItem";
 import HueRotationMenuItem from "../../ImageProcessingUi/HueRotationMenuItem";
+import SaturateImageMenuItem from "../../ImageProcessingUi/SaturateImageMenuItem";
 
 /**
  * "Point Operations" Appbar Dropdown menu. Contains all the point operations
@@ -72,6 +73,7 @@ export default class PointOperationsSubmenu extends React.Component {
                 <HistogramEqualizationMenuItem />
                 <QuantizationMenuItem />
                 <HueRotationMenuItem />
+                <SaturateImageMenuItem />
               </MenuList>
             </ClickAwayListener>
           </Paper>

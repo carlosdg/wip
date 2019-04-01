@@ -17,3 +17,4 @@ export * from "./quantization";
 export * from "./transformImage";
 export * from "./sepia";
 export * from "./hueRotation";
+export * from "./saturate";

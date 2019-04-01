@@ -2,13 +2,13 @@ import RgbaImageBuffer from "../RgbaImageBuffer";
 import * as colorSpaceConversions from "../colorSpaceConversions";
 
 /**
- * Rotates the H channel of the image
+ * Saturates the given image
  *
  * @param {RgbaImageBuffer} imgBuffer Image Buffer base
- * @param {Number} degrees Amount of degrees for the hue rotation
+ * @param {Number} saturationPercentage Saturation percentage for the operation
  * @returns {RgbaImageBuffer} Converted image
  */
-export const hueRotation = (imgBuffer, degrees) => {
+export const saturateImage = (imgBuffer, saturationPercentage) => {
   const result = imgBuffer.copy();
 
   for (let i = 0; i < result.pixels.length; i += RgbaImageBuffer.NUM_CHANNELS) {
@@ -22,8 +22,8 @@ export const hueRotation = (imgBuffer, degrees) => {
       b: bComponent
     });
     const newRGBPixel = colorSpaceConversions.HSLToRGB({
-      h: (HSLPixel.h + degrees) % 360,
-      s: HSLPixel.s,
+      h: HSLPixel.h,
+      s: HSLPixel.s * saturationPercentage / 100,
       l: HSLPixel.l
     });
 
