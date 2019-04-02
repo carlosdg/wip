@@ -63,8 +63,12 @@ class ChangesDetectionDialog extends React.Component {
     const otherImageInfo = appStore.imagesInfos.find(
       ({ key }) => key === imgName
     );
-    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
-
+    let { currentVersionIndex, versionsHistory } = otherImageInfo;
+    const imageBuffer = otherImageInfo && versionsHistory[currentVersionIndex].imageBuffer;
+    
+    currentVersionIndex = appStore.imagesInfos[index].currentVersionIndex;
+    versionsHistory = appStore.imagesInfos[index].versionsHistory;
+    
     if (imageBuffer === undefined) {
       enqueueSnackbar(
         `Couldn't find an image with the selected name (${imgName})`,
@@ -73,9 +77,9 @@ class ChangesDetectionDialog extends React.Component {
         }
       );
     } else {
-      appStore.addImage(
+      appStore.addOperationResult(
         changesDetection(
-          appStore.imagesInfos[index].imageBuffer,
+          versionsHistory[currentVersionIndex].imageBuffer,
           imageBuffer,
           threshold,
           rgbaColor

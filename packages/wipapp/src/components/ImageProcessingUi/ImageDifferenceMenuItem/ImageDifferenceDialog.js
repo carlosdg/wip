@@ -39,7 +39,11 @@ class ImageDifferenceDialog extends React.Component {
     const otherImageInfo = appStore.imagesInfos.find(
       ({ key }) => key === otherImgName
     );
-    const imageBuffer = otherImageInfo && otherImageInfo.imageBuffer;
+    let { currentVersionIndex, versionsHistory } = otherImageInfo;
+    const imageBuffer = otherImageInfo && versionsHistory[currentVersionIndex].imageBuffer;
+    
+    currentVersionIndex = appStore.imagesInfos[index].currentVersionIndex;
+    versionsHistory = appStore.imagesInfos[index].versionsHistory;
 
     if (imageBuffer === undefined) {
       enqueueSnackbar(
@@ -49,8 +53,8 @@ class ImageDifferenceDialog extends React.Component {
         }
       );
     } else {
-      appStore.addImage(
-        imagesDifference(appStore.imagesInfos[index].imageBuffer, imageBuffer)
+      appStore.addOperationResult(
+        imagesDifference(versionsHistory[currentVersionIndex].imageBuffer, imageBuffer)
       );
     }
 

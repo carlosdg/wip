@@ -11,6 +11,9 @@ import { calculateRect } from "../../lib/coordinates";
 import SelectionToolbar from "../Toolbar/SelectionToolbar";
 import RightSideMenu from "../RightSideMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UndoIcon from "@material-ui/icons/Undo"
+import RedoIcon from "@material-ui/icons/Redo"
+import { IconButton } from "@material-ui/core";
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -116,6 +119,15 @@ class App extends Component {
   }
 
   render() {
+    const { appStore } = this.props;
+    const { index } = appStore.selectedGridItem;
+    let isUndoButtonDisabled = true;
+    let isRedoButtonDisabled = true;
+    if (index > -1) {
+      const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
+      isUndoButtonDisabled = (currentVersionIndex === 0);
+      isRedoButtonDisabled = (currentVersionIndex === versionsHistory.length - 1);
+    }
     return (
       <div>
         <div className="app-container">
@@ -138,10 +150,25 @@ class App extends Component {
           </main>
           <footer
             style={{
-              boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)"
+              boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)",
+              display: "flex"
             }}
           >
             {this.getDisplayForPixelUnderMouse()}
+            <IconButton 
+              color="primary" 
+              onClick={appStore.undoCurrentImageChange} 
+              disabled={(isUndoButtonDisabled)}
+            >
+              <UndoIcon />
+            </IconButton>
+            <IconButton
+              color="primary" 
+              onClick={appStore.redoCurrentImageChange} 
+              disabled={isRedoButtonDisabled}
+            >
+              <RedoIcon />
+            </IconButton>
           </footer>
         </div>
       </div>
@@ -157,14 +184,17 @@ class App extends Component {
         layouts={this.props.appStore.gridLayouts}
         onLayoutChange={this.props.appStore.updateLayout}
       >
-        {this.props.appStore.imagesInfos.map((image, index) =>
-          this.getImageGridItem(image, index)
+        {this.props.appStore.imagesInfos.map((imageInfo, index) =>
+          this.getImageGridItem(imageInfo, index)
         )}
       </InteractiveGrid.Grid>
     );
   }
 
-  getImageGridItem({ imageBuffer, key }, index) {
+  getImageGridItem(
+    { key, versionsHistory, currentVersionIndex },
+    index
+  ) {
     return (
       <InteractiveGrid.Item
         key={key}
@@ -177,7 +207,7 @@ class App extends Component {
         <div className="center">
           <div className="scrollable">
             <ImageComponent
-              rgbaImage={imageBuffer}
+              rgbaImage={versionsHistory[currentVersionIndex].imageBuffer}
               onMouseMove={this.onMouseMoveOverImage}
               onSelection={this.onImageRegionSelection(index)}
             >

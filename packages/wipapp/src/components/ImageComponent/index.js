@@ -48,6 +48,17 @@ class ImageComponent extends Component {
   };
 
   componentDidMount() {
+    this.updateCanvas();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.rgbaImage !== prevProps.rgbaImage) {
+      this.setState({isImageLoading: true});
+      this.updateCanvas();
+    }
+  }
+
+  updateCanvas() {
     // Try to get the image and draw it to the canvas If there is an error
     // update the state.error
     const canvas = this.refs.canvas;

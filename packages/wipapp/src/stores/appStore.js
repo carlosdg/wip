@@ -44,10 +44,19 @@ class AppStoreSingleton {
 
     this.imagesInfos.push({
       key,
-      imageBuffer,
-      region,
-      extraInfo,
-      profilesInfos: []
+      imageBuffer, // TODO: delete
+      versionsHistory: [
+        {
+          imageBuffer,
+          region,
+          extraInfo,
+          profilesInfos: []
+        }
+      ],
+      currentVersionIndex: 0,
+      region, // TODO: delete
+      extraInfo, // TODO: delete
+      profilesInfos: [] // TODO: delete
     });
 
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
@@ -55,6 +64,45 @@ class AppStoreSingleton {
       [key]
     );
   };
+
+  addOperationResult = imageBuffer => {
+    const region = {
+      top: 0,
+      left: 0,
+      width: imageBuffer.width,
+      height: imageBuffer.height
+    };
+    const extraInfo = new ImageInfo(imageBuffer);
+
+    const { index } = this.selectedGridItem;
+    let { versionsHistory, currentVersionIndex } = this.imagesInfos[index];
+
+    if (currentVersionIndex < versionsHistory.length - 1) {
+      versionsHistory.length = currentVersionIndex + 1;
+    }
+
+    versionsHistory.push({
+      imageBuffer,
+      region,
+      extraInfo,
+      profilesInfos: []
+    });
+    this.imagesInfos[index].currentVersionIndex += 1;
+  };
+
+  undoCurrentImageChange = () => {
+    const { index } = this.selectedGridItem;
+    const { currentVersionIndex } = this.imagesInfos[index];
+    if ( currentVersionIndex > 0)
+      this.imagesInfos[index].currentVersionIndex--;
+  }
+
+  redoCurrentImageChange = () => {
+    const { index } = this.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.imagesInfos[index];
+    if ( currentVersionIndex < versionsHistory.length - 1)
+      this.imagesInfos[index].currentVersionIndex++;
+  }
 
   addProfile = (profileValues, firstDerivativeProfileValues) => {
     this.imagesInfos[this.selectedGridItem.index].profilesInfos.push({
@@ -117,20 +165,23 @@ class AppStoreSingleton {
     this.selectedGridItem.type === type;
 
   closeRightSideMenu = () => (
-    this.rightSideMenu.open = false,
-    this.rightSideMenu.menuContent = []
+    (this.rightSideMenu.open = false), (this.rightSideMenu.menuContent = [])
   );
 
   openRightSideMenu = () => (
-    this.rightSideMenu.open = true,
-    this.rightSideMenu.menuContent = [
-      <HistogramAndInfoComponent data={this.imagesInfos[this.selectedGridItem.index].extraInfo} />
-    ],
-    this.imagesInfos[this.selectedGridItem.index].profilesInfos.forEach(profileInfo => {
-      this.rightSideMenu.menuContent.push(
-        <ProfilesComponent info={profileInfo} />
-      );
-    })
+    (this.rightSideMenu.open = true),
+    (this.rightSideMenu.menuContent = [
+      <HistogramAndInfoComponent
+        data={this.imagesInfos[this.selectedGridItem.index].extraInfo}
+      />
+    ]),
+    this.imagesInfos[this.selectedGridItem.index].profilesInfos.forEach(
+      profileInfo => {
+        this.rightSideMenu.menuContent.push(
+          <ProfilesComponent info={profileInfo} />
+        );
+      }
+    )
   );
 
   updateRightSideMenuImageInfo = () => {
@@ -173,6 +224,9 @@ decorate(AppStoreSingleton, {
   rightSideMenu: observable,
   addImage: action,
   addProfile: action,
+  addOperationResult: action,
+  undoCurrentImageChange: action,
+  redoCurrentImageChange: action,
   updateImageRegion: action,
   removeProfile: action,
   updateLayout: action,
