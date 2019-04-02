@@ -44,7 +44,6 @@ class AppStoreSingleton {
 
     this.imagesInfos.push({
       key,
-      imageBuffer, // TODO: delete
       versionsHistory: [
         {
           imageBuffer,
@@ -54,9 +53,7 @@ class AppStoreSingleton {
         }
       ],
       currentVersionIndex: 0,
-      region, // TODO: delete
-      extraInfo, // TODO: delete
-      profilesInfos: [] // TODO: delete
+      amountOfDuplicates: 0
     });
 
     this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
@@ -104,6 +101,30 @@ class AppStoreSingleton {
     if ( currentVersionIndex < versionsHistory.length - 1) {
       this.imagesInfos[index].currentVersionIndex++;
       this.updateRightSideMenuImageInfo();
+    }
+  }
+
+  redoAllCurrentImageChanges = () => {
+    const { index } = this.selectedGridItem;
+    this.imagesInfos[index].currentVersionIndex = 0;
+    this.updateRightSideMenuImageInfo();
+  }
+
+  duplicateCurrentImage = () => {
+    const { index } = this.selectedGridItem;
+    if (index > -1) {
+      this.imagesInfos[index].amountOfDuplicates += 1;
+      const newKey = this.imagesInfos[index].key + " duplicate " + this.imagesInfos[index].amountOfDuplicates;
+      this.imagesInfos.push({
+        key: newKey,
+        versionsHistory: this.imagesInfos[index].versionsHistory,
+        currentVersionIndex: this.imagesInfos[index].currentVersionIndex,
+        amountOfDuplicates: 0
+      });
+      this.gridLayouts = GridLayoutHelper.addNewElementsToLayouts(
+        this.gridLayouts,
+        [newKey]
+      );
     }
   }
 
@@ -239,6 +260,8 @@ decorate(AppStoreSingleton, {
   addOperationResult: action,
   undoCurrentImageChange: action,
   redoCurrentImageChange: action,
+  redoAllCurrentImageChanges: action,
+  duplicateCurrentImage: action,
   updateImageRegion: action,
   removeProfile: action,
   updateLayout: action,

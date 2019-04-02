@@ -11,9 +11,9 @@ import { calculateRect } from "../../lib/coordinates";
 import SelectionToolbar from "../Toolbar/SelectionToolbar";
 import RightSideMenu from "../RightSideMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UndoIcon from "@material-ui/icons/Undo"
-import RedoIcon from "@material-ui/icons/Redo"
+import {Undo, Redo, LibraryAdd, ReplyAll } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
+
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -155,19 +155,33 @@ class App extends Component {
             }}
           >
             {this.getDisplayForPixelUnderMouse()}
+            <IconButton
+              color="primary" 
+              onClick={appStore.redoAllCurrentImageChanges} 
+              disabled={index <= -1 || isUndoButtonDisabled}
+            >
+              <ReplyAll />
+            </IconButton>
             <IconButton 
               color="primary" 
               onClick={appStore.undoCurrentImageChange} 
               disabled={(isUndoButtonDisabled)}
             >
-              <UndoIcon />
+              <Undo />
             </IconButton>
             <IconButton
               color="primary" 
               onClick={appStore.redoCurrentImageChange} 
               disabled={isRedoButtonDisabled}
             >
-              <RedoIcon />
+              <Redo />
+            </IconButton>
+            <IconButton
+              color="primary" 
+              onClick={appStore.duplicateCurrentImage} 
+              disabled={index <= -1}
+            >
+              <LibraryAdd />
             </IconButton>
           </footer>
         </div>
