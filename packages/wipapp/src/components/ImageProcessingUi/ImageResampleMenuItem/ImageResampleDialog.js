@@ -68,7 +68,8 @@ class ImageResampleDialog extends React.Component {
   /** Listener for when the user changes the block width input value */
   onBlockWidthChange = e => {
     const { index } = this.props.appStore.selectedGridItem;
-    const { imageBuffer } = this.props.appStore.imagesInfos[index];
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+    const { imageBuffer } = versionsHistory[currentVersionIndex];
     this.onChange(
       e,
       "blockWidth",
@@ -81,7 +82,8 @@ class ImageResampleDialog extends React.Component {
   /** Listener for when the user changes the block height input value */
   onBlockHeightChange = e => {
     const { index } = this.props.appStore.selectedGridItem;
-    const { imageBuffer } = this.props.appStore.imagesInfos[index];
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+    const { imageBuffer } = versionsHistory[currentVersionIndex];
     this.onChange(
       e,
       "blockHeight",
@@ -94,11 +96,13 @@ class ImageResampleDialog extends React.Component {
   onSubmit = () => {
     const { blockWidth, blockHeight } = this.state;
     const { appStore } = this.props;
-    const { index } = appStore.selectedGridItem;
+    const { index } = this.props.appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+    const { imageBuffer } = versionsHistory[currentVersionIndex];
 
-    appStore.addImage(
+    appStore.addOperationResult(
       imageResampling(
-        appStore.imagesInfos[index].imageBuffer,
+        imageBuffer,
         blockWidth,
         blockHeight
       )

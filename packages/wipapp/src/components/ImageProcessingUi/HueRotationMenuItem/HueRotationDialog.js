@@ -69,9 +69,10 @@ class HueRotationDialog extends React.Component {
   onSubmit = () => {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
 
-    appStore.addImage(
-      hueRotation(appStore.imagesInfos[index].imageBuffer, this.state.degrees)
+    appStore.addOperationResult(
+      hueRotation(versionsHistory[currentVersionIndex].imageBuffer, this.state.degrees)
     );
 
     this.props.onClose();

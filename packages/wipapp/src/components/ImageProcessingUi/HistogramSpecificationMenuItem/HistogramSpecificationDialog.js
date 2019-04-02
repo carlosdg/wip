@@ -48,11 +48,14 @@ class HistogramSpecificationDialog extends React.Component {
         }
       );
     } else {
-      appStore.addImage(
+      const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
+      const otherImageVersions = appStore.imagesInfos[otherImgIndex].versionsHistory;
+      const otherImageCurrentVersionIndex = appStore.imagesInfos[otherImgIndex].currentVersionIndex;
+      appStore.addOperationResult(
         histogramSpecification(
-          appStore.imagesInfos[index].imageBuffer,
-          appStore.imagesInfos[index].extraInfo,
-          appStore.imagesInfos[otherImgIndex].extraInfo
+          versionsHistory[currentVersionIndex].imageBuffer,
+          versionsHistory[currentVersionIndex].extraInfo,
+          otherImageVersions[otherImageCurrentVersionIndex].extraInfo
         )
       );
     }

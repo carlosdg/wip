@@ -10,14 +10,15 @@ class HorizontalMirrorMenuItem extends React.Component {
   currentImageHorizontalMirror = () => {
     const { appStore, enqueueSnackbar } = this.props;
     const { type, index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
     } else {
-      appStore.addImage(
-        mirror.horizontal(appStore.imagesInfos[index].imageBuffer)
+      appStore.addOperationResult(
+        mirror.horizontal(versionsHistory[currentVersionIndex].imageBuffer)
       );
     }
   };
