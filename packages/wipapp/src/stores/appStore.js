@@ -66,16 +66,15 @@ class AppStoreSingleton {
   };
 
   addOperationResult = imageBuffer => {
-    const region = {
-      top: 0,
-      left: 0,
-      width: imageBuffer.width,
-      height: imageBuffer.height
-    };
-    const extraInfo = new ImageInfo(imageBuffer);
-
     const { index } = this.selectedGridItem;
     let { versionsHistory, currentVersionIndex } = this.imagesInfos[index];
+    const region = {
+        top: 0,
+        left: 0,
+        width: imageBuffer.width,
+        height: imageBuffer.height
+      };
+    const extraInfo = new ImageInfo(imageBuffer);
 
     if (currentVersionIndex < versionsHistory.length - 1) {
       versionsHistory.length = currentVersionIndex + 1;
@@ -93,19 +92,25 @@ class AppStoreSingleton {
   undoCurrentImageChange = () => {
     const { index } = this.selectedGridItem;
     const { currentVersionIndex } = this.imagesInfos[index];
-    if ( currentVersionIndex > 0)
+    if ( currentVersionIndex > 0) {
       this.imagesInfos[index].currentVersionIndex--;
+      this.updateRightSideMenuImageInfo();
+    }
   }
 
   redoCurrentImageChange = () => {
     const { index } = this.selectedGridItem;
     const { versionsHistory, currentVersionIndex } = this.imagesInfos[index];
-    if ( currentVersionIndex < versionsHistory.length - 1)
+    if ( currentVersionIndex < versionsHistory.length - 1) {
       this.imagesInfos[index].currentVersionIndex++;
+      this.updateRightSideMenuImageInfo();
+    }
   }
 
   addProfile = (profileValues, firstDerivativeProfileValues) => {
-    this.imagesInfos[this.selectedGridItem.index].profilesInfos.push({
+    const { index } = this.selectedGridItem;
+    const { currentVersionIndex, versionsHistory } = this.imagesInfos[index];
+    versionsHistory[currentVersionIndex].profilesInfos.push({
       profileValues,
       firstDerivativeProfileValues
     });
@@ -140,8 +145,11 @@ class AppStoreSingleton {
     }
   };
 
-  updateImageRegion = (index, newRegion) =>
-    (this.imagesInfos[index].region = newRegion);
+  updateImageRegion = (index, newRegion) => {
+    const { currentVersionIndex, versionsHistory } = this.imagesInfos[index];
+    versionsHistory[currentVersionIndex].region = newRegion;
+  }
+    
 
   updateLayout = (_, newLayouts) =>
     requestAnimationFrame(() => (this.gridLayouts = newLayouts));
@@ -164,28 +172,32 @@ class AppStoreSingleton {
     this.selectedGridItem.index === index &&
     this.selectedGridItem.type === type;
 
-  closeRightSideMenu = () => (
-    (this.rightSideMenu.open = false), (this.rightSideMenu.menuContent = [])
-  );
+  closeRightSideMenu = () => {
+    this.rightSideMenu.open = false; 
+    this.rightSideMenu.menuContent = [];
+  };
 
-  openRightSideMenu = () => (
-    (this.rightSideMenu.open = true),
-    (this.rightSideMenu.menuContent = [
+  openRightSideMenu = () => {
+    const { index } = this.selectedGridItem;
+    const { currentVersionIndex, versionsHistory } = this.imagesInfos[index];
+    this.rightSideMenu.open = true;
+    this.rightSideMenu.menuContent = [
       <HistogramAndInfoComponent
-        data={this.imagesInfos[this.selectedGridItem.index].extraInfo}
+        data={versionsHistory[currentVersionIndex].extraInfo}
       />
-    ]),
-    this.imagesInfos[this.selectedGridItem.index].profilesInfos.forEach(
+    ];
+    versionsHistory[currentVersionIndex].profilesInfos.forEach(
       profileInfo => {
         this.rightSideMenu.menuContent.push(
           <ProfilesComponent info={profileInfo} />
         );
       }
-    )
-  );
+    );
+  };
 
   updateRightSideMenuImageInfo = () => {
-    if (this.selectedGridItem.index === -1) {
+    const { index } = this.selectedGridItem;
+    if (index === -1) {
       this.rightSideMenu.selectedImageInfo = {
         name: "",
         width: "",
@@ -194,18 +206,18 @@ class AppStoreSingleton {
       this.rightSideMenu.menuTitle = "";
       this.rightSideMenu.menuContent = [];
     } else {
-      const selectedImageInfo = this.imagesInfos[this.selectedGridItem.index];
-      const { extraInfo } = selectedImageInfo;
-      this.rightSideMenu.menuTitle = `${selectedImageInfo.key} - Information`;
+      const { currentVersionIndex, versionsHistory, key } = this.imagesInfos[index];
+      const { imageBuffer, extraInfo, profilesInfos } = versionsHistory[currentVersionIndex];
+      this.rightSideMenu.menuTitle = `${key} - Information`;
       this.rightSideMenu.selectedImageInfo = {
-        name: selectedImageInfo.key,
-        width: selectedImageInfo.imageBuffer.width,
-        height: selectedImageInfo.imageBuffer.height
+        name: key,
+        width: imageBuffer.width,
+        height: imageBuffer.height
       };
       this.rightSideMenu.menuContent = [
         <HistogramAndInfoComponent data={extraInfo} />
       ];
-      selectedImageInfo.profilesInfos.forEach(profileInfo => {
+      profilesInfos.forEach(profileInfo => {
         this.rightSideMenu.menuContent.push(
           <ProfilesComponent info={profileInfo} />
         );

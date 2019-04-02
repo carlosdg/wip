@@ -14,9 +14,9 @@ class DownloadSelectedImageMenuItem extends React.Component {
         variant: "warning"
       });
     } else {
-      const imgInfo = appStore.imagesInfos[index];
-      const { left, top, width, height } = imgInfo.region;
-      const imageData = imgInfo.imageBuffer.toImageData();
+      const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
+      const { left, top, width, height } = versionsHistory[currentVersionIndex].region;
+      const imageData = versionsHistory[currentVersionIndex].imageBuffer.toImageData();
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 

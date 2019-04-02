@@ -69,9 +69,10 @@ class GammaCorrectionDialog extends React.Component {
   onSubmit = () => {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
 
-    appStore.addImage(
-      gammaCorrection(appStore.imagesInfos[index].imageBuffer, this.state.gamma)
+    appStore.addOperationResult(
+      gammaCorrection(versionsHistory[currentVersionIndex].imageBuffer, this.state.gamma)
     );
 
     this.props.onClose();

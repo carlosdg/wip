@@ -10,16 +10,18 @@ class HistogramEqualizationMenuItem extends React.Component {
   currentImageHistogramEqualization = () => {
     const { enqueueSnackbar, appStore } = this.props;
     const { type, index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
+    const { imageBuffer, extraInfo } = versionsHistory[currentVersionIndex];
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
     } else {
-      appStore.addImage(
+      appStore.addOperationResult(
         histogramEqualization(
-          appStore.imagesInfos[index].imageBuffer,
-          appStore.imagesInfos[index].extraInfo
+          imageBuffer,
+          extraInfo
         )
       );
     }

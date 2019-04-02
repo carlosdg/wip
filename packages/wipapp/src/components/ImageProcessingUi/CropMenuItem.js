@@ -25,7 +25,8 @@ class CropMenuItem extends React.Component {
       );
     } else {
       const { addImage, imagesInfos } = appStore;
-      addImage(crop(imagesInfos[index].imageBuffer, imagesInfos[index].region));
+      const { versionsHistory, currentVersionIndex } = imagesInfos[index];
+      addImage(crop(versionsHistory[currentVersionIndex].imageBuffer, versionsHistory[currentVersionIndex].region));
     }
   };
 
