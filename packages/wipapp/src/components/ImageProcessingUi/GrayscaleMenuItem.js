@@ -9,15 +9,16 @@ const { imageToGrayscale } = operations;
 class GrayscaleMenuItem extends React.Component {
   currentImageToGrayscale = () => {
     const { enqueueSnackbar, appStore } = this.props;
-    const { type, index } = this.props.appStore.selectedGridItem;
+    const { type, index } = appStore.selectedGridItem;
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
     } else {
-      appStore.addImage(
-        imageToGrayscale(appStore.imagesInfos[index].imageBuffer)
+      const {versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
+      appStore.addOperationResult(
+        imageToGrayscale(versionsHistory[currentVersionIndex].imageBuffer)
       );
     }
   };
