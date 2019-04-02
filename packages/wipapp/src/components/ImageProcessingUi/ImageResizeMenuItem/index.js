@@ -50,10 +50,10 @@ class ImageResizeMenuItem extends React.Component {
   render() {
     const { appStore } = this.props;
     const { type, index } = appStore.selectedGridItem;
-    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
     let selectedImageDimensions = { width: 0, height: 0 };
 
     if (type === "image" && index >= 0) {
+      const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
       const imgBuffer = versionsHistory[currentVersionIndex].imageBuffer;
 
       selectedImageDimensions = {

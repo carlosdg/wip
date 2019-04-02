@@ -10,13 +10,13 @@ class VerticalMirrorMenuItem extends React.Component {
   currentImageVerticalMirror = () => {
     const { appStore, enqueueSnackbar } = this.props;
     const { type, index } = appStore.selectedGridItem;
-    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
         variant: "warning"
       });
     } else {
+      const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
       appStore.addOperationResult(
         mirror.vertical(versionsHistory[currentVersionIndex].imageBuffer)
       );

@@ -95,19 +95,25 @@ class ImageResampleDialog extends React.Component {
 
   onSubmit = () => {
     const { blockWidth, blockHeight } = this.state;
-    const { appStore } = this.props;
-    const { index } = this.props.appStore.selectedGridItem;
-    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
-    const { imageBuffer } = versionsHistory[currentVersionIndex];
+    const { appStore, enqueueSnackbar } = this.props;
+    const { index, type } = this.props.appStore.selectedGridItem;
+    if (type !== "image" || index < 0) {
+      enqueueSnackbar("You first need to select an image", {
+        variant: "warning"
+      });
+    } else {
+      const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+      const { imageBuffer } = versionsHistory[currentVersionIndex];
 
-    appStore.addOperationResult(
-      imageResampling(
-        imageBuffer,
-        blockWidth,
-        blockHeight
-      )
-    );
-    this.props.onClose();
+      appStore.addOperationResult(
+        imageResampling(
+          imageBuffer,
+          blockWidth,
+          blockHeight
+        )
+      );
+      this.props.onClose();
+    }
   };
 
   render() {

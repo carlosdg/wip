@@ -32,7 +32,6 @@ class ImageRotationMenuItem extends React.Component {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
     const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
-    
 
     appStore.addOperationResult(
       imageRotation(

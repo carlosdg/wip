@@ -9,6 +9,7 @@ class ProfileMenuItem extends React.Component {
     const { enqueueSnackbar, appStore } = this.props;
     const { imageSelectionMehod } = appStore;
     const { type, index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
 
     if (type !== "image" || index < 0) {
       enqueueSnackbar("You first need to select an image", {
@@ -22,12 +23,12 @@ class ProfileMenuItem extends React.Component {
         }
       );
     } else {
-      const { left, top, width, height } = appStore.imagesInfos[index].region;
+      const { left, top, width, height } = versionsHistory[currentVersionIndex].region;
       const points = bresenham(
         { x: left, y: top },
         { x: left + width, y: top + height }
       );
-      const associatedImage = appStore.imagesInfos[index].imageBuffer;
+      const associatedImage = versionsHistory[currentVersionIndex].imageBuffer;
       const profileValues = {
         Red: [],
         Green: [],
