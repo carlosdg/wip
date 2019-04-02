@@ -69,9 +69,10 @@ class SaturateImageDialog extends React.Component {
   onSubmit = () => {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
 
-    appStore.addImage(
-      saturateImage(appStore.imagesInfos[index].imageBuffer, this.state.saturationPercentage)
+    appStore.addOperationResult(
+      saturateImage(versionsHistory[currentVersionIndex].imageBuffer, this.state.saturationPercentage)
     );
 
     this.props.onClose();

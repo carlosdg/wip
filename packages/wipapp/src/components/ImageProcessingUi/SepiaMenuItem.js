@@ -16,7 +16,9 @@ class SepiaMenuItem extends React.Component {
         variant: "warning"
       });
     } else {
-      appStore.addImage(imageToSepia(appStore.imagesInfos[index].imageBuffer));
+      const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+
+      appStore.addOperationResult(imageToSepia(versionsHistory[currentVersionIndex].imageBuffer));
     }
   };
 

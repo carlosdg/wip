@@ -70,9 +70,10 @@ class QuantizationDialog extends React.Component {
     const { levels } = this.state;
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
 
-    appStore.addImage(
-      quantization(appStore.imagesInfos[index].imageBuffer, levels)
+    appStore.addOperationResult(
+      quantization(versionsHistory[currentVersionIndex].imageBuffer, levels)
     );
     this.props.onClose();
   };
