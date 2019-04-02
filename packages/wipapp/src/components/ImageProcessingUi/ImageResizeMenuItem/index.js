@@ -35,10 +35,11 @@ class ImageResizeMenuItem extends React.Component {
   }) => {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
 
-    appStore.addImage(
+    appStore.addOperationResult(
       imageResizing(
-        appStore.imagesInfos[index].imageBuffer,
+        versionsHistory[currentVersionIndex].imageBuffer,
         widthPercentage,
         heightPercentage,
         interpolationMethods[interpolationMethod]
@@ -49,10 +50,11 @@ class ImageResizeMenuItem extends React.Component {
   render() {
     const { appStore } = this.props;
     const { type, index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
     let selectedImageDimensions = { width: 0, height: 0 };
 
     if (type === "image" && index >= 0) {
-      const imgBuffer = appStore.imagesInfos[index].imageBuffer;
+      const imgBuffer = versionsHistory[currentVersionIndex].imageBuffer;
 
       selectedImageDimensions = {
         width: imgBuffer.width,

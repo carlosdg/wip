@@ -31,10 +31,12 @@ class ImageRotationMenuItem extends React.Component {
   rotateCurrentImage = ({ degrees, rotateAndPaint, interpolationMethod }) => {
     const { appStore } = this.props;
     const { index } = appStore.selectedGridItem;
+    const { versionsHistory, currentVersionIndex } = this.props.appStore.imagesInfos[index];
+    
 
-    appStore.addImage(
+    appStore.addOperationResult(
       imageRotation(
-        appStore.imagesInfos[index].imageBuffer,
+        versionsHistory[currentVersionIndex].imageBuffer,
         degrees,
         interpolationMethods[interpolationMethod],
         rotateAndPaint
