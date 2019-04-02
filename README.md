@@ -3,10 +3,29 @@
 </p>
 
 <h1 align="center">Web Image Processing</h1>
+<p align="center">
+    <a href="https://github.com/carlosdg/wip/blob/master/LICENSE">
+        <img alt="GitHub" src="https://img.shields.io/github/license/carlosdg/wip.svg">
+    </a>
+    <a href="https://github.com/ellerbrock/open-source-badges/">
+        <img src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103g" alt="Open source">
+    </a>
+    <a href="https://wipblog463382623.wordpress.com/">
+        <img alt="Website" src="https://img.shields.io/website/https/wipblog463382623.wordpress.com.svg?up_message=Landing%20page">
+    </a>
+    <a href="https://wipblog463382623.wordpress.com/blog/">
+        <img alt="Blog" src="https://img.shields.io/website/https/wipblog463382623.wordpress.com/blog.svg?up_message=Blog">
+    </a>
+    <a href="https://carlosdg.github.io/wip/">
+        <img alt="App" src="https://img.shields.io/website/https/carlosdg.github.io/wip.svg?up_message=App">
+    </a>
+    <a href="https://twitter.com/wip_open_source">
+        <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/wip_open_source.svg?label=Follow&style=social">
+    </a>
+</p>
 <p align="center"> Simple image processing in the browser </p>
-<p align="center"> <a href="https://carlosdg.github.io/wip/">App</a> | <a href="https://wipblog463382623.wordpress.com/">Blog</a> | <a href="https://twitter.com/wip_open_source">Twitter</a> </p>
 
-## Table of Contents
+## :clipboard: Table of Contents
 
 - [Introduction](#introduction)
 - [How to use](#how-to-use)
@@ -14,7 +33,7 @@
 - [Authors](#authors)
 - [License](#license)
 
-## Introduction
+## :scroll: Introduction
 
 WIP is an open source web application that allows the users to apply different image processing operations. 🌆 → 🏙
 
@@ -22,7 +41,7 @@ You can load & download images, apply different operations and it is meant so us
 
 Everything is done in the front-end so your images never leave your device 🖥🔐
 
-## How to use
+## :computer: How to use
 
 You can access the application at the following link: [https://carlosdg.github.io/wip/](https://carlosdg.github.io/wip/).
 
@@ -36,7 +55,7 @@ You can drag the image items by dragging the top of the image. You can also resi
   <img src="doc/resources/images/demo.gif" alt="Demo gif showing how to open a file, select and apply an operation to an image and how to drag and resize an image item">
 </p>
 
-## Contributing
+## :construction_worker: Contributing
 
 You can contribute with anything, from letting us know of some broken English with an issue to adding new features with pull requests (or even fixing some broken English with a pull request 🤯). Any help will be warmly welcome 😊.
 
@@ -48,12 +67,12 @@ Before submitting a pull request please file an issue, we may be working on the 
 
 Before any pull request, please check the [Contributing guidelines](./CONTRIBUTING.md) to know how to setup the project (install dependencies, run tests, etc)
 
-## Authors
+## :mailbox_with_mail: Authors
 
 - Alberto Jesús González Álvarez &lt;[AlberTJ97](https://github.com/AlberTJ97)&gt;
 - Daute Rodríguez Rodríguez &lt;[DauteRR](https://github.com/DauteRR)&gt;
 - Carlos Domínguez García &lt;[carlosdg](https://github.com/carlosdg)&gt;
 
-## License
+## :copyright: License
 
-MIT
+This project is licensed under the [MIT License](/LICENSE)
