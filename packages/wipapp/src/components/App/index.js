@@ -8,12 +8,14 @@ import { observer, inject } from "mobx-react";
 import SelectionOverlay from "../Overlays/SelectionOverlay";
 import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
-import SelectionToolbar from "../Toolbar/SelectionToolbar";
 import RightSideMenu from "../RightSideMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {Undo, Redo, LibraryAdd, ReplyAll } from "@material-ui/icons";
+import { Undo, Redo, LibraryAdd, ReplyAll } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
-
+import Button from "@material-ui/core/Button";
+import CropSquareIcon from "@material-ui/icons/CropSquare";
+import EditIcon from "@material-ui/icons/Edit";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class App extends Component {
   /** Callback that updates the pixel value and coordinates currently under the
@@ -78,7 +80,7 @@ class App extends Component {
           <span
             style={{
               width: "2.5rem",
-              height: "1.9rem",
+              height: "100%",
               backgroundColor: currentPixelRgbaValue
             }}
           />
@@ -132,15 +134,14 @@ class App extends Component {
       <div>
         <div className="app-container">
           <AppToolbar />
-          <SelectionToolbar />
           <main className="main">
             <div
               className="main__wrapper"
               style={
                 !this.props.appStore.rightSideMenu.open
                   ? {
-                      width: "100%"
-                    }
+                    width: "100%"
+                  }
                   : {}
               }
             >
@@ -156,33 +157,74 @@ class App extends Component {
           >
             {this.getDisplayForPixelUnderMouse()}
             <IconButton
-              color="primary" 
-              onClick={appStore.redoAllCurrentImageChanges} 
+              color="primary"
+              onClick={appStore.redoAllCurrentImageChanges}
               disabled={index <= -1 || isUndoButtonDisabled}
             >
               <ReplyAll />
             </IconButton>
-            <IconButton 
-              color="primary" 
-              onClick={appStore.undoCurrentImageChange} 
+            <IconButton
+              color="primary"
+              onClick={appStore.undoCurrentImageChange}
               disabled={(isUndoButtonDisabled)}
             >
               <Undo />
             </IconButton>
             <IconButton
-              color="primary" 
-              onClick={appStore.redoCurrentImageChange} 
+              color="primary"
+              onClick={appStore.redoCurrentImageChange}
               disabled={isRedoButtonDisabled}
             >
               <Redo />
             </IconButton>
             <IconButton
-              color="primary" 
-              onClick={appStore.duplicateCurrentImage} 
+              color="primary"
+              onClick={appStore.duplicateCurrentImage}
               disabled={index <= -1}
             >
               <LibraryAdd />
             </IconButton>
+
+            <div className="selection">
+              <Button
+                style={
+                  appStore.imageSelectionMehod !== "selection"
+                    ? { margin: "0 0.5rem" }
+                    : {
+                      margin: "0 0.5rem",
+                      backgroundColor: "#3f51b5",
+                      color: "white"
+                    }
+                }
+                onClick={() => appStore.updateImageSelectionMehod("selection")}
+              >
+                <Tooltip
+                  title="Select a portion of an image"
+                  aria-label="Select a portion of an image"
+                >
+                  <CropSquareIcon />
+                </Tooltip>
+              </Button>
+              <Button
+                style={
+                  appStore.imageSelectionMehod !== "line"
+                    ? { margin: "0 0.5rem" }
+                    : {
+                      margin: "0 0.5rem",
+                      backgroundColor: "#3f51b5",
+                      color: "white"
+                    }
+                }
+                onClick={() => appStore.updateImageSelectionMehod("line")}
+              >
+                <Tooltip
+                  title="Select a line in the image to create a profile"
+                  aria-label="Select a line in the image to create a profile"
+                >
+                  <EditIcon />
+                </Tooltip>
+              </Button>
+            </div>
           </footer>
         </div>
       </div>

@@ -9,7 +9,7 @@ class RightSideMenu extends React.Component {
       <div
         className="right-side-menu-container"
         style={{
-          width: !this.props.appStore.rightSideMenu.open ? "0px" : ""
+          display: !this.props.appStore.rightSideMenu.open ? "none" : "initial"
         }}
       >
         <div className="right-side-menu-title">

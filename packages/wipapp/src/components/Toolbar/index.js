@@ -9,6 +9,11 @@ import GeometricOperationsSubmenu from "./Submenus/GeometricOperationsSubmenu";
 const AppToolbar = () => (
   <AppBar position="static">
     <Toolbar>
+      <div className="header-logo">
+        <a className="navbar-item" href="https://github.com/carlosdg/ImageProcessor.git">
+          <img alt="logo" src="https://i.imgur.com/5uTCDlA.png" height="40" />
+        </a>
+      </div>
       <FileSubmenu />
       <ImageSubmenu />
       <PointOperationsSubmenu />
