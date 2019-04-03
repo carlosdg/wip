@@ -5,6 +5,7 @@
   border-radius: 5px;
   z-index: 1;
   overflow: hidden;
+  margin-top: 10px;
 }
 
 .right-side-menu-title {
