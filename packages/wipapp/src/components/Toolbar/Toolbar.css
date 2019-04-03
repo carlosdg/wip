@@ -1,0 +1,9 @@
+@media screen and (max-width: 800px) {
+  .toolbar {
+    justify-content: center;
+  }
+}
+
+.toolbar {
+  flex-wrap: wrap;
+}

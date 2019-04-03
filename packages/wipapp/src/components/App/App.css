@@ -69,15 +69,23 @@
   cursor: move;
 }
 
-.selection {
-  display: flex;
-  margin: 7px;
-  align-items: center;
-  justify-content: flex-end;
+.grow {
   flex-grow: 1;
 }
 
-.header-logo{
+.history-buttons-container {
+  display: flex;
+  margin: 7px;
+  align-items: center;
+}
+
+.selection-tools-container {
+  display: flex;
+  margin: 7px;
+  align-items: center;
+}
+
+.header-logo {
   padding-right: 17px;
-  border-right: 1px solid #c8c8c830
+  border-right: 1px solid #c8c8c830;
 }

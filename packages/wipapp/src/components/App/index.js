@@ -67,7 +67,8 @@ class App extends Component {
     return (
       <div
         style={{
-          display: "flex"
+          display: "flex",
+          flexWrap: "wrap"
         }}
       >
         <div
@@ -158,60 +159,63 @@ class App extends Component {
           <footer
             style={{
               boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)",
-              display: "flex"
+              display: "flex",
+              flexWrap: "wrap"
             }}
           >
             {this.getDisplayForPixelUnderMouse()}
-            <IconButton
-              color="primary"
-              onClick={appStore.redoAllCurrentImageChanges}
-              disabled={index <= -1 || isUndoButtonDisabled}
-            >
-              <Tooltip
-                title="Revert all changes of selected image"
-                aria-label="Revert all changes of selected image"
+            <div className="history-buttons-container">
+              <IconButton
+                color="primary"
+                onClick={appStore.redoAllCurrentImageChanges}
+                disabled={index <= -1 || isUndoButtonDisabled}
               >
-                <ReplyAll />
-              </Tooltip>
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={appStore.undoCurrentImageChange}
-              disabled={isUndoButtonDisabled}
-            >
-              <Tooltip
-                title="Undo change of selected image"
-                aria-label="Undo change of selected image"
+                <Tooltip
+                  title="Revert all changes of selected image"
+                  aria-label="Revert all changes of selected image"
+                >
+                  <ReplyAll />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                color="primary"
+                onClick={appStore.undoCurrentImageChange}
+                disabled={isUndoButtonDisabled}
               >
-                <Undo />
-              </Tooltip>
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={appStore.redoCurrentImageChange}
-              disabled={isRedoButtonDisabled}
-            >
-              <Tooltip
-                title="Redo change of selected image"
-                aria-label="Redo change of selected image"
+                <Tooltip
+                  title="Undo change of selected image"
+                  aria-label="Undo change of selected image"
+                >
+                  <Undo />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                color="primary"
+                onClick={appStore.redoCurrentImageChange}
+                disabled={isRedoButtonDisabled}
               >
-                <Redo />
-              </Tooltip>
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={appStore.duplicateCurrentImage}
-              disabled={index <= -1}
-            >
-              <Tooltip
-                title="Duplicate selected image"
-                aria-label="Duplicate selected image"
+                <Tooltip
+                  title="Redo change of selected image"
+                  aria-label="Redo change of selected image"
+                >
+                  <Redo />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                color="primary"
+                onClick={appStore.duplicateCurrentImage}
+                disabled={index <= -1}
               >
-                <LibraryAdd />
-              </Tooltip>
-            </IconButton>
-
-            <div className="selection">
+                <Tooltip
+                  title="Duplicate selected image"
+                  aria-label="Duplicate selected image"
+                >
+                  <LibraryAdd />
+                </Tooltip>
+              </IconButton>
+            </div>
+            <div className="grow" />
+            <div className="selection-tools-container">
               <IconButton
                 style={
                   appStore.imageSelectionMehod !== "selection"
