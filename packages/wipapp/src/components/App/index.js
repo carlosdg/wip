@@ -10,11 +10,15 @@ import LineOverlay from "../Overlays/LineOverlay";
 import { calculateRect } from "../../lib/coordinates";
 import RightSideMenu from "../RightSideMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Undo, Redo, LibraryAdd, ReplyAll } from "@material-ui/icons";
+import {
+  Undo,
+  Redo,
+  LibraryAdd,
+  ReplyAll,
+  CropSquare,
+  Edit
+} from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import CropSquareIcon from "@material-ui/icons/CropSquare";
-import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
 
 class App extends Component {
@@ -126,9 +130,11 @@ class App extends Component {
     let isUndoButtonDisabled = true;
     let isRedoButtonDisabled = true;
     if (index > -1) {
-      const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[index];
-      isUndoButtonDisabled = (currentVersionIndex === 0);
-      isRedoButtonDisabled = (currentVersionIndex === versionsHistory.length - 1);
+      const { versionsHistory, currentVersionIndex } = appStore.imagesInfos[
+        index
+      ];
+      isUndoButtonDisabled = currentVersionIndex === 0;
+      isRedoButtonDisabled = currentVersionIndex === versionsHistory.length - 1;
     }
     return (
       <div>
@@ -140,8 +146,8 @@ class App extends Component {
               style={
                 !this.props.appStore.rightSideMenu.open
                   ? {
-                    width: "100%"
-                  }
+                      width: "100%"
+                    }
                   : {}
               }
             >
@@ -161,40 +167,60 @@ class App extends Component {
               onClick={appStore.redoAllCurrentImageChanges}
               disabled={index <= -1 || isUndoButtonDisabled}
             >
-              <ReplyAll />
+              <Tooltip
+                title="Revert all changes of selected image"
+                aria-label="Revert all changes of selected image"
+              >
+                <ReplyAll />
+              </Tooltip>
             </IconButton>
             <IconButton
               color="primary"
               onClick={appStore.undoCurrentImageChange}
-              disabled={(isUndoButtonDisabled)}
+              disabled={isUndoButtonDisabled}
             >
-              <Undo />
+              <Tooltip
+                title="Undo change of selected image"
+                aria-label="Undo change of selected image"
+              >
+                <Undo />
+              </Tooltip>
             </IconButton>
             <IconButton
               color="primary"
               onClick={appStore.redoCurrentImageChange}
               disabled={isRedoButtonDisabled}
             >
-              <Redo />
+              <Tooltip
+                title="Redo change of selected image"
+                aria-label="Redo change of selected image"
+              >
+                <Redo />
+              </Tooltip>
             </IconButton>
             <IconButton
               color="primary"
               onClick={appStore.duplicateCurrentImage}
               disabled={index <= -1}
             >
-              <LibraryAdd />
+              <Tooltip
+                title="Duplicate selected image"
+                aria-label="Duplicate selected image"
+              >
+                <LibraryAdd />
+              </Tooltip>
             </IconButton>
 
             <div className="selection">
-              <Button
+              <IconButton
                 style={
                   appStore.imageSelectionMehod !== "selection"
-                    ? { margin: "0 0.5rem" }
+                    ? { margin: "0 0.5rem", color: "#3f51b5" }
                     : {
-                      margin: "0 0.5rem",
-                      backgroundColor: "#3f51b5",
-                      color: "white"
-                    }
+                        margin: "0 0.5rem",
+                        backgroundColor: "#3f51b5",
+                        color: "white"
+                      }
                 }
                 onClick={() => appStore.updateImageSelectionMehod("selection")}
               >
@@ -202,18 +228,18 @@ class App extends Component {
                   title="Select a portion of an image"
                   aria-label="Select a portion of an image"
                 >
-                  <CropSquareIcon />
+                  <CropSquare />
                 </Tooltip>
-              </Button>
-              <Button
+              </IconButton>
+              <IconButton
                 style={
                   appStore.imageSelectionMehod !== "line"
-                    ? { margin: "0 0.5rem" }
+                    ? { margin: "0 0.5rem", color: "#3f51b5" }
                     : {
-                      margin: "0 0.5rem",
-                      backgroundColor: "#3f51b5",
-                      color: "white"
-                    }
+                        margin: "0 0.5rem",
+                        backgroundColor: "#3f51b5",
+                        color: "white"
+                      }
                 }
                 onClick={() => appStore.updateImageSelectionMehod("line")}
               >
@@ -221,9 +247,9 @@ class App extends Component {
                   title="Select a line in the image to create a profile"
                   aria-label="Select a line in the image to create a profile"
                 >
-                  <EditIcon />
+                  <Edit />
                 </Tooltip>
-              </Button>
+              </IconButton>
             </div>
           </footer>
         </div>
@@ -247,10 +273,7 @@ class App extends Component {
     );
   }
 
-  getImageGridItem(
-    { key, versionsHistory, currentVersionIndex },
-    index
-  ) {
+  getImageGridItem({ key, versionsHistory, currentVersionIndex }, index) {
     return (
       <InteractiveGrid.Item
         key={key}
