@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { RgbaImageBuffer } from "wiplib";
 import * as Coordinates from "../../lib/coordinates";
+import { observer, inject } from "mobx-react";
 
 // FIXME: the selection functionality doesn't work well when:
 // - The mouse up event is done outside the component
@@ -90,12 +91,13 @@ class ImageComponent extends Component {
       this.refs.canvas
     );
     const pixel = this.props.rgbaImage.getPixel(coordinates);
+    const { imageSelectionMehod } = this.props.appStore;
 
     if (this.state.isMouseDown && !this.state.isDragging) {
       this.setState({
         currentMouseCoordinates: coordinates
       });
-    } else if(this.state.isMouseDown && this.state.isDragging) {
+    } else if(imageSelectionMehod !== "line" && this.state.isMouseDown && this.state.isDragging) {
       const { 
         initialOriginCoords,
         initialEndCoords, 
@@ -271,4 +273,4 @@ class ImageComponent extends Component {
   }
 }
 
-export default ImageComponent;
+export default inject("appStore")(observer(ImageComponent));

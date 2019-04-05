@@ -18,7 +18,7 @@ export default class ProfilesComponent extends React.Component {
     const { profileValues, firstDerivativeProfileValues } = this.props.info;
 
     return (
-      <React.Fragment>
+      <div className="profile">
         <div
           style={{
             display: "flex",
@@ -100,7 +100,7 @@ export default class ProfilesComponent extends React.Component {
             />
           )}
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

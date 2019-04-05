@@ -66,20 +66,12 @@ class App extends Component {
     const currentPixelRgbaValue = `rgba(${pixelValue.join(", ")})`;
     return (
       <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap"
-        }}
+        className="footer-tools"
       >
         <div
+          className="color-picker"
           style={{
-            display: "flex",
-            margin: "0.4rem",
-            borderRadius: "5px",
-            width: "250px",
-            border: "1px solid #000",
             boxShadow: `1px 1px 10px -5px ${currentPixelRgbaValue}`,
-            overflow: "hidden"
           }}
         >
           <span
@@ -160,7 +152,7 @@ class App extends Component {
             style={{
               boxShadow: "-3px 0px 10px -5px rgba(0, 0, 0, 0.8)",
               display: "flex",
-              flexWrap: "wrap"
+              flexWrap: "wrap",
             }}
           >
             {this.getDisplayForPixelUnderMouse()}

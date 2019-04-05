@@ -1,11 +1,12 @@
 .right-side-menu-container {
   display: flex;
   flex-direction: column;
-  box-shadow: -3px 0px 10px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: -3px 3px 10px -5px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   z-index: 1;
   overflow: hidden;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .right-side-menu-title {
@@ -25,10 +26,8 @@
 }
 
 .right-side-menu-feed {
-  height: 100%;
-  -webkit-align-items: center;
-  align-items: center;
-  padding: 4%;
+  height: 95%;
+  overflow: auto;
 }
 
 .image-info {
@@ -38,4 +37,12 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.right-side-menu-content{
+  height: max-content;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 4%;
+  /* overflow: auto; */
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "react-vis/dist/style.css";
 import {
-  FlexibleXYPlot,
+  FlexibleWidthXYPlot,
   XAxis,
   YAxis,
   VerticalGridLines,
@@ -34,7 +34,7 @@ class HistogramComponent extends Component {
     }
     return null;
   }
-
+  
   componentDidMount() {
     this.setState({
       histogramVisualizationData: this.props.histogram.map((value, index) => ({
@@ -47,7 +47,8 @@ class HistogramComponent extends Component {
 
   render() {
     return (
-      <FlexibleXYPlot
+      <FlexibleWidthXYPlot
+        height={400}
         margin={{
           left: 70
         }}
@@ -77,7 +78,7 @@ class HistogramComponent extends Component {
             }}
           />
         ) : null}
-      </FlexibleXYPlot>
+      </FlexibleWidthXYPlot>
     );
   }
 }

@@ -16,13 +16,15 @@ const AppToolbar = () => {
             className="navbar-item"
             href="https://github.com/carlosdg/ImageProcessor.git"
           >
-            <img alt="logo" src="https://i.imgur.com/5uTCDlA.png" height="40" />
+            <img id="logo" alt="logo" src="https://i.imgur.com/5uTCDlA.png" height="40" />
           </a>
         </div>
+        <div className="menu-items">
         <FileSubmenu />
         <ImageSubmenu />
         <PointOperationsSubmenu />
         <GeometricOperationsSubmenu />
+        </div>
       </Toolbar>
     </AppBar>
   );

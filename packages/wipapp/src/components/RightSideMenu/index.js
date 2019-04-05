@@ -25,6 +25,7 @@ class RightSideMenu extends React.Component {
 
         </div>
         <div className="right-side-menu-feed">
+          <div className="right-side-menu-content">
           {this.props.appStore.rightSideMenu.menuContent.map(
             (menuItem, index) => {
               return (
@@ -34,6 +35,7 @@ class RightSideMenu extends React.Component {
               );
             }
           )}
+          </div>
         </div>
       </div>
     );

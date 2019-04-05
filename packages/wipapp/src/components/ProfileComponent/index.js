@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "react-vis/dist/style.css";
 import {
-  FlexibleXYPlot,
+  FlexibleWidthXYPlot,
   XAxis,
   YAxis,
   VerticalGridLines,
@@ -9,6 +9,7 @@ import {
   LineSeries,
   Hint
 } from "react-vis";
+import sizeMe from 'react-sizeme';
 
 class ProfileComponent extends Component {
   state = {
@@ -44,10 +45,12 @@ class ProfileComponent extends Component {
 
   render() {
     return (
-      <FlexibleXYPlot
+      <FlexibleWidthXYPlot
+      height={400}
         margin={{
           top: 50,
-          left: 70
+          left: 70,
+          bottom: 50
         }}
         onMouseLeave={() => this.setState({ emphasizedValue: null })}
       >
@@ -75,9 +78,9 @@ class ProfileComponent extends Component {
             }}
           />
         ) : null}
-      </FlexibleXYPlot>
+      </FlexibleWidthXYPlot>
     );
   }
 }
 
-export default ProfileComponent;
+export default sizeMe()(ProfileComponent);
