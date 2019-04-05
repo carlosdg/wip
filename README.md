@@ -27,11 +27,11 @@
 
 ## :clipboard: Table of Contents
 
-- [Introduction](#introduction)
-- [How to use](#how-to-use)
-- [Contributing](#contributing)
-- [Authors](#authors)
-- [License](#license)
+-   [Introduction](#introduction)
+-   [How to use](#how-to-use)
+-   [Contributing](#contributing)
+-   [Authors](#authors)
+-   [License](#license)
 
 ## :scroll: Introduction
 
@@ -43,7 +43,7 @@ Everything is done in the front-end so your images never leave your device 🖥�
 
 ## :computer: How to use
 
-You can access the application at the following link: [https://carlosdg.github.io/wip/](https://carlosdg.github.io/wip/).
+You can access the application at the following link: <https://carlosdg.github.io/wip/>.
 
 You can find the tool bar at the top of the app. To open an image from your device head to `File -> Open` and the browser will prompt you to select the image to open.
 
@@ -61,17 +61,17 @@ You can contribute with anything, from letting us know of some broken English wi
 
 Before submitting a pull request please file an issue, we may be working on the same topic and with an issue we can let you know so you don't waste your time 😄
 
-- [Report a bug 🐞 at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=bug&template=bug-report---.md&title=%5BBUG%5D+Issue+Title)
-- [Request a feature 💡at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=enhancement&template=feature-request---.md&title=%5BFeat%5D+Issue+Title)
-- For any other topic or to ask a question you can [file a regular issue at this link](https://github.com/carlosdg/wip/issues/new)
+-   [Report a bug 🐞 at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=bug&template=bug-report---.md&title=%5BBUG%5D+Issue+Title)
+-   [Request a feature 💡at this link](https://github.com/carlosdg/wip/issues/new?assignees=&labels=enhancement&template=feature-request---.md&title=%5BFeat%5D+Issue+Title)
+-   For any other topic or to ask a question you can [file a regular issue at this link](https://github.com/carlosdg/wip/issues/new)
 
 Before any pull request, please check the [Contributing guidelines](./CONTRIBUTING.md) to know how to setup the project (install dependencies, run tests, etc)
 
 ## :mailbox_with_mail: Authors
 
-- Alberto Jesús González Álvarez &lt;[AlberTJ97](https://github.com/AlberTJ97)&gt;
-- Daute Rodríguez Rodríguez &lt;[DauteRR](https://github.com/DauteRR)&gt;
-- Carlos Domínguez García &lt;[carlosdg](https://github.com/carlosdg)&gt;
+-   Alberto Jesús González Álvarez &lt;[AlberTJ97](https://github.com/AlberTJ97)>
+-   Daute Rodríguez Rodríguez &lt;[DauteRR](https://github.com/DauteRR)>
+-   Carlos Domínguez García &lt;[carlosdg](https://github.com/carlosdg)>
 
 ## :copyright: License
 

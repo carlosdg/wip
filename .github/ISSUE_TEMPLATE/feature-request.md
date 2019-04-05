@@ -1,14 +1,13 @@
 ---
 name: "Feature request \U0001F4A1"
 about: Suggest an idea for this project
-title: "[Feat] Issue Title"
+title: "(Feat) Issue Title"
 labels: enhancement
 assignees: ''
-
 ---
 
 **If your feature request is related to a problem please describe it.**
-A description of what the problem is. Ex. I'm always frustrated when [...]. Please try to be clear and concise, we would really appreciate it.
+A description of what the problem is. Ex. I'm always frustrated when (...). Please try to be clear and concise, we would really appreciate it.
 
 **Describe the solution you'd like**
 A description of what you want to happen.
